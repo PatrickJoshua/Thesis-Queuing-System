@@ -54,19 +54,25 @@ public class getVIPNumberServlet extends HttpServlet {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM QUEUETBL WHERE VIP=TRUE");      //execute sql statement, and place result on rs
             
+            boolean duplicate = false;
             //detect duplicate
             while(rs.next())    //loop until reached the last VIP
             {
-                if(cellNo.equals(rs.getString("MOBILENUMBER")) && name.equalsIgnoreCase(rs.getString("NAME")))
-                    return "V" + rs.getInt("NUMBER");
+                if(cellNo.equals(rs.getString("MOBILENUMBER")) && name.equalsIgnoreCase(rs.getString("NAME")))      //true if duplicate
+                {
+                    lastNumber = rs.getInt("NUMBER")-1;     //set last number from db
+                    duplicate = true;
+                }
             }
-            
-            if(!rs.last())      //if no one in queue is VIP
-                stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',true,'" + name + "');");  //insert value to table (1)            
-            else
+            if(!duplicate)      //continue if no duplicate detected
             {
-                lastNumber = rs.getInt("NUMBER");       //change this in the future to get last value from a history table
-                stmt.execute("insert into QUEUETBL values (" + lastNumber+1 + ",'" + cellNo + "',true,'" + name + "');");  //insert value to table
+                if(!rs.last())      //if no one in queue is VIP
+                    stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',true,'" + name + "');");  //insert value to table (1)            
+                else
+                {
+                    lastNumber = rs.getInt("NUMBER");       //change this in the future to get last value from a history table
+                    stmt.execute("insert into QUEUETBL values (" + lastNumber+1 + ",'" + cellNo + "',true,'" + name + "');");  //insert value to table
+                }
             }
             //close necessary objects
             rs.close();     
