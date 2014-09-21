@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author PatrickJoshua
  */
+@WebServlet(urlPatterns = {"/getVIPNumberServlet"})
 public class getVIPNumberServlet extends HttpServlet {
 
     /**
@@ -58,7 +60,7 @@ public class getVIPNumberServlet extends HttpServlet {
             //detect duplicate
             while(rs.next())    //loop until reached the last VIP
             {
-                if(cellNo.equals(rs.getString("MOBILENUMBER")) && name.equalsIgnoreCase(rs.getString("NAME")))      //true if duplicate
+                if(cellNo.equals(rs.getString("MOBILENUMBER")) || name.equalsIgnoreCase(rs.getString("NAME")))      //true if duplicate
                 {
                     lastNumber = rs.getInt("NUMBER")-1;     //set last number from db
                     duplicate = true;
