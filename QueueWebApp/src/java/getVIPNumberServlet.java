@@ -53,7 +53,7 @@ public class getVIPNumberServlet extends HttpServlet {
             
         try
         {
-            Statement stmt = con.createStatement();
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt.executeQuery("SELECT * FROM QUEUETBL WHERE VIP=TRUE");      //execute sql statement, and place result on rs
             
             boolean duplicate = false;
@@ -62,18 +62,20 @@ public class getVIPNumberServlet extends HttpServlet {
             {
                 if(cellNo.equals(rs.getString("MOBILENUMBER")) || name.equalsIgnoreCase(rs.getString("NAME")))      //true if duplicate
                 {
-                    lastNumber = rs.getInt("NUMBER")-1;     //set last number from db
+                    lastNumber = rs.getInt("NUMBER");     //set last number from db
                     duplicate = true;
                 }
             }
             if(!duplicate)      //continue if no duplicate detected
             {
                 if(!rs.last())      //if no one in queue is VIP
-                    stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',true,'" + name + "');");  //insert value to table (1)            
+                    stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',true,'" + name + "')");  //insert value to table (1)            
                 else
                 {
                     lastNumber = rs.getInt("NUMBER");       //change this in the future to get last value from a history table
-                    stmt.execute("insert into QUEUETBL values (" + lastNumber+1 + ",'" + cellNo + "',true,'" + name + "');");  //insert value to table
+                    lastNumber++;   //use actual position, and write to database
+                    stmt.execute("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "',true,'" + name + "')");  //insert value to table
+                    lastNumber--;   //revert to lastNumber after writing to database
                 }
             }
             //close necessary objects
@@ -85,8 +87,8 @@ public class getVIPNumberServlet extends HttpServlet {
         {
             System.err.println(sqle.getMessage());
         }
-        
-        return "V" + lastNumber+1;  //return number, like "V1"
+        lastNumber++;
+        return "V" + lastNumber;  //return number, like "V1"
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
