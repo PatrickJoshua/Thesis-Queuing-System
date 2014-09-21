@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Random;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,9 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(urlPatterns = {"/getNumberServlet"})
 public class getNumberServlet extends HttpServlet {
 
-    String cellphoneGlobal;
-    int positionGlobal,refGlobal;
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,99 +32,61 @@ public class getNumberServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    public int generateReferenceNo()
-    {
-        Random random = new Random();
-        return random.nextInt(999999999);       //9 digit random number
-    }
     
-    public int getPosition(File file)
+    Connection connectToDatabase(String host, String user, String pw)
     {
-        int counter = 1;
+        Connection con = null;
         try
         {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            for(counter = 1; (br.readLine() != null); counter++);         //loop to get last line
-            br.close();
+            con = DriverManager.getConnection(host, user, pw);
         }
-        catch (FileNotFoundException fnfe)
+        catch (SQLException sqle)
         {
-            System.err.println("Cannot get position. File " + file.getName() + " not found.");
+            System.err.println(sqle.getMessage());
         }
-        catch (IOException ioe)
-        {
-            System.err.println("IOException while getting position");
-        }
-        return counter;
+        return con;
     }
     
-    public boolean checkDuplicate(String incomingCellNo, File file)
+    String add2DB(Connection con, String cellNo)
     {
+        int lastNumber = 0;     //holds the last number of VIP in the DB
+            
         try
         {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line,split = ",";
-            while((line = br.readLine()) != null)
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM QUEUETBL WHERE VIP=FALSE");      //execute sql statement, and place result on rs
+            
+            boolean duplicate = false;
+            //detect duplicate
+            while(rs.next())    //loop until reached the last normal client
             {
-                String[] data = line.split(split);
-                if(data[1].equals(incomingCellNo))
+                if(cellNo.equals(rs.getString("MOBILENUMBER")))      //true if duplicate
                 {
-                    System.err.println("Duplicate detected");
-                    br.close();
-                    positionGlobal = Integer.parseInt(data[0]);
-                    cellphoneGlobal = data[1];
-                    refGlobal = Integer.parseInt(data[2]);
-                    return true;
+                    lastNumber = rs.getInt("NUMBER")-1;     //set last number from db
+                    duplicate = true;
                 }
             }
-            br.close();
-        }
-        catch (FileNotFoundException fnfe)
-        {
-            System.err.println("Cannot check for duplicate. File " + file.getName() + " not found.");
-        }
-        catch (IOException ioe)
-        {
-            System.err.println("IOException while checking for duplicate.");
-        }
-        return false;
-    }
-    
-    public boolean add2queue(String cellNo)
-    {
-        File folder = new File(System.getProperty("user.home") + "/WebAppFiles");    //folder
-        if(!folder.exists())
-            if(!folder.mkdir())
-                System.out.println("Cannot create directory.");
-        File queueFile = new File(System.getProperty("user.home") + "/WebAppFiles/QueueFile.csv");    //file
-        int ref = generateReferenceNo();
-        int position = getPosition(queueFile);
-        try
-        {
-            if(!queueFile.exists())                     //create new file if it doesn't exist
-                queueFile.createNewFile();
-            if(!checkDuplicate(cellNo,queueFile))       //verify duplicate
-            {    
-                BufferedWriter queueWriter = new BufferedWriter(new FileWriter(queueFile,true));
-                queueWriter.append(position + "," + cellNo + "," + ref);    //write position, cellNo, and referenceNo to file
-                queueWriter.newLine();
-                queueWriter.close();
-                positionGlobal = position;
-                cellphoneGlobal = cellNo;
-                refGlobal = ref;
+            if(!duplicate)      //continue if no duplicate detected
+            {
+                if(!rs.last())      //if no one in queue is Normal Client
+                    stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',false,'');");  //insert value to table (1)            
+                else
+                {
+                    lastNumber = rs.getInt("NUMBER");       //change this in the future to get last value from a history table
+                    stmt.execute("insert into QUEUETBL values (" + lastNumber+1 + ",'" + cellNo + "',false,'');");  //insert value to table
+                }
             }
-            else
-                return true;            //return true if duplicate
+            //close necessary objects
+            rs.close();     
+            stmt.close();
+            con.close();
         }
-        catch (FileNotFoundException fnfe)
+        catch (SQLException sqle)
         {
-            System.err.println("Queue File not found.");
+            System.err.println(sqle.getMessage());
         }
-        catch (IOException ioe)
-        {
-            System.err.println("IOException occured while trying to add to the queue file.");
-        }
-        return false;
+        
+        return "N" + lastNumber+1;  //return number, like "N1"
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -141,20 +97,17 @@ public class getNumberServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Queuing System Web App</title>");         
+            out.println("<title>Queuing Successful - Queuing System Web App</title>");         
             out.println("<meta charset=\"UTF-8\">");
-            out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+            out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");   
             out.println("</head>");
             out.println("<body>");
             out.println("<center>");
+            out.println("<h2>Thank you!</h2>");
             String cellNo = request.getParameter("cellNo");
-            if(add2queue(cellNo))
-                out.println("<b><font>Record Found</font></b>");
-            else
-                out.println("<b><font>You have been added to the queue</font></b>");
-            out.println("<br><br><br>Cellphone Number: " + cellphoneGlobal);
-            out.println("<br><h3>Your queue number is " + positionGlobal + " </h3>");
-            out.println("Reference Number: " + refGlobal + "<br>");
+            Connection con = connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
+            out.println("Your number is: <b>" + add2DB(con,cellNo) + "</b><br><br>");
+            out.println("Please wait for the text confirmation.");
             out.println("</center>");
             out.println("</body>");
             out.println("</html>");
