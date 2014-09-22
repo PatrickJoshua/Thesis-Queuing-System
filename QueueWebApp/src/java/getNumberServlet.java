@@ -104,7 +104,7 @@ public class getNumberServlet extends HttpServlet {
             out.println("<h2>Thank you!</h2>");
             String cellNo = request.getParameter("cellNo");
             Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-            out.println("Your number is: <b>" + add2DB(con,cellNo) + "</b><br>Reference Number: " + ref + "<br><br>");
+            out.println("Your number is: <b>N" + Common.add2DB(con,cellNo,"",false) + "</b><br>Reference Number: " + Common.ref + "<br><br>");
             out.println("Please wait for the text confirmation.");
             out.println("</center>");
             out.println("</body>");
