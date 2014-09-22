@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,6 +33,14 @@ public class getVIPNumberServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    int ref;
+    
+    public int generateReferenceNo()
+    {
+        Random random = new Random();
+        return random.nextInt(999999999);       //9 digit random number
+    }
     
     Connection connectToDatabase(String host, String user, String pw)
     {
@@ -60,21 +69,24 @@ public class getVIPNumberServlet extends HttpServlet {
             //detect duplicate
             while(rs.next())    //loop until reached the last VIP
             {
-                if(cellNo.equals(rs.getString("MOBILENUMBER")) || name.equalsIgnoreCase(rs.getString("NAME")))      //true if duplicate
+                if(cellNo.equals(rs.getString("MOBILENUM")) || name.equalsIgnoreCase(rs.getString("NAME")))      //true if duplicate
                 {
-                    lastNumber = rs.getInt("NUMBER");     //set last number from db
+                    lastNumber = rs.getInt("NUM");     //set last number from db
+                    lastNumber--;       //temporarily decrement (will be incremented before return)
+                    ref = rs.getInt("REF");
                     duplicate = true;
                 }
             }
             if(!duplicate)      //continue if no duplicate detected
             {
+                ref = generateReferenceNo();
                 if(!rs.last())      //if no one in queue is VIP
-                    stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',true,'" + name + "')");  //insert value to table (1)            
+                    stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',true," + ref + ",'" + name + "')");  //insert value to table (1)            
                 else
                 {
-                    lastNumber = rs.getInt("NUMBER");       //change this in the future to get last value from a history table
+                    lastNumber = rs.getInt("NUM");       //change this in the future to get last value from a history table
                     lastNumber++;   //use actual position, and write to database
-                    stmt.execute("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "',true,'" + name + "')");  //insert value to table
+                    stmt.execute("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "',true," + ref + ",'" + name + "')");  //insert value to table
                     lastNumber--;   //revert to lastNumber after writing to database
                 }
             }
@@ -109,12 +121,12 @@ public class getVIPNumberServlet extends HttpServlet {
             String cellNo = request.getParameter("cellNo");
             String name = request.getParameter("name");
             Connection con = connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-            out.println("Your number is: <b>" + add2DB(con,cellNo,name) + "</b><br><br>");
+            out.println("Your number is: <b>" + add2DB(con,cellNo,name) + "</b><br>Reference Number: " + ref + "<br><br>");
             out.println("Please wait for the text confirmation.");
             out.println("</center>");
             out.println("</body>");
             out.println("</html>");
-        }
+        } 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
