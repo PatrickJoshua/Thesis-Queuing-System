@@ -36,26 +36,6 @@ public class getVIPNumberServlet extends HttpServlet {
     
     int ref;
     
-    public int generateReferenceNo()
-    {
-        Random random = new Random();
-        return random.nextInt(999999999);       //9 digit random number
-    }
-    
-    Connection connectToDatabase(String host, String user, String pw)
-    {
-        Connection con = null;
-        try
-        {
-            con = DriverManager.getConnection(host, user, pw);
-        }
-        catch (SQLException sqle)
-        {
-            System.err.println(sqle.getMessage());
-        }
-        return con;
-    }
-    
     String add2DB(Connection con, String cellNo, String name)
     {
         int lastNumber = 0;     //holds the last number of VIP in the DB
@@ -79,7 +59,7 @@ public class getVIPNumberServlet extends HttpServlet {
             }
             if(!duplicate)      //continue if no duplicate detected
             {
-                ref = generateReferenceNo();
+                ref = Common.generateReferenceNo();
                 if(!rs.last())      //if no one in queue is VIP
                     stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',true," + ref + ",'" + name + "')");  //insert value to table (1)            
                 else
@@ -120,7 +100,7 @@ public class getVIPNumberServlet extends HttpServlet {
             out.println("<h2>Thank you!</h2>");
             String cellNo = request.getParameter("cellNo");
             String name = request.getParameter("name");
-            Connection con = connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
+            Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
             out.println("Your number is: <b>" + add2DB(con,cellNo,name) + "</b><br>Reference Number: " + ref + "<br><br>");
             out.println("Please wait for the text confirmation.");
             out.println("</center>");
