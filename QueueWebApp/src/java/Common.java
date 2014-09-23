@@ -93,8 +93,8 @@ public class Common {
             //ResultSet rs = stmt.executeQuery("SELECT * FROM QUEUETBL WHERE VIP=" + vip + "AND DATE=" + new java.sql.Date(new java.util.Date().getTime()));      //execute sql statement, and place result on rs
             PreparedStatement ps = con.prepareStatement("SELECT * FROM QUEUETBL WHERE VIP=? AND DATE=?");
             ps.setBoolean(1, vip);
-            
-            ps.setDate(2, new java.sql.Date(new java.util.Date().getTime()));
+            java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+            ps.setDate(2, sqlDate);
             ResultSet rs = ps.executeQuery();
             
             boolean duplicate = false;
