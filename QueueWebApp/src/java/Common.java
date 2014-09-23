@@ -61,14 +61,41 @@ public class Common {
         }
     }
     
+    public static int getLastNumber(Connection con, boolean vip)
+    {
+        int lastNumber = 0;
+        try
+        {
+            java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+            PreparedStatement ps = con.prepareStatement("select NUM from RECORDSHISTORY where DATE=? AND VIP=?",ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+            ps.setDate(1, sqlDate);
+            ps.setBoolean(2, vip);
+            ResultSet rs = ps.executeQuery();
+            if(rs.last())
+                lastNumber = rs.getInt("NUM");
+            ps.close();
+        }
+        catch (SQLException sqle)
+        {
+            System.err.println(sqle.getMessage());
+        }
+        System.out.println(lastNumber);
+        return lastNumber;
+    }
+    
     public static int add2DB(Connection con, String cellNo, String name, boolean vip)
     {
         int lastNumber = 0;     //holds the last number in the DB
             
         try
         {
-            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = stmt.executeQuery("SELECT * FROM QUEUETBL WHERE VIP=" + vip);      //execute sql statement, and place result on rs
+            //Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            //ResultSet rs = stmt.executeQuery("SELECT * FROM QUEUETBL WHERE VIP=" + vip + "AND DATE=" + new java.sql.Date(new java.util.Date().getTime()));      //execute sql statement, and place result on rs
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM QUEUETBL WHERE VIP=? AND DATE=?");
+            ps.setBoolean(1, vip);
+            
+            ps.setDate(2, new java.sql.Date(new java.util.Date().getTime()));
+            ResultSet rs = ps.executeQuery();
             
             boolean duplicate = false;
             //detect duplicate
@@ -97,24 +124,25 @@ public class Common {
             
             if(!duplicate)      //continue if no duplicate detected
             {
-                ref = Common.generateReferenceNo();
-                if(!rs.last())      //if no one in queue is VIP
-                {
-                    stmt.executeUpdate("insert into QUEUETBL values (1,'" + cellNo + "'," + vip + "," + ref + ",'" + name + "')");  //insert value to table (1)            
-                    add2History(con,1,cellNo,vip,ref,name);     //add to recordshistory table
-                }
-                else
-                {
-                    lastNumber = rs.getInt("NUM");       //change this in the future to get last value from a history table
-                    lastNumber++;   //use actual position, and write to database
-                    stmt.executeUpdate("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "')");  //insert value to table
-                    add2History(con,lastNumber,cellNo,vip,ref,name);    //add to reccordshistory table
-                    lastNumber--;   //revert to lastNumber after writing to database
-                }
+                ref = Common.generateReferenceNo();         //generate reference number
+                lastNumber = getLastNumber(con,vip);        //get last number from records history within the day
+                lastNumber++;   //temporarily increment to actual position
+                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (?,'?',?,?,'?',?)");
+                insert.setInt(1, lastNumber);
+                insert.setString(2, cellNo);
+                insert.setBoolean(3, vip);
+                insert.setInt(4, ref);
+                insert.setString(5, name);
+                insert.setDate(6, new java.sql.Date(new java.util.Date().getTime()));
+                insert.executeUpdate();
+                //stmt.executeUpdate("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "')");  //insert value to table
+                add2History(con,lastNumber,cellNo,vip,ref,name);    //add to reccordshistory table
+                lastNumber--;   //revert to lastNumber after writing to database
+                insert.close();
             }
             //close necessary objects
             rs.close();     
-            stmt.close();
+            ps.close();
             con.close();
         }
         catch (SQLException sqle)
