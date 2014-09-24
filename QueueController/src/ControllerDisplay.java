@@ -31,6 +31,68 @@ public class ControllerDisplay extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Connect2DB = new javax.swing.JDialog();
+        jLabel1 = new javax.swing.JLabel();
+        hostTF = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        usernameTF = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        passwordTF = new javax.swing.JPasswordField();
+
+        Connect2DB.setTitle("Connect to Database");
+
+        jLabel1.setText("Database URL:");
+
+        hostTF.setText("jdbc:derby://localhost:1527/QueueDB");
+
+        jLabel2.setText("Username:");
+
+        usernameTF.setText("DBADMIN");
+        usernameTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usernameTFActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Password:");
+
+        passwordTF.setText("dba");
+
+        javax.swing.GroupLayout Connect2DBLayout = new javax.swing.GroupLayout(Connect2DB.getContentPane());
+        Connect2DB.getContentPane().setLayout(Connect2DBLayout);
+        Connect2DBLayout.setHorizontalGroup(
+            Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Connect2DBLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(usernameTF)
+                    .addComponent(passwordTF))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        Connect2DBLayout.setVerticalGroup(
+            Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Connect2DBLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(hostTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(usernameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(passwordTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(164, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CSA Queuing System");
 
@@ -48,6 +110,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void usernameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameTFActionPerformed
 
     //start of developer-created methods
     public static Connection connectToDatabase(String host, String user, String pw)
@@ -93,8 +159,16 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 new ControllerDisplay().setVisible(true);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JDialog Connect2DB;
+    private javax.swing.JTextField hostTF;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPasswordField passwordTF;
+    private javax.swing.JTextField usernameTF;
     // End of variables declaration//GEN-END:variables
 }
