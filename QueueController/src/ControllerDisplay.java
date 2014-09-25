@@ -38,6 +38,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         usernameTF = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         passwordTF = new javax.swing.JPasswordField();
+        connectBT = new javax.swing.JButton();
 
         Connect2DB.setTitle("Connect to Database");
 
@@ -58,21 +59,28 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         passwordTF.setText("dba");
 
+        connectBT.setText("Connect");
+
         javax.swing.GroupLayout Connect2DBLayout = new javax.swing.GroupLayout(Connect2DB.getContentPane());
         Connect2DB.getContentPane().setLayout(Connect2DBLayout);
         Connect2DBLayout.setHorizontalGroup(
             Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Connect2DBLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                    .addComponent(usernameTF)
-                    .addComponent(passwordTF))
+                    .addGroup(Connect2DBLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                            .addComponent(usernameTF)
+                            .addComponent(passwordTF)))
+                    .addGroup(Connect2DBLayout.createSequentialGroup()
+                        .addGap(128, 128, 128)
+                        .addComponent(connectBT)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         Connect2DBLayout.setVerticalGroup(
@@ -90,7 +98,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(passwordTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(connectBT)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -159,11 +169,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 new ControllerDisplay().setVisible(true);
             }
         });
-        
+        Connect2DB.pack();
+        Connect2DB.setLocationRelativeTo(null);
+        Connect2DB.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JDialog Connect2DB;
+    private javax.swing.JButton connectBT;
     private javax.swing.JTextField hostTF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
