@@ -20,6 +20,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
      */
     public ControllerDisplay() {
         initComponents();
+        Connect2DB.pack();
+        Connect2DB.setLocationRelativeTo(null);
+        Connect2DB.setVisible(true);
     }
 
     /**
@@ -41,6 +44,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         connectBT = new javax.swing.JButton();
 
         Connect2DB.setTitle("Connect to Database");
+        Connect2DB.setAlwaysOnTop(true);
 
         jLabel1.setText("Database URL:");
 
@@ -169,9 +173,6 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 new ControllerDisplay().setVisible(true);
             }
         });
-        Connect2DB.pack();
-        Connect2DB.setLocationRelativeTo(null);
-        Connect2DB.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

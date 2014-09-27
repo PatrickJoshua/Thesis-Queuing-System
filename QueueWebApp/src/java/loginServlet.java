@@ -110,8 +110,8 @@ public class loginServlet extends HttpServlet {
                 out.println("<br><br>Your mobile number is: ");
                 out.println("<form name=viploginsuccess action=getVIPNumberServlet>");
                 out.println("<input type=text name=cellNo value=" + mobilenumber + ">");
+                out.println("<br><font size=\"2\"><i>Format: +639XXXXXXXXX</i></font> <br><br>");
                 out.println("<input type=hidden name=name value=\"" + name + "\">");
-                out.println("<br><br>");
                 out.println("<input type=submit value=\"Get VIP Number\">");
             }
             else    //if not valid
