@@ -2,6 +2,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /*
@@ -15,6 +16,8 @@ import javax.swing.UIManager;
  */
 public class ControllerDisplay extends javax.swing.JFrame {
 
+    public static Connection con = null;
+    
     /**
      * Creates new form ControllerDisplay
      */
@@ -44,7 +47,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         connectBT = new javax.swing.JButton();
 
         Connect2DB.setTitle("Connect to Database");
-        Connect2DB.setAlwaysOnTop(true);
+        Connect2DB.setModal(true);
 
         jLabel1.setText("Database URL:");
 
@@ -62,8 +65,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jLabel3.setText("Password:");
 
         passwordTF.setText("dba");
+        passwordTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordTFActionPerformed(evt);
+            }
+        });
 
         connectBT.setText("Connect");
+        connectBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connectBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout Connect2DBLayout = new javax.swing.GroupLayout(Connect2DB.getContentPane());
         Connect2DB.getContentPane().setLayout(Connect2DBLayout);
@@ -126,22 +139,38 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void usernameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTFActionPerformed
-        // TODO add your handling code here:
+        connectBTActionPerformed(evt);
     }//GEN-LAST:event_usernameTFActionPerformed
 
-    //start of developer-created methods
-    public static Connection connectToDatabase(String host, String user, String pw)
+    private void connectBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectBTActionPerformed
+        connectToDatabase(hostTF.getText(),usernameTF.getText(),passwordTF.getText());
+    }//GEN-LAST:event_connectBTActionPerformed
+
+    private void passwordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFActionPerformed
+        connectBTActionPerformed(evt);
+    }//GEN-LAST:event_passwordTFActionPerformed
+
+    //start of developer-creaed methods
+    public static void connectToDatabase(String host, String user, String pw)
     {
-        Connection con = null;
         try
         {
-            con = DriverManager.getConnection(host, user, pw);
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            //con = DriverManager.getConnection(host, user, pw);
+            con = DriverManager.getConnection("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");
         }
         catch (SQLException sqle)
         {
             System.err.println(sqle.getMessage());
+            JOptionPane.showMessageDialog(null, sqle.getMessage(), "Database Connection Error", JOptionPane.ERROR_MESSAGE);
         }
-        return con;
+        catch (ClassNotFoundException cnfe)
+        {
+            JOptionPane.showMessageDialog(null, cnfe.getMessage(), "Database Connection Error", JOptionPane.ERROR_MESSAGE);
+            cnfe.printStackTrace();
+        }
+        if(con != null)
+            Connect2DB.hide();
     }
     
     /**
