@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -123,7 +124,7 @@ public class Common {
                 ref = Common.generateReferenceNo();         //generate reference number
                 lastNumber = getLastNumber(con,vip);        //get last number from records history within the day
                 lastNumber++;   //temporarily increment to actual position
-                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,'','" + trans + "')");
+                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,'" + trans + "',NULL)");
                 insert.setDate(1, sqlDate);
                 insert.executeUpdate();
                 add2History(con,lastNumber,cellNo,vip,ref,name,trans);    //add to reccordshistory table
@@ -141,5 +142,22 @@ public class Common {
         }
         lastNumber++;
         return lastNumber;  //return number
+    }
+    
+    public static String getNowServing(Connection con) throws SQLException
+    {
+        String nowserving;
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("select NUM,VIP from QUEUETBL where NOWSERVING=true");
+        if(rs.next())
+        {
+            if(rs.getBoolean("VIP"))
+                nowserving = "V" + rs.getInt("NUM");
+            else
+                nowserving = "N" + rs.getInt("NUM");
+        }
+        else
+            nowserving = "None";
+        return nowserving;
     }
 }
