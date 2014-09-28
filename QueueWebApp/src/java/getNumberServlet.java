@@ -103,6 +103,7 @@ public class getNumberServlet extends HttpServlet {
             out.println("<center>");
             out.println("<h2>Thank you!</h2>");
             String cellNo = request.getParameter("cellNo");
+            String trans = "";
             if(!(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length()!=13))     //if mobile number is incorrect format
             {
                 out.println("<script type=\"text/javascript\">");  
@@ -113,7 +114,7 @@ public class getNumberServlet extends HttpServlet {
             else
             {
                 Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-                out.println("Your number is: <b>N" + Common.add2DB(con,cellNo,"",false) + "</b><br>Reference Number: " + Common.ref + "<br><br>");
+                out.println("Your number is: <b>N" + Common.add2DB(con,cellNo,"",false,trans) + "</b><br>Reference Number: " + Common.ref + "<br><br>");
                 out.println("Please wait for the text confirmation.");
             }
             out.println("</center>");

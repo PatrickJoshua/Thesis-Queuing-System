@@ -35,54 +35,7 @@ public class getVIPNumberServlet extends HttpServlet {
      */
     
     int ref;
-    
-    String add2DB(Connection con, String cellNo, String name)
-    {
-        int lastNumber = 0;     //holds the last number of VIP in the DB
-            
-        try
-        {
-            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = stmt.executeQuery("SELECT * FROM QUEUETBL WHERE VIP=TRUE");      //execute sql statement, and place result on rs
-            
-            boolean duplicate = false;
-            //detect duplicate
-            while(rs.next())    //loop until reached the last VIP
-            {
-                if(cellNo.equals(rs.getString("MOBILENUM")) || name.equalsIgnoreCase(rs.getString("NAME")))      //true if duplicate
-                {
-                    lastNumber = rs.getInt("NUM");     //set last number from db
-                    lastNumber--;       //temporarily decrement (will be incremented before return)
-                    ref = rs.getInt("REF");
-                    duplicate = true;
-                }
-            }
-            if(!duplicate)      //continue if no duplicate detected
-            {
-                ref = Common.generateReferenceNo();
-                if(!rs.last())      //if no one in queue is VIP
-                    stmt.execute("insert into QUEUETBL values (1,'" + cellNo + "',true," + ref + ",'" + name + "')");  //insert value to table (1)            
-                else
-                {
-                    lastNumber = rs.getInt("NUM");       //change this in the future to get last value from a history table
-                    lastNumber++;   //use actual position, and write to database
-                    stmt.execute("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "',true," + ref + ",'" + name + "')");  //insert value to table
-                    lastNumber--;   //revert to lastNumber after writing to database
-                }
-            }
-            //close necessary objects
-            rs.close();     
-            stmt.close();
-            con.close();
-        }
-        catch (SQLException sqle)
-        {
-            System.err.println(sqle.getMessage());
-        }
-        lastNumber++;
-        return "V" + lastNumber;  //return number, like "V1"
-    }
-    
+        
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -100,6 +53,7 @@ public class getVIPNumberServlet extends HttpServlet {
             out.println("<h2>Thank you!</h2>");
             String cellNo = request.getParameter("cellNo");
             String name = request.getParameter("name");
+            String trans = "";
             if(!(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length()!=13))     //if mobile number is incorrect format
             {
                 out.println("<script type=\"text/javascript\">");  
@@ -110,7 +64,7 @@ public class getVIPNumberServlet extends HttpServlet {
             else
             {
                 Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-                out.println("Your number is: <b>V" + Common.add2DB(con,cellNo,name,true) + "</b><br>Reference Number: " + Common.ref + "<br><br>");
+                out.println("Your number is: <b>V" + Common.add2DB(con,cellNo,name,true,trans) + "</b><br>Reference Number: " + Common.ref + "<br><br>");
                 out.println("Please wait for the text confirmation.");
             }
             out.println("</center>");
