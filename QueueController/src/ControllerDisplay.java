@@ -45,6 +45,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
         refLBL = new javax.swing.JLabel();
         nameLBL = new javax.swing.JLabel();
         transLBL = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        viewDB = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        cleanup = new javax.swing.JMenuItem();
+        clearQueue = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
 
         Connect2DB.setTitle("Connect to Database");
         Connect2DB.setModal(true);
@@ -182,6 +190,43 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         transLBL.setText("Transaction");
 
+        jMenu1.setText("Menu");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Database");
+
+        viewDB.setText("View Queue Database");
+        viewDB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewDBActionPerformed(evt);
+            }
+        });
+        jMenu2.add(viewDB);
+        jMenu2.add(jSeparator1);
+
+        cleanup.setText("Cleanup Past Records on Queue");
+        cleanup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cleanupActionPerformed(evt);
+            }
+        });
+        jMenu2.add(cleanup);
+
+        clearQueue.setText("Clear Queue");
+        clearQueue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearQueueActionPerformed(evt);
+            }
+        });
+        jMenu2.add(clearQueue);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Window");
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -217,7 +262,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addComponent(transLBL)
                 .addGap(7, 7, 7)
                 .addComponent(nextBT)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         pack();
@@ -306,6 +351,37 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private void hostTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hostTFActionPerformed
         connectBTActionPerformed(evt);
     }//GEN-LAST:event_hostTFActionPerformed
+
+    private void viewDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewDBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_viewDBActionPerformed
+
+    private void cleanupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanupActionPerformed
+        int reply = JOptionPane.showConfirmDialog(null, "You are about to remove all records on queue dated before today.\nDo you want to continue?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+          try {
+          PreparedStatement ps = con.prepareStatement("delete from QUEUETBL where DATE<>?");
+          ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+          JOptionPane.showMessageDialog(null, ps.executeUpdate() + " row(s) deleted", "Cleanup success", JOptionPane.INFORMATION_MESSAGE);
+          ps.close();
+          } catch (SQLException sqle) {
+              JOptionPane.showMessageDialog(null, "Cannot delete old records.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+          }
+        }
+    }//GEN-LAST:event_cleanupActionPerformed
+
+    private void clearQueueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearQueueActionPerformed
+        int reply = JOptionPane.showConfirmDialog(null, "Warning: You are about erase the entire queue.\nNote: This process is irrevesible.\nDo you want to continue?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+          try {
+          PreparedStatement ps = con.prepareStatement("delete from QUEUETBL");
+          JOptionPane.showMessageDialog(null, ps.executeUpdate() + " row(s) deleted", "Successfully Deleted Queue", JOptionPane.INFORMATION_MESSAGE);
+          ps.close();
+          } catch (SQLException sqle) {
+              JOptionPane.showMessageDialog(null, "Cannot delete all records on Queue.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+          }
+        }
+    }//GEN-LAST:event_clearQueueActionPerformed
 
     public static void connectToDatabase(String host, String user, String pw)
     {
@@ -408,12 +484,19 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JDialog Connect2DB;
     public static javax.swing.JFrame Display;
     public static javax.swing.JLabel cNowServing;
+    private javax.swing.JMenuItem cleanup;
+    private javax.swing.JMenuItem clearQueue;
     private javax.swing.JButton connectBT;
     public static javax.swing.JLabel dNowServing;
     private javax.swing.JTextField hostTF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel mobilenumLBL;
     private javax.swing.JLabel nameLBL;
     public static javax.swing.JButton nextBT;
@@ -422,5 +505,6 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private static javax.swing.JLabel servingLBL;
     private javax.swing.JLabel transLBL;
     private javax.swing.JTextField usernameTF;
+    private javax.swing.JMenuItem viewDB;
     // End of variables declaration//GEN-END:variables
 }
