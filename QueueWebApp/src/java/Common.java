@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -39,11 +40,11 @@ public class Common {
         return con;
     }
     
-    public static void add2History(Connection con, int num, String cellNo, boolean vip, int ref, String name)
+    public static void add2History(Connection con, int num, String cellNo, boolean vip, int ref, String name, String trans)
     {
         try
         {
-            PreparedStatement ps = con.prepareStatement("insert into RECORDSHISTORY values (" + num + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,?)");
+            PreparedStatement ps = con.prepareStatement("insert into RECORDSHISTORY values (" + num + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,?,'" + trans + "')");
             
             java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());  //get current date
             ps.setDate(1, sqlDate);     //set date on SQL statement
@@ -82,7 +83,7 @@ public class Common {
         return lastNumber;
     }
     
-    public static int add2DB(Connection con, String cellNo, String name, boolean vip)
+    public static int add2DB(Connection con, String cellNo, String name, boolean vip, String trans)
     {
         int lastNumber = 0;     //holds the last number in the DB
             
@@ -123,10 +124,10 @@ public class Common {
                 ref = Common.generateReferenceNo();         //generate reference number
                 lastNumber = getLastNumber(con,vip);        //get last number from records history within the day
                 lastNumber++;   //temporarily increment to actual position
-                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?)");
+                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,'" + trans + "',NULL)");
                 insert.setDate(1, sqlDate);
                 insert.executeUpdate();
-                add2History(con,lastNumber,cellNo,vip,ref,name);    //add to reccordshistory table
+                add2History(con,lastNumber,cellNo,vip,ref,name,trans);    //add to reccordshistory table
                 lastNumber--;   //revert to lastNumber after writing to database
                 insert.close();
             }
@@ -141,5 +142,25 @@ public class Common {
         }
         lastNumber++;
         return lastNumber;  //return number
+    }
+    
+    public static String getNowServing(Connection con) throws SQLException
+    {
+        String nowserving;
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("select NUM,VIP from QUEUETBL where NOWSERVING=true");
+        if(rs.next())
+        {
+            if(rs.getBoolean("VIP"))
+                nowserving = "V" + rs.getInt("NUM");
+            else
+                nowserving = "N" + rs.getInt("NUM");
+        }
+        else
+            nowserving = "None";
+        rs.close();
+        stmt.close();
+        con.close();
+        return nowserving;
     }
 }
