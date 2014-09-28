@@ -158,6 +158,9 @@ public class Common {
         }
         else
             nowserving = "None";
+        rs.close();
+        stmt.close();
+        con.close();
         return nowserving;
     }
 }

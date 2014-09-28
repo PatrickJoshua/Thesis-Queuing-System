@@ -1,16 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,16 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(urlPatterns = {"/getVIPNumberServlet"})
 public class getVIPNumberServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    
     int ref;
         
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -51,9 +31,9 @@ public class getVIPNumberServlet extends HttpServlet {
             out.println("<body>");
             out.println("<center>");
             out.println("<h2>Thank you!</h2>");
-            String cellNo = request.getParameter("cellNo");
-            String name = request.getParameter("name");
-            String trans = "";
+            String cellNo = request.getParameter("cellNo");     //do not modify
+            String name = request.getParameter("name");         //do not modify
+            String trans = "";      //do not modify
             if(!(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length()!=13))     //if mobile number is incorrect format
             {
                 out.println("<script type=\"text/javascript\">");  

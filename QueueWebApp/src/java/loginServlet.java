@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,7 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -24,15 +17,6 @@ import java.sql.ResultSet;
 @WebServlet(urlPatterns = {"/loginServlet"})
 public class loginServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     String name, mobilenumber;
     
     boolean validateCredentials(Connection con, String username, String password)
@@ -91,14 +75,20 @@ public class loginServlet extends HttpServlet {
             String password = request.getParameter("password");     //inputted password
             if(validateCredentials(con,username,password))          //run the code to validate user credentials
             {
-                //out.println("Record found: <br>Name: " + name + "<br>Mobile Number: " + mobilenumber);
                 out.println("<h2>Welcome</h2><b>" + name + "</b>");
                 out.println("<br><br>Your mobile number is: ");
-                out.println("<form name=viploginsuccess action=getVIPNumberServlet>");
-                out.println("<input type=text name=cellNo value=" + mobilenumber + ">");
-                out.println("<br><font size=\"2\"><i>Format: +639XXXXXXXXX</i></font> <br><br>");
-                out.println("<input type=hidden name=name value=\"" + name + "\">");
-                out.println("<input type=submit value=\"Get VIP Number\">");
+                out.println("<form name=viploginsuccess action=getVIPNumberServlet>");      //do not modify
+                out.println("<input type=text name=cellNo value=" + mobilenumber + ">");    //do not modify
+                out.println("<br><font size=\"2\"><i>Format: +639XXXXXXXXX</i></font> <br><br>");   
+                out.println("<input type=hidden name=name value=\"" + name + "\">");    //do not modify
+                out.println("<input type=submit value=\"Get VIP Number\">");        //do not modify
+                out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
+                con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
+                try {
+                    out.println("Now serving: <b>" + Common.getNowServing(con) + "</b>");   //display Now Serving
+                } catch(SQLException sqle) {
+                    System.out.println(sqle.getMessage());
+                }
             }
             else    //if not valid
             {
