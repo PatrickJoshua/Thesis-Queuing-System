@@ -1,4 +1,5 @@
 
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -45,6 +46,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         passwordTF = new javax.swing.JPasswordField();
         connectBT = new javax.swing.JButton();
+        Display = new javax.swing.JFrame();
+        nowServingLBL = new javax.swing.JLabel();
+        servingLBL = new javax.swing.JLabel();
 
         Connect2DB.setTitle("Connect to Database");
         Connect2DB.setModal(true);
@@ -55,7 +59,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         jLabel2.setText("Username:");
 
-        usernameTF.setText("DBADMIN");
+        usernameTF.setText("dbadmin");
         usernameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameTFActionPerformed(evt);
@@ -120,6 +124,42 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        Display.setTitle("Now Serving");
+        Display.setBackground(new java.awt.Color(255, 255, 255));
+        Display.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                DisplayComponentResized(evt);
+            }
+        });
+
+        nowServingLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nowServingLBL.setText("Now Serving");
+
+        servingLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        servingLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        servingLBL.setText("0");
+
+        javax.swing.GroupLayout DisplayLayout = new javax.swing.GroupLayout(Display.getContentPane());
+        Display.getContentPane().setLayout(DisplayLayout);
+        DisplayLayout.setHorizontalGroup(
+            DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DisplayLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nowServingLBL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(servingLBL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        DisplayLayout.setVerticalGroup(
+            DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DisplayLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(nowServingLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(servingLBL, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addGap(58, 58, 58))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CSA Queuing System");
 
@@ -150,14 +190,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
         connectBTActionPerformed(evt);
     }//GEN-LAST:event_passwordTFActionPerformed
 
+    private void DisplayComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_DisplayComponentResized
+        resizeDisplay();
+    }//GEN-LAST:event_DisplayComponentResized
+
     //start of developer-creaed methods
     public static void connectToDatabase(String host, String user, String pw)
     {
         try
         {
             Class.forName("org.apache.derby.jdbc.ClientDriver");
-            //con = DriverManager.getConnection(host, user, pw);
-            con = DriverManager.getConnection("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");
+            con = DriverManager.getConnection(host, user, pw);
+            //con = DriverManager.getConnection("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");
         }
         catch (SQLException sqle)
         {
@@ -170,7 +214,53 @@ public class ControllerDisplay extends javax.swing.JFrame {
             cnfe.printStackTrace();
         }
         if(con != null)
+        {
             Connect2DB.hide();
+            Display.pack();
+            Display.setLocationRelativeTo(null);
+            Display.setVisible(true);
+            //resizeDisplay();
+        }
+    }
+    
+    static void resizeDisplay()
+    {
+        Font labelFont = nowServingLBL.getFont();
+        String labelText = nowServingLBL.getText();
+
+        int stringWidth = nowServingLBL.getFontMetrics(labelFont).stringWidth(labelText);
+        int componentWidth = nowServingLBL.getWidth();
+
+        // Find out how much the font can grow in width.
+        double widthRatio = (double)componentWidth / (double)stringWidth;
+
+        int newFontSize = (int)(labelFont.getSize() * widthRatio);
+        int componentHeight = nowServingLBL.getHeight();
+
+        // Pick a new font size so it will not be larger than the height of label.
+        int fontSizeToUse = Math.min(newFontSize, componentHeight);
+
+        // Set the label's font size to the newly determined size.
+        nowServingLBL.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
+
+        //Number
+        Font labelFont1 = servingLBL.getFont();
+        String labelText1 = servingLBL.getText();
+
+        int stringWidth1 = servingLBL.getFontMetrics(labelFont1).stringWidth(labelText1);
+        int componentWidth1 = servingLBL.getWidth();
+
+        // Find out how much the font can grow in width.
+        double widthRatio1 = (double)componentWidth1 / (double)stringWidth1;
+
+        int newFontSize1 = (int)(labelFont1.getSize() * widthRatio1);
+        int componentHeight1 = servingLBL.getHeight();
+
+        // Pick a new font size so it will not be larger than the height of label.
+        int fontSizeToUse1 = Math.min(newFontSize1, componentHeight1);
+
+        // Set the label's font size to the newly determined size.
+        servingLBL.setFont(new Font(labelFont1.getName(), Font.PLAIN, fontSizeToUse1));
     }
     
     /**
@@ -206,12 +296,15 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JDialog Connect2DB;
+    public static javax.swing.JFrame Display;
     private javax.swing.JButton connectBT;
     private javax.swing.JTextField hostTF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    public static javax.swing.JLabel nowServingLBL;
     private javax.swing.JPasswordField passwordTF;
+    private static javax.swing.JLabel servingLBL;
     private javax.swing.JTextField usernameTF;
     // End of variables declaration//GEN-END:variables
 }
