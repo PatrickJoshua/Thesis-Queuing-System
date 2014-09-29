@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.Random;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -157,7 +159,13 @@ public class Common {
                 nowserving = "N" + rs.getInt("NUM");
         }
         else
-            nowserving = "None";
+        {
+            int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
+            if(currentTime > 9 && currentTime < 21)     //9AM to 9PM
+                nowserving = "None";
+            else
+                nowserving = "Store is closed";
+        }
         rs.close();
         stmt.close();
         con.close();
