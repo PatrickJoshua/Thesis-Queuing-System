@@ -46,8 +46,15 @@ public class realtime extends HttpServlet {
             out.println("<center>");
             out.println("<h2>Now Serving:</h2>");
             Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-            try{out.println("<h1>" + Common.getNowServing(con) + "</h1>");}
-            catch(SQLException sqle){System.err.println(sqle.getMessage());}
+            out.println("<h1>" + Common.getNowServing(con) + "</h1>");
+            out.println("<br><h3>On Queue:</h3>");
+            out.println("<table><tr><td align=center>");
+            out.println("VIP: " + Common.getTotal(con, false, true));
+            out.println("</td><td align=center>");
+            out.println("Guests: " + Common.getTotal(con, false, false));
+            out.println("</td></tr><td colspan=2 align=center>");
+            out.println("<br>Total persons on queue: " + Common.getTotal(con, true, true));
+            out.println("</td></tr></table>");
             out.println("</center>");
             out.println("</body>");
             out.println("</html>");

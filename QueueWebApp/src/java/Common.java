@@ -146,29 +146,54 @@ public class Common {
         return lastNumber;  //return number
     }
     
-    public static String getNowServing(Connection con) throws SQLException
+    public static String getNowServing(Connection con)
     {
-        String nowserving;
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery("select NUM,VIP from QUEUETBL where NOWSERVING=true");
-        if(rs.next())
-        {
-            if(rs.getBoolean("VIP"))
-                nowserving = "V" + rs.getInt("NUM");
+        String nowserving = null;
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select NUM,VIP from QUEUETBL where NOWSERVING=true");
+            if(rs.next())
+            {
+                if(rs.getBoolean("VIP"))
+                    nowserving = "V" + rs.getInt("NUM");
+                else
+                    nowserving = "N" + rs.getInt("NUM");
+            }
             else
-                nowserving = "N" + rs.getInt("NUM");
+            {
+                int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
+                if(currentTime > 9 && currentTime < 21)     //9AM to 9PM
+                    nowserving = "None";
+                else
+                    nowserving = "Store is closed";
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException sqle) {
+            System.err.println("Exception at getLastNumber - " + sqle.getMessage());
         }
-        else
-        {
-            int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
-            if(currentTime > 9 && currentTime < 21)     //9AM to 9PM
-                nowserving = "None";
-            else
-                nowserving = "Store is closed";
-        }
-        rs.close();
-        stmt.close();
-        con.close();
         return nowserving;
+    }
+    
+    public static int getTotal(Connection con, boolean all, boolean vip)
+    {
+        int total = 0;
+        try {
+            PreparedStatement ps;
+            ResultSet rs;
+            if(all)
+                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=?");
+            else
+                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=? AND VIP=" + vip);
+            ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+            rs = ps.executeQuery();
+            rs.next();
+            total = rs.getInt(1);
+            rs.close();
+            ps.close();
+        } catch (SQLException sqle) {
+            System.err.println("Exception at getTotal - " + sqle.getMessage());
+        }
+        return total;
     }
 }

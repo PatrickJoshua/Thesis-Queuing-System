@@ -84,11 +84,15 @@ public class loginServlet extends HttpServlet {
                 out.println("<input type=submit value=\"Get VIP Number\">");        //do not modify
                 out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
                 con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-                try {
-                    out.println("Now serving: <b>" + Common.getNowServing(con) + "</b>");   //display Now Serving
-                } catch(SQLException sqle) {
-                    System.out.println(sqle.getMessage());
-                }
+                out.println("Now serving: <b>" + Common.getNowServing(con) + "</b>");   //display Now Serving
+                out.println("<br><br>On Queue:");
+                out.println("<table><tr><td align=center>");
+                out.println("VIP: " + Common.getTotal(con, false, true));
+                out.println("</td><td align=center>");
+                out.println("Guests: " + Common.getTotal(con, false, false));
+                out.println("</td></tr><td colspan=2 align=center>");
+                out.println("<br>Total persons on queue: " + Common.getTotal(con, true, true));
+                out.println("</td></tr></table>");
             }
             else    //if not valid
             {
