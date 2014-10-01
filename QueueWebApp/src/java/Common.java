@@ -125,6 +125,19 @@ public class Common {
             {
                 ref = Common.generateReferenceNo();         //generate reference number
                 lastNumber = getLastNumber(con,vip);        //get last number from records history within the day
+                
+                /*Delete record from previous day*/
+                PreparedStatement psd = con.prepareStatement("select MOBILENUM from QUEUETBL where MOBILENUM='" + cellNo + "'");
+                ResultSet rsd = psd.executeQuery();
+                if(rsd.next()) { 
+                    PreparedStatement delete = con.prepareStatement("delete from QUEUETBL where MOBILENUM='" + cellNo + "'");
+                    System.err.println(delete.executeUpdate() + " old record on queue has been automatically deleted. Please use the Cleanup Queue function to delete old records that might interfere with current operations.");
+                    delete.close();
+                }
+                rsd.close();
+                psd.close();
+                /*end of record delete*/
+                
                 lastNumber++;   //temporarily increment to actual position
                 PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,'" + trans + "',NULL)");
                 insert.setDate(1, sqlDate);
@@ -140,7 +153,7 @@ public class Common {
         }
         catch (SQLException sqle)
         {
-            System.err.println(sqle.getMessage() + sqle.getSQLState());
+            System.err.println("Exception while adding to queue - " + sqle.getMessage() + sqle.getSQLState());
         }
         lastNumber++;
         return lastNumber;  //return number

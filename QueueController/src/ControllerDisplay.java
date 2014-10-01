@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
@@ -20,15 +19,15 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
     public static Connection con = null;
     DefaultTableModel model;
+    String currentTBL;
     
     public ControllerDisplay() {
-        model = new DefaultTableModel();
-        model.setColumnIdentifiers(new Object [] {"Number","Mobile"});
         initComponents();
         Connect2DB.pack();
         Connect2DB.setLocationRelativeTo(null);
         Connect2DB.setVisible(true);
     }
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -43,8 +42,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         passwordTF = new javax.swing.JPasswordField();
         connectBT = new javax.swing.JButton();
         Display = new javax.swing.JFrame();
+        nowServingLBL = new javax.swing.JLabel();
         dNowServing = new javax.swing.JLabel();
-        servingLBL = new javax.swing.JLabel();
         viewDatabase = new javax.swing.JFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -70,6 +69,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
         clearQueue = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         launchDisplay = new javax.swing.JMenuItem();
+        fullscreen = new javax.swing.JMenuItem();
+        restore = new javax.swing.JMenuItem();
+        closeDisplay = new javax.swing.JMenuItem();
 
         Connect2DB.setTitle("Connect to Database");
         Connect2DB.setModal(true);
@@ -150,20 +152,27 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        Display.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Display.setTitle("Now Serving");
         Display.setBackground(new java.awt.Color(255, 255, 255));
+        Display.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                DisplayMouseClicked(evt);
+            }
+        });
         Display.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 DisplayComponentResized(evt);
             }
         });
 
-        dNowServing.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        dNowServing.setText("Now Serving");
+        nowServingLBL.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        nowServingLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nowServingLBL.setText("Now Serving");
 
-        servingLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        servingLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        servingLBL.setText("None");
+        dNowServing.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
+        dNowServing.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        dNowServing.setText("None");
 
         javax.swing.GroupLayout DisplayLayout = new javax.swing.GroupLayout(Display.getContentPane());
         Display.getContentPane().setLayout(DisplayLayout);
@@ -172,24 +181,31 @@ public class ControllerDisplay extends javax.swing.JFrame {
             .addGroup(DisplayLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dNowServing, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addComponent(servingLBL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(nowServingLBL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(dNowServing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         DisplayLayout.setVerticalGroup(
             DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DisplayLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(dNowServing, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(servingLBL, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addComponent(nowServingLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(dNowServing, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
                 .addGap(58, 58, 58))
         );
 
         viewDatabase.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         viewDatabase.setTitle("View Database");
 
-        table.setModel(model);
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
         jScrollPane1.setViewportView(table);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("SQL Statement"));
@@ -245,8 +261,13 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CSA Queuing System");
+        addWindowStateListener(new java.awt.event.WindowStateListener() {
+            public void windowStateChanged(java.awt.event.WindowEvent evt) {
+                formWindowStateChanged(evt);
+            }
+        });
 
-        cNowServing.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        cNowServing.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cNowServing.setText("None");
 
         nextBT.setText("Next");
@@ -331,6 +352,30 @@ public class ControllerDisplay extends javax.swing.JFrame {
         });
         jMenu3.add(launchDisplay);
 
+        fullscreen.setText("Fullscreen Display");
+        fullscreen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fullscreenActionPerformed(evt);
+            }
+        });
+        jMenu3.add(fullscreen);
+
+        restore.setText("Restore Window Controls");
+        restore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restoreActionPerformed(evt);
+            }
+        });
+        jMenu3.add(restore);
+
+        closeDisplay.setText("Close Display");
+        closeDisplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeDisplayActionPerformed(evt);
+            }
+        });
+        jMenu3.add(closeDisplay);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -347,7 +392,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cNowServing)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(refLBL)
                             .addComponent(mobilenumLBL)
@@ -370,7 +415,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addComponent(transLBL)
                 .addGap(7, 7, 7)
                 .addComponent(nextBT)
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         pack();
@@ -402,8 +447,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         }
     }
             
-    void updateLabels(ResultSet rs)
-    {
+    void updateLabels(ResultSet rs) {
         try {
             if(rs.getBoolean("VIP"))   //transfer data from db to GUI labels on controller
                 cNowServing.setText("V" + rs.getInt("NUM"));    //if VIP
@@ -417,7 +461,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
             Statement stmt = con.createStatement();
             stmt.executeUpdate("update QUEUETBL set NOWSERVING=true where MOBILENUM='" + mobilenumLBL.getText() + "'"); //set now serving field to true
             stmt.close();
-            servingLBL.setText(cNowServing.getText());   //set now serving on display
+            dNowServing.setText("  " + cNowServing.getText() + "  ");   //set now serving on display
             //play tone
             //insert SMS code here
         } catch (SQLException sqle) {
@@ -435,7 +479,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 updateLabels(rs);   //transfer retrieved DB data to GUI
             }
             else {
-                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=fals");  //get non-vip guest
+                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false");  //get non-vip guest
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
                 rs = ps.executeQuery();
                 if(rs.next()) {    //if there is a non-vip guest on queue
@@ -447,7 +491,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                     refLBL.setText("-");
                     nameLBL.setText("-");
                     transLBL.setText("-");
-                    servingLBL.setText("None");
+                    dNowServing.setText("None");
                 }
             }
             ps.close();
@@ -461,6 +505,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_hostTFActionPerformed
 
     private void viewDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewDBActionPerformed
+        currentTBL = "QUEUETBL";
+        sqlTF.setText("select * from QUEUETBL");
         executeSQL("QUEUETBL");
         viewDatabase.pack();
         viewDatabase.setLocationRelativeTo(null);
@@ -499,6 +545,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_sqlBTActionPerformed
 
     private void viewRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewRecordsActionPerformed
+        currentTBL = "RECORDSHISTORY";
+        sqlTF.setText("select * from RECORDSHISTORY");
         executeSQL("RECORDSHISTORY");
         viewDatabase.pack();
         viewDatabase.setLocationRelativeTo(null);
@@ -506,6 +554,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_viewRecordsActionPerformed
 
     private void viewVIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewVIPActionPerformed
+        currentTBL = "VIPCLIENTSTBL";
+        sqlTF.setText("select * from VIPCLIENTSTBL");
         executeSQL("VIPCLIENTSTBL");
         viewDatabase.pack();
         viewDatabase.setLocationRelativeTo(null);
@@ -513,10 +563,44 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_viewVIPActionPerformed
 
     private void launchDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchDisplayActionPerformed
+        dNowServing.setFont(new Font("Segoe UI Light", Font.PLAIN, 11));
+        nowServingLBL.setFont(new Font("Segoe UI Light", Font.PLAIN, 11));
+        Display.setUndecorated(false);
         Display.pack();
         Display.setLocationRelativeTo(null);
         Display.setVisible(true);
     }//GEN-LAST:event_launchDisplayActionPerformed
+
+    private void closeDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeDisplayActionPerformed
+        Display.dispose();
+        Display.setUndecorated(false);
+    }//GEN-LAST:event_closeDisplayActionPerformed
+
+    private void fullscreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullscreenActionPerformed
+        Display.dispose();
+        Display.setUndecorated(true);
+        Display.setVisible(true);
+    }//GEN-LAST:event_fullscreenActionPerformed
+
+    private void restoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restoreActionPerformed
+        Display.dispose();
+        Display.setUndecorated(false);
+        Display.setVisible(true);
+    }//GEN-LAST:event_restoreActionPerformed
+
+    private void formWindowStateChanged(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowStateChanged
+    }//GEN-LAST:event_formWindowStateChanged
+
+    private void DisplayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayMouseClicked
+        Display.dispose();
+        if(Display.isUndecorated()) {
+            Display.setUndecorated(false);
+            dNowServing.setFont(new Font("Segoe UI Light", Font.PLAIN, 11));
+            nowServingLBL.setFont(new Font("Segoe UI Light", Font.PLAIN, 11));
+        } else
+            Display.setUndecorated(true);
+        Display.setVisible(true);
+    }//GEN-LAST:event_DisplayMouseClicked
 
     public void connectToDatabase(String host, String user, String pw)
     {
@@ -561,14 +645,13 @@ public class ControllerDisplay extends javax.swing.JFrame {
     
     void executeSQL(String DBtable) {
         try {
-            sqlTF.setText("select * from " + DBtable);
             Statement stmt = con.createStatement();
             ResultSet rs;
             if(sqlTF.getText().startsWith("select"))
                 rs = stmt.executeQuery(sqlTF.getText());
             else {
-                stmt.execute(sqlTF.getText());
-                rs = stmt.executeQuery("select * from " + DBtable);
+                JOptionPane.showMessageDialog(null, stmt.executeUpdate(sqlTF.getText()) + " row(s) affected", "SQL Result", JOptionPane.INFORMATION_MESSAGE);
+                rs = stmt.executeQuery("select * from " + currentTBL);
             }
             //String [] columnHeader = {"Number", "Mobile Number", "VIP", "Reference Number", "Name", "Date", "Transaction", "Currently Serving"};
             table.setModel(DbUtils.resultSetToTableModel(rs));
@@ -584,42 +667,42 @@ public class ControllerDisplay extends javax.swing.JFrame {
     //<editor-fold defaultstate="collapsed" desc=" Display resizing code ">
     static void resizeDisplay()
     {
-        Font labelFont = dNowServing.getFont();
-        String labelText = dNowServing.getText();
+        Font labelFont = nowServingLBL.getFont();
+        String labelText = nowServingLBL.getText();
 
-        int stringWidth = dNowServing.getFontMetrics(labelFont).stringWidth(labelText);
-        int componentWidth = dNowServing.getWidth();
+        int stringWidth = nowServingLBL.getFontMetrics(labelFont).stringWidth(labelText);
+        int componentWidth = nowServingLBL.getWidth();
 
         // Find out how much the font can grow in width.
         double widthRatio = (double)componentWidth / (double)stringWidth;
 
         int newFontSize = (int)(labelFont.getSize() * widthRatio);
-        int componentHeight = dNowServing.getHeight();
+        int componentHeight = nowServingLBL.getHeight();
 
         // Pick a new font size so it will not be larger than the height of label.
         int fontSizeToUse = Math.min(newFontSize, componentHeight);
 
         // Set the label's font size to the newly determined size.
-        dNowServing.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
+        nowServingLBL.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
 
         //Number
-        Font labelFont1 = servingLBL.getFont();
-        String labelText1 = servingLBL.getText();
+        Font labelFont1 = dNowServing.getFont();
+        String labelText1 = dNowServing.getText();
 
-        int stringWidth1 = servingLBL.getFontMetrics(labelFont1).stringWidth(labelText1);
-        int componentWidth1 = servingLBL.getWidth();
+        int stringWidth1 = dNowServing.getFontMetrics(labelFont1).stringWidth(labelText1);
+        int componentWidth1 = dNowServing.getWidth();
 
         // Find out how much the font can grow in width.
         double widthRatio1 = (double)componentWidth1 / (double)stringWidth1;
 
         int newFontSize1 = (int)(labelFont1.getSize() * widthRatio1);
-        int componentHeight1 = servingLBL.getHeight();
+        int componentHeight1 = dNowServing.getHeight();
 
         // Pick a new font size so it will not be larger than the height of label.
         int fontSizeToUse1 = Math.min(newFontSize1, componentHeight1);
 
         // Set the label's font size to the newly determined size.
-        servingLBL.setFont(new Font(labelFont1.getName(), Font.PLAIN, fontSizeToUse1));
+        dNowServing.setFont(new Font(labelFont1.getName(), Font.PLAIN, fontSizeToUse1));
     }
     //</editor-fold>
     
@@ -631,6 +714,37 @@ public class ControllerDisplay extends javax.swing.JFrame {
         try {
             UIManager.setLookAndFeel(
             UIManager.getSystemLookAndFeelClassName());
+            UIManager.put("Button.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("ToggleButton.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("RadioButton.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("CheckBox.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("ColorChooser.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("ComboBox.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("List.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("MenuBar.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("MenuItem.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("RadioButtonMenuItem.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("CheckBoxMenuItem.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("Menu.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("PopupMenu.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("OptionPane.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("Panel.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("ProgressBar.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("ScrollPane.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("Viewport.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("TabbedPane.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("Table.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("TableHeader.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("TextField.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("PasswordField.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("TextArea.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("TextPane.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("EditorPane.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("TitledBorder.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("ToolBar.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("ToolTip.font", new Font("Segoe UI", Font.PLAIN, 11));
+            UIManager.put("Tree.font", new Font("Segoe UI", Font.PLAIN, 11));
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(ControllerDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -656,8 +770,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JLabel cNowServing;
     private javax.swing.JMenuItem cleanup;
     private javax.swing.JMenuItem clearQueue;
+    private javax.swing.JMenuItem closeDisplay;
     private javax.swing.JButton connectBT;
-    public static javax.swing.JLabel dNowServing;
+    private static javax.swing.JLabel dNowServing;
+    private javax.swing.JMenuItem fullscreen;
     private javax.swing.JTextField hostTF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -675,12 +791,13 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel mobilenumLBL;
     private javax.swing.JLabel nameLBL;
     public static javax.swing.JButton nextBT;
+    public static javax.swing.JLabel nowServingLBL;
     private javax.swing.JPasswordField passwordTF;
     private javax.swing.JLabel refLBL;
-    private static javax.swing.JLabel servingLBL;
+    private javax.swing.JMenuItem restore;
     private javax.swing.JButton sqlBT;
     private javax.swing.JTextField sqlTF;
-    private javax.swing.JTable table;
+    public javax.swing.JTable table;
     private javax.swing.JLabel transLBL;
     private javax.swing.JTextField usernameTF;
     private javax.swing.JMenuItem viewDB;
