@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -16,8 +19,11 @@ import javax.swing.UIManager;
 public class ControllerDisplay extends javax.swing.JFrame {
 
     public static Connection con = null;
+    DefaultTableModel model;
     
     public ControllerDisplay() {
+        model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object [] {"Number","Mobile"});
         initComponents();
         Connect2DB.pack();
         Connect2DB.setLocationRelativeTo(null);
@@ -39,6 +45,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
         Display = new javax.swing.JFrame();
         dNowServing = new javax.swing.JLabel();
         servingLBL = new javax.swing.JLabel();
+        viewDatabase = new javax.swing.JFrame();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        sqlTF = new javax.swing.JTextField();
+        sqlBT = new javax.swing.JButton();
         cNowServing = new javax.swing.JLabel();
         nextBT = new javax.swing.JButton();
         mobilenumLBL = new javax.swing.JLabel();
@@ -47,12 +59,17 @@ public class ControllerDisplay extends javax.swing.JFrame {
         transLBL = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
         viewDB = new javax.swing.JMenuItem();
+        viewRecords = new javax.swing.JMenuItem();
+        viewVIP = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         cleanup = new javax.swing.JMenuItem();
         clearQueue = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        launchDisplay = new javax.swing.JMenuItem();
 
         Connect2DB.setTitle("Connect to Database");
         Connect2DB.setModal(true);
@@ -146,7 +163,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         servingLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         servingLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        servingLBL.setText("0");
+        servingLBL.setText("None");
 
         javax.swing.GroupLayout DisplayLayout = new javax.swing.GroupLayout(Display.getContentPane());
         Display.getContentPane().setLayout(DisplayLayout);
@@ -169,9 +186,67 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addGap(58, 58, 58))
         );
 
+        viewDatabase.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        viewDatabase.setTitle("View Database");
+
+        table.setModel(model);
+        jScrollPane1.setViewportView(table);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("SQL Statement"));
+
+        sqlBT.setText("Execute SQL");
+        sqlBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sqlBTActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(sqlTF)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sqlBT)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sqlTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sqlBT))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout viewDatabaseLayout = new javax.swing.GroupLayout(viewDatabase.getContentPane());
+        viewDatabase.getContentPane().setLayout(viewDatabaseLayout);
+        viewDatabaseLayout.setHorizontalGroup(
+            viewDatabaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(viewDatabaseLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(viewDatabaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        viewDatabaseLayout.setVerticalGroup(
+            viewDatabaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(viewDatabaseLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CSA Queuing System");
 
+        cNowServing.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         cNowServing.setText("None");
 
         nextBT.setText("Next");
@@ -191,20 +266,44 @@ public class ControllerDisplay extends javax.swing.JFrame {
         transLBL.setText("Transaction");
 
         jMenu1.setText("Menu");
+
+        jMenuItem1.setText("jMenuItem1");
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Database");
 
-        viewDB.setText("View Queue Database");
+        jMenu4.setText("View Tables");
+
+        viewDB.setText("View Queue");
         viewDB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 viewDBActionPerformed(evt);
             }
         });
-        jMenu2.add(viewDB);
+        jMenu4.add(viewDB);
+
+        viewRecords.setText("View Records History");
+        viewRecords.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewRecordsActionPerformed(evt);
+            }
+        });
+        jMenu4.add(viewRecords);
+
+        viewVIP.setText("View VIP List");
+        viewVIP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewVIPActionPerformed(evt);
+            }
+        });
+        jMenu4.add(viewVIP);
+
+        jMenu2.add(jMenu4);
         jMenu2.add(jSeparator1);
 
-        cleanup.setText("Cleanup Past Records on Queue");
+        cleanup.setText("Cleanup Queue");
         cleanup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cleanupActionPerformed(evt);
@@ -223,6 +322,15 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Window");
+
+        launchDisplay.setText("Launch Display");
+        launchDisplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                launchDisplayActionPerformed(evt);
+            }
+        });
+        jMenu3.add(launchDisplay);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -239,7 +347,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cNowServing)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(refLBL)
                             .addComponent(mobilenumLBL)
@@ -262,7 +370,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addComponent(transLBL)
                 .addGap(7, 7, 7)
                 .addComponent(nextBT)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
@@ -353,11 +461,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_hostTFActionPerformed
 
     private void viewDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewDBActionPerformed
-        // TODO add your handling code here:
+        executeSQL("QUEUETBL");
+        viewDatabase.pack();
+        viewDatabase.setLocationRelativeTo(null);
+        viewDatabase.setVisible(true);
     }//GEN-LAST:event_viewDBActionPerformed
 
     private void cleanupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanupActionPerformed
-        int reply = JOptionPane.showConfirmDialog(null, "You are about to remove all records on queue dated before today.\nDo you want to continue?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(null, "This will remove all records on queue dated before today.\nDo you want to continue?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
           try {
           PreparedStatement ps = con.prepareStatement("delete from QUEUETBL where DATE<>?");
@@ -383,7 +494,31 @@ public class ControllerDisplay extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_clearQueueActionPerformed
 
-    public static void connectToDatabase(String host, String user, String pw)
+    private void sqlBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sqlBTActionPerformed
+        executeSQL("QUEUETBL");
+    }//GEN-LAST:event_sqlBTActionPerformed
+
+    private void viewRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewRecordsActionPerformed
+        executeSQL("RECORDSHISTORY");
+        viewDatabase.pack();
+        viewDatabase.setLocationRelativeTo(null);
+        viewDatabase.setVisible(true);
+    }//GEN-LAST:event_viewRecordsActionPerformed
+
+    private void viewVIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewVIPActionPerformed
+        executeSQL("VIPCLIENTSTBL");
+        viewDatabase.pack();
+        viewDatabase.setLocationRelativeTo(null);
+        viewDatabase.setVisible(true);
+    }//GEN-LAST:event_viewVIPActionPerformed
+
+    private void launchDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchDisplayActionPerformed
+        Display.pack();
+        Display.setLocationRelativeTo(null);
+        Display.setVisible(true);
+    }//GEN-LAST:event_launchDisplayActionPerformed
+
+    public void connectToDatabase(String host, String user, String pw)
     {
         try
         {
@@ -408,6 +543,41 @@ public class ControllerDisplay extends javax.swing.JFrame {
             Display.setLocationRelativeTo(null);
             Display.setVisible(true);
             nextBT.setEnabled(true);
+            
+            //retrieve now serving
+            try {    
+                PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and NOWSERVING=true");
+                ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+                ResultSet rs = ps.executeQuery();
+                if(rs.next())
+                    updateLabels(rs);
+                rs.close();
+                ps.close();
+            } catch (SQLException sqle) {
+              JOptionPane.showMessageDialog(null, "There was a problem retrieving the number currently being served.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    void executeSQL(String DBtable) {
+        try {
+            sqlTF.setText("select * from " + DBtable);
+            Statement stmt = con.createStatement();
+            ResultSet rs;
+            if(sqlTF.getText().startsWith("select"))
+                rs = stmt.executeQuery(sqlTF.getText());
+            else {
+                stmt.execute(sqlTF.getText());
+                rs = stmt.executeQuery("select * from " + DBtable);
+            }
+            //String [] columnHeader = {"Number", "Mobile Number", "VIP", "Reference Number", "Name", "Date", "Transaction", "Currently Serving"};
+            table.setModel(DbUtils.resultSetToTableModel(rs));
+            //JTableHeader
+            //table.setTableHeader(null);
+            rs.close();
+            stmt.close();
+        } catch (SQLException sqle) {
+            JOptionPane.showMessageDialog(null, "Error executing statement: " + sqlTF.getText() + "\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -495,16 +665,27 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuItem launchDisplay;
     private javax.swing.JLabel mobilenumLBL;
     private javax.swing.JLabel nameLBL;
     public static javax.swing.JButton nextBT;
     private javax.swing.JPasswordField passwordTF;
     private javax.swing.JLabel refLBL;
     private static javax.swing.JLabel servingLBL;
+    private javax.swing.JButton sqlBT;
+    private javax.swing.JTextField sqlTF;
+    private javax.swing.JTable table;
     private javax.swing.JLabel transLBL;
     private javax.swing.JTextField usernameTF;
     private javax.swing.JMenuItem viewDB;
+    public static javax.swing.JFrame viewDatabase;
+    private javax.swing.JMenuItem viewRecords;
+    private javax.swing.JMenuItem viewVIP;
     // End of variables declaration//GEN-END:variables
 }
