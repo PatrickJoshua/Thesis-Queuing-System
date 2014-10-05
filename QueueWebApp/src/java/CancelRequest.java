@@ -38,7 +38,7 @@ public class CancelRequest extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CancelRequestN</title>");            
+            out.println("<title>Request Cancelled</title>");            
             out.println("<meta charset=\"UTF-8\">");
             out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");   
             out.println("</head>");
@@ -53,10 +53,10 @@ public class CancelRequest extends HttpServlet {
                 stmt.close();
                 con.close();
             } catch (SQLException sqle) {
-                System.out.println("Cannot cancel request. " + sqle.getMessage());
+                out.println("Cannot cancel request. " + sqle.getMessage());
             }
             /*End of do not modify*/
-            out.println("<center>Request has been canceled.<br>You have been removed from the queue</center>");
+            out.println("<center>Your number has been removed from the queue</center>");
             out.println("</body>");
             out.println("</html>");
         }

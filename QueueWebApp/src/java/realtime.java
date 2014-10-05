@@ -46,9 +46,6 @@ public class realtime extends HttpServlet {
             out.println("<center>");
             Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
             out.println("<h2>Now Serving:</h2>");
-            /*int numOfCounters = Common.getTotalCounters(con);
-            for(int i=0; i<numOfCounters; i++)
-                out.println("<h1>Counter " + Common.getNowServing(con) + "</h1>");*/
             out.println(Common.getNowServingCounters(con));
             out.println("<br><h3>On Queue:</h3>");
             out.println("<table><tr><td align=center>");

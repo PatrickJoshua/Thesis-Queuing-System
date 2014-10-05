@@ -85,8 +85,9 @@ public class loginServlet extends HttpServlet {
                 out.println("<input type=submit value=\"Get VIP Number\">");        //do not modify
                 out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
                 con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-                out.println("Now serving: <b>" + Common.getNowServing(con) + "</b>");   //display Now Serving
-                out.println("<br><br>On Queue:");
+                out.println("<h2>Now Serving:</h2>");
+                out.println(Common.getNowServingCounters(con));
+                out.println("<br><h3>On Queue:</h3>");
                 out.println("<table><tr><td align=center>");
                 out.println("VIP: " + Common.getTotal(con, false, true));
                 out.println("</td><td align=center>");
