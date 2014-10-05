@@ -19,6 +19,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static Connection con = null;
     DefaultTableModel model;
     String currentTBL;
+    int counter;
 
     public ControllerDisplay() {
         initComponents();
@@ -39,6 +40,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         passwordTF = new javax.swing.JPasswordField();
         connectBT = new javax.swing.JButton();
+        counterSpinner = new javax.swing.JSpinner();
+        jLabel5 = new javax.swing.JLabel();
         Display = new javax.swing.JFrame();
         nowServingLBL = new javax.swing.JLabel();
         dNowServing = new javax.swing.JLabel();
@@ -61,9 +64,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
         scroll = new javax.swing.JScrollPane();
         vipList = new javax.swing.JList();
         callAgainBT = new javax.swing.JButton();
+        counterLBL = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jmenu1 = new javax.swing.JMenu();
+        connectToDatabaseAgain = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         viewDB = new javax.swing.JMenuItem();
@@ -115,6 +119,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
             }
         });
 
+        counterSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+
+        jLabel5.setText("Counter #:");
+
         javax.swing.GroupLayout Connect2DBLayout = new javax.swing.GroupLayout(Connect2DB.getContentPane());
         Connect2DB.getContentPane().setLayout(Connect2DBLayout);
         Connect2DBLayout.setHorizontalGroup(
@@ -126,16 +134,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
                         .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                             .addComponent(usernameTF)
-                            .addComponent(passwordTF)))
+                            .addComponent(passwordTF)
+                            .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(Connect2DBLayout.createSequentialGroup()
-                        .addGap(128, 128, 128)
+                        .addGap(127, 127, 127)
                         .addComponent(connectBT)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
         Connect2DBLayout.setVerticalGroup(
             Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,8 +163,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(passwordTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(connectBT)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         Display.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -265,7 +279,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("CSA Queuing System");
+        setTitle("Queuing System");
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
                 formWindowStateChanged(evt);
@@ -323,12 +337,19 @@ public class ControllerDisplay extends javax.swing.JFrame {
             }
         });
 
-        jMenu1.setText("Menu");
+        counterLBL.setText("Counter");
 
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
+        jmenu1.setText("Menu");
 
-        jMenuBar1.add(jMenu1);
+        connectToDatabaseAgain.setText("Connect to Database Server");
+        connectToDatabaseAgain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connectToDatabaseAgainActionPerformed(evt);
+            }
+        });
+        jmenu1.add(connectToDatabaseAgain);
+
+        jMenuBar1.add(jmenu1);
 
         jMenu2.setText("Database");
 
@@ -427,10 +448,13 @@ public class ControllerDisplay extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cNowServing)
-                            .addComponent(jLabel4)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(42, 42, 42)
+                                .addComponent(counterLBL))
                             .addComponent(mobilenumLBL)
                             .addComponent(nameLBL))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
                         .addComponent(scroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -452,7 +476,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(counterLBL))
                         .addGap(14, 14, 14)
                         .addComponent(cNowServing)
                         .addGap(18, 18, 18)
@@ -483,7 +509,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameTFActionPerformed
 
     private void connectBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectBTActionPerformed
-        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText());
+        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString());
     }//GEN-LAST:event_connectBTActionPerformed
 
     private void passwordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFActionPerformed
@@ -497,7 +523,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     //start of developer-creaed methods
     void deletePreviouslyServed() {
         try {
-            con.createStatement().executeUpdate("delete from QUEUETBL where NOWSERVING=true");
+            con.createStatement().executeUpdate("delete from QUEUETBL where NOWSERVING=true AND COUNTER=" + counter);
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(null, "Error deleting previously served number.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -517,10 +543,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
             transLBL.setText(rs.getString("TRANS"));
             rs.close();
             Statement stmt = con.createStatement();
-            stmt.executeUpdate("update QUEUETBL set NOWSERVING=true where MOBILENUM='" + mobilenumLBL.getText() + "'"); //set now serving field to true
+            stmt.executeUpdate("update QUEUETBL set NOWSERVING=true,COUNTER=" + counter + " where MOBILENUM='" + mobilenumLBL.getText() + "'"); //set now serving field to true
             stmt.close();
             dNowServing.setText("  " + cNowServing.getText() + "  ");   //set now serving on display
-            //play tone
             //insert SMS code here
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(null, "Error retreiving data\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
@@ -530,7 +555,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private void nextBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBTActionPerformed
         try {
             deletePreviouslyServed();
-            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true");    //query to get VIP first
+            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true and NOWSERVING IS NULL");    //query to get VIP first
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
             ResultSet rs = ps.executeQuery();   //execute SQL statement
             if (rs.next()) {    //if there is a VIP on queue
@@ -539,7 +564,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 blink.start();
                 callAgainBT.setEnabled(true);
             } else {
-                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false");  //get non-vip guest
+                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false and NOWSERVING IS NULL");  //get non-vip guest
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
                 rs = ps.executeQuery();
                 if (rs.next()) {    //if there is a non-vip guest on queue
@@ -680,8 +705,13 @@ public class ControllerDisplay extends javax.swing.JFrame {
         blink.start();
     }//GEN-LAST:event_callAgainBTActionPerformed
 
-    public void connectToDatabase(String host, String user, String pw) {
+    private void connectToDatabaseAgainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectToDatabaseAgainActionPerformed
+        Connect2DB.show();
+    }//GEN-LAST:event_connectToDatabaseAgainActionPerformed
+
+    public void connectToDatabase(String host, String user, String pw, String counterNum) {
         try {
+            counter = Integer.parseInt(counterNum);
             Class.forName("org.apache.derby.jdbc.ClientDriver");
             con = DriverManager.getConnection(host, user, pw);
             //con = DriverManager.getConnection("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");
@@ -691,6 +721,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         } catch (ClassNotFoundException cnfe) {
             JOptionPane.showMessageDialog(null, cnfe.getMessage(), "Database Connection Error", JOptionPane.ERROR_MESSAGE);
             cnfe.printStackTrace();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid Counter", JOptionPane.ERROR_MESSAGE);
         }
         if (con != null) {
             Connect2DB.hide();
@@ -698,11 +730,15 @@ public class ControllerDisplay extends javax.swing.JFrame {
             Display.setLocationRelativeTo(null);
             Display.setVisible(true);
             nextBT.setEnabled(true);
-            //callAgainBT.setEnabled(true);
-
+            connectToDatabaseAgain.setEnabled(false);
+            connectToDatabaseAgain.setText("Connected to Database");
+            Display.setTitle("Counter " + counter);
+            counterLBL.setText("Counter " + counter);
+            nowServingLBL.setText("Counter " + counter + " - Now Serving");
+            
             //retrieve now serving
             try {
-                PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and NOWSERVING=true");
+                PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and NOWSERVING=true and COUNTER=" + counter);
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
@@ -850,6 +886,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JMenuItem clearQueue;
     private javax.swing.JMenuItem closeDisplay;
     private javax.swing.JButton connectBT;
+    private javax.swing.JMenuItem connectToDatabaseAgain;
+    private javax.swing.JLabel counterLBL;
+    private javax.swing.JSpinner counterSpinner;
     public static javax.swing.JLabel dNowServing;
     private javax.swing.JMenuItem fullscreen;
     public static javax.swing.JList guestList;
@@ -858,16 +897,16 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenu jmenu1;
     private javax.swing.JMenuItem launchDisplay;
     private javax.swing.JLabel mobilenumLBL;
     private javax.swing.JLabel nameLBL;

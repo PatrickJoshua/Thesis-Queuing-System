@@ -34,6 +34,10 @@ public class getVIPNumberServlet extends HttpServlet {
             String cellNo = request.getParameter("cellNo");     //do not modify
             String name = request.getParameter("name");         //do not modify
             String trans = "";      //do not modify
+            Boolean sms = true;
+            String checkbox = request.getParameter("sms");
+            if(checkbox==null)
+                sms = false;
             if(!(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length()!=13))     //if mobile number is incorrect format
             {
                 out.println("<script type=\"text/javascript\">");  
@@ -44,7 +48,7 @@ public class getVIPNumberServlet extends HttpServlet {
             else
             {
                 Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-                int num = Common.add2DB(con,cellNo,name,true,trans);
+                int num = Common.add2DB(con,cellNo,name,true,trans,sms);
                 out.println("Your number is: <b>V" + num + "</b><br>Reference Number: " + Common.ref + "<br><br>");
                 out.println("Please wait for the text confirmation.");
                 out.println("<form name=\"cancelrequest\" action=\"CancelRequest\"><br>");

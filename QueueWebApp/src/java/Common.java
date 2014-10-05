@@ -84,7 +84,7 @@ public class Common {
         return lastNumber;
     }
     
-    public static int add2DB(Connection con, String cellNo, String name, boolean vip, String trans)
+    public static int add2DB(Connection con, String cellNo, String name, boolean vip, String trans, boolean sms)
     {
         int lastNumber = 0;     //holds the last number in the DB
             
@@ -138,7 +138,7 @@ public class Common {
                 /*end of record delete*/
                 
                 lastNumber++;   //temporarily increment to actual position
-                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,'" + trans + "',NULL)");
+                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,'" + trans + "',NULL,NULL," + sms + ")");
                 insert.setDate(1, sqlDate);
                 insert.executeUpdate();
                 add2History(con,lastNumber,cellNo,vip,ref,name,trans);    //add to reccordshistory table
@@ -163,13 +163,42 @@ public class Common {
         String nowserving = null;
         try {
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select NUM,VIP from QUEUETBL where NOWSERVING=true");
+            ResultSet rs = stmt.executeQuery("select NUM,VIP,COUNTER from QUEUETBL where NOWSERVING=true");
             if(rs.next())
             {
                 if(rs.getBoolean("VIP"))
                     nowserving = "V" + rs.getInt("NUM");
                 else
                     nowserving = "N" + rs.getInt("NUM");
+            }
+            else
+            {
+                int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
+                if(currentTime > 9 && currentTime < 21)     //9AM to 9PM
+                    nowserving = "None";
+                else
+                    nowserving = "Store is closed";
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException sqle) {
+            System.err.println("Exception at getLastNumber - " + sqle.getMessage());
+        }
+        return nowserving;
+    }
+    
+    public static String getNowServingCounters(Connection con) {
+        String nowserving = "";
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select NUM,VIP,COUNTER from QUEUETBL where NOWSERVING=true");
+            if(rs.next()) {
+                do {
+                    if(rs.getBoolean("VIP"))
+                        nowserving = nowserving + "<h1>Counter " + rs.getInt("COUNTER") + ": V" + rs.getInt("NUM") + "</h1>";
+                    else
+                        nowserving = nowserving + "<h1>Counter " + rs.getInt("COUNTER") + ": V" + rs.getInt("NUM") + "</h1>";
+                } while(rs.next());
             }
             else
             {
@@ -194,9 +223,9 @@ public class Common {
             PreparedStatement ps;
             ResultSet rs;
             if(all)
-                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=?");
+                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=? AND NOWSERVING IS NULL");
             else
-                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=? AND VIP=" + vip);
+                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=? AND NOWSERVING IS NULL AND VIP=" + vip);
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
             rs = ps.executeQuery();
             rs.next();
@@ -205,6 +234,24 @@ public class Common {
             ps.close();
         } catch (SQLException sqle) {
             System.err.println("Exception at getTotal - " + sqle.getMessage());
+        }
+        return total;
+    }
+    
+    public static int getTotalCounters(Connection con) {
+        int total = 0;
+        try {
+            PreparedStatement ps;
+            ResultSet rs;
+                ps = con.prepareStatement("SELECT COUNT(COUNTER) FROM QUEUETBL WHERE DATE=?");
+            ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+            rs = ps.executeQuery();
+            rs.next();
+            total = rs.getInt(1);
+            rs.close();
+            ps.close();
+        } catch (SQLException sqle) {
+            System.err.println("Exception at getTotalCounters - " + sqle.getMessage());
         }
         return total;
     }
