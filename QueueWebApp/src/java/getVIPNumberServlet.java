@@ -44,8 +44,24 @@ public class getVIPNumberServlet extends HttpServlet {
             else
             {
                 Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-                out.println("Your number is: <b>V" + Common.add2DB(con,cellNo,name,true,trans) + "</b><br>Reference Number: " + Common.ref + "<br><br>");
+                int num = Common.add2DB(con,cellNo,name,true,trans);
+                out.println("Your number is: <b>V" + num + "</b><br>Reference Number: " + Common.ref + "<br><br>");
                 out.println("Please wait for the text confirmation.");
+                out.println("<form name=\"cancelrequest\" action=\"CancelRequest\"><br>");
+                out.println("<input type=hidden name=num value=" + num + ">");
+                out.println("<input type=hidden name=vip value=true>");
+                out.println("<input type=submit value=\"Cancel Request\">");
+                out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
+                con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
+                out.println("Now serving: <b>" + Common.getNowServing(con) + "</b>");   //display Now Serving
+                out.println("<br><br>On Queue:");
+                out.println("<table><tr><td align=center>");
+                out.println("VIP: " + Common.getTotal(con, false, true));
+                out.println("</td><td align=center>");
+                out.println("Guests: " + Common.getTotal(con, false, false));
+                out.println("</td></tr><td colspan=2 align=center>");
+                out.println("<br>Total persons on queue: " + Common.getTotal(con, true, true));
+                out.println("</td></tr></table>");
             }
             out.println("</center>");
             out.println("</body>");

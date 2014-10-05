@@ -178,7 +178,7 @@
             <Property name="text" type="java.lang.String" value="None"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
           </AuxValues>
         </Component>
       </SubComponents>
@@ -449,10 +449,14 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="nextBT" min="-2" max="-2" attributes="0"/>
                           <Component id="nextLBL" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="refLBL" min="-2" max="-2" attributes="0"/>
                           <Component id="transLBL" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="nextBT" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="callAgainBT" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -485,7 +489,10 @@
               <EmptySpace pref="29" max="32767" attributes="0"/>
               <Component id="nextLBL" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="nextBT" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="nextBT" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="callAgainBT" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -599,5 +606,14 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="callAgainBT">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Call Again"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="callAgainBTActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>

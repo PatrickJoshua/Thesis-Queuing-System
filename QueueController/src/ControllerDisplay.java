@@ -1,4 +1,3 @@
-
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,15 +19,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static Connection con = null;
     DefaultTableModel model;
     String currentTBL;
-    
+
     public ControllerDisplay() {
         initComponents();
         Connect2DB.pack();
         Connect2DB.setLocationRelativeTo(null);
         Connect2DB.setVisible(true);
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -62,6 +60,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         guestList = new javax.swing.JList();
         scroll = new javax.swing.JScrollPane();
         vipList = new javax.swing.JList();
+        callAgainBT = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -316,6 +315,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
         });
         scroll.setViewportView(vipList);
 
+        callAgainBT.setText("Call Again");
+        callAgainBT.setEnabled(false);
+        callAgainBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                callAgainBTActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("Menu");
 
         jMenuItem1.setText("jMenuItem1");
@@ -429,10 +436,13 @@ public class ControllerDisplay extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nextBT)
                             .addComponent(nextLBL)
                             .addComponent(refLBL)
-                            .addComponent(transLBL))
+                            .addComponent(transLBL)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(nextBT)
+                                .addGap(18, 18, 18)
+                                .addComponent(callAgainBT)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -458,7 +468,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(nextLBL)
                 .addGap(18, 18, 18)
-                .addComponent(nextBT)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nextBT)
+                    .addComponent(callAgainBT))
                 .addContainerGap())
         );
 
@@ -471,7 +483,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameTFActionPerformed
 
     private void connectBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectBTActionPerformed
-        connectToDatabase(hostTF.getText(),usernameTF.getText(),passwordTF.getText());
+        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText());
     }//GEN-LAST:event_connectBTActionPerformed
 
     private void passwordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFActionPerformed
@@ -487,17 +499,19 @@ public class ControllerDisplay extends javax.swing.JFrame {
         try {
             con.createStatement().executeUpdate("delete from QUEUETBL where NOWSERVING=true");
         } catch (SQLException sqle) {
-            JOptionPane.showMessageDialog(null, "Error deleting previously served number.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);   
+            JOptionPane.showMessageDialog(null, "Error deleting previously served number.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-            
+
     void updateLabels(ResultSet rs) {
         try {
-            if(rs.getBoolean("VIP"))   //transfer data from db to GUI labels on controller
+            if (rs.getBoolean("VIP")) //transfer data from db to GUI labels on controller
+            {
                 cNowServing.setText("V" + rs.getInt("NUM"));    //if VIP
-            else
+            } else {
                 cNowServing.setText("N" + rs.getInt("NUM"));    //non-vip guest
-            mobilenumLBL.setText(rs.getString("MOBILENUM"));    
+            }
+            mobilenumLBL.setText(rs.getString("MOBILENUM"));
             refLBL.setText(rs.getInt("REF") + "");
             nameLBL.setText(rs.getString("NAME"));
             transLBL.setText(rs.getString("TRANS"));
@@ -512,30 +526,36 @@ public class ControllerDisplay extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error retreiving data\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void nextBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBTActionPerformed
         try {
             deletePreviouslyServed();
             PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true");    //query to get VIP first
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
             ResultSet rs = ps.executeQuery();   //execute SQL statement
-            if(rs.next()) {    //if there is a VIP on queue
+            if (rs.next()) {    //if there is a VIP on queue
                 updateLabels(rs);   //transfer retrieved DB data to GUI
-            }
-            else {
+                Thread blink = new BlinkySound();
+                blink.start();
+                callAgainBT.setEnabled(true);
+            } else {
                 ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false");  //get non-vip guest
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
                 rs = ps.executeQuery();
-                if(rs.next()) {    //if there is a non-vip guest on queue
+                if (rs.next()) {    //if there is a non-vip guest on queue
                     updateLabels(rs);
-                }
-                else {  //if queue is empty
+                    Thread blink = new BlinkySound();
+                    blink.start();
+                    callAgainBT.setEnabled(true);
+                } else {  //if queue is empty
                     cNowServing.setText("None");//transfer data from db to GUI labels on controller
-                    mobilenumLBL.setText("-");    
+                    mobilenumLBL.setText("-");
                     refLBL.setText("-");
                     nameLBL.setText("-");
                     transLBL.setText("-");
                     dNowServing.setText("None");
+                    callAgainBT.setEnabled(false);
+                    JOptionPane.showMessageDialog(this, "No one is on queue", "Empty Queue", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
             rs.close();
@@ -561,27 +581,27 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private void cleanupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanupActionPerformed
         int reply = JOptionPane.showConfirmDialog(null, "This will remove all records on queue dated before today.\nDo you want to continue?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
-          try {
-          PreparedStatement ps = con.prepareStatement("delete from QUEUETBL where DATE<>?");
-          ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
-          JOptionPane.showMessageDialog(null, ps.executeUpdate() + " row(s) deleted", "Cleanup success", JOptionPane.INFORMATION_MESSAGE);
-          ps.close();
-          } catch (SQLException sqle) {
-              JOptionPane.showMessageDialog(null, "Cannot delete old records.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-          }
+            try {
+                PreparedStatement ps = con.prepareStatement("delete from QUEUETBL where DATE<>?");
+                ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+                JOptionPane.showMessageDialog(null, ps.executeUpdate() + " row(s) deleted", "Cleanup success", JOptionPane.INFORMATION_MESSAGE);
+                ps.close();
+            } catch (SQLException sqle) {
+                JOptionPane.showMessageDialog(null, "Cannot delete old records.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_cleanupActionPerformed
 
     private void clearQueueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearQueueActionPerformed
         int reply = JOptionPane.showConfirmDialog(null, "Warning: You are about erase the entire queue.\nNote: This process is irrevesible.\nDo you want to continue?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
-          try {
-          PreparedStatement ps = con.prepareStatement("delete from QUEUETBL");
-          JOptionPane.showMessageDialog(null, ps.executeUpdate() + " row(s) deleted", "Successfully Deleted Queue", JOptionPane.INFORMATION_MESSAGE);
-          ps.close();
-          } catch (SQLException sqle) {
-              JOptionPane.showMessageDialog(null, "Cannot delete all records on Queue.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-          }
+            try {
+                PreparedStatement ps = con.prepareStatement("delete from QUEUETBL");
+                JOptionPane.showMessageDialog(null, ps.executeUpdate() + " row(s) deleted", "Successfully Deleted Queue", JOptionPane.INFORMATION_MESSAGE);
+                ps.close();
+            } catch (SQLException sqle) {
+                JOptionPane.showMessageDialog(null, "Cannot delete all records on Queue.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_clearQueueActionPerformed
 
@@ -638,73 +658,76 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
     private void DisplayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DisplayMouseClicked
         Display.dispose();
-        if(Display.isUndecorated()) {
+        if (Display.isUndecorated()) {
             Display.setUndecorated(false);
             dNowServing.setFont(new Font("Segoe UI Light", Font.PLAIN, 11));
             nowServingLBL.setFont(new Font("Segoe UI Light", Font.PLAIN, 11));
-        } else
+        } else {
             Display.setUndecorated(true);
+        }
         Display.setVisible(true);
     }//GEN-LAST:event_DisplayMouseClicked
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
-        if (reply == JOptionPane.YES_OPTION) 
+        if (reply == JOptionPane.YES_OPTION) {
             System.exit(0);
+        }
     }//GEN-LAST:event_formWindowClosing
 
-    public void connectToDatabase(String host, String user, String pw)
-    {
-        try
-        {
+    private void callAgainBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_callAgainBTActionPerformed
+        Thread blink = new BlinkySound();
+        blink.start();
+    }//GEN-LAST:event_callAgainBTActionPerformed
+
+    public void connectToDatabase(String host, String user, String pw) {
+        try {
             Class.forName("org.apache.derby.jdbc.ClientDriver");
             con = DriverManager.getConnection(host, user, pw);
             //con = DriverManager.getConnection("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");
-        }
-        catch (SQLException sqle)
-        {
+        } catch (SQLException sqle) {
             System.err.println(sqle.getMessage());
             JOptionPane.showMessageDialog(null, sqle.getMessage(), "Database Connection Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (ClassNotFoundException cnfe)
-        {
+        } catch (ClassNotFoundException cnfe) {
             JOptionPane.showMessageDialog(null, cnfe.getMessage(), "Database Connection Error", JOptionPane.ERROR_MESSAGE);
             cnfe.printStackTrace();
         }
-        if(con != null)
-        {
+        if (con != null) {
             Connect2DB.hide();
             Display.pack();
             Display.setLocationRelativeTo(null);
             Display.setVisible(true);
             nextBT.setEnabled(true);
-            
+            //callAgainBT.setEnabled(true);
+
             //retrieve now serving
-            try {    
+            try {
                 PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and NOWSERVING=true");
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 ResultSet rs = ps.executeQuery();
-                if(rs.next())
+                if (rs.next()) {
                     updateLabels(rs);
+                    callAgainBT.setEnabled(true);
+                }
                 rs.close();
                 ps.close();
             } catch (SQLException sqle) {
-              JOptionPane.showMessageDialog(null, "There was a problem retrieving the number currently being served.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "There was a problem retrieving the number currently being served.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
-            
+
             //start upcoming list generator thread
             Thread upcominglistgeneratorThread = new UpcomingListGenerator(con);
             upcominglistgeneratorThread.start();
         }
     }
-    
+
     void executeSQL(String DBtable) {
         try {
             Statement stmt = con.createStatement();
             ResultSet rs;
-            if(sqlTF.getText().startsWith("select"))
+            if (sqlTF.getText().startsWith("select")) {
                 rs = stmt.executeQuery(sqlTF.getText());
-            else {
+            } else {
                 JOptionPane.showMessageDialog(null, stmt.executeUpdate(sqlTF.getText()) + " row(s) affected", "SQL Result", JOptionPane.INFORMATION_MESSAGE);
                 rs = stmt.executeQuery("select * from " + currentTBL);
             }
@@ -718,10 +741,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error executing statement: " + sqlTF.getText() + "\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     //<editor-fold defaultstate="collapsed" desc=" Display resizing code ">
-    static void resizeDisplay()
-    {
+    static void resizeDisplay() {
         Font labelFont = nowServingLBL.getFont();
         String labelText = nowServingLBL.getText();
 
@@ -729,9 +751,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
         int componentWidth = nowServingLBL.getWidth();
 
         // Find out how much the font can grow in width.
-        double widthRatio = (double)componentWidth / (double)stringWidth;
+        double widthRatio = (double) componentWidth / (double) stringWidth;
 
-        int newFontSize = (int)(labelFont.getSize() * widthRatio);
+        int newFontSize = (int) (labelFont.getSize() * widthRatio);
         int componentHeight = nowServingLBL.getHeight();
 
         // Pick a new font size so it will not be larger than the height of label.
@@ -748,9 +770,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
         int componentWidth1 = dNowServing.getWidth();
 
         // Find out how much the font can grow in width.
-        double widthRatio1 = (double)componentWidth1 / (double)stringWidth1;
+        double widthRatio1 = (double) componentWidth1 / (double) stringWidth1;
 
-        int newFontSize1 = (int)(labelFont1.getSize() * widthRatio1);
+        int newFontSize1 = (int) (labelFont1.getSize() * widthRatio1);
         int componentHeight1 = dNowServing.getHeight();
 
         // Pick a new font size so it will not be larger than the height of label.
@@ -760,7 +782,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         dNowServing.setFont(new Font(labelFont1.getName(), Font.PLAIN, fontSizeToUse1));
     }
     //</editor-fold>
-    
+
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -768,7 +790,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
          */
         try {
             UIManager.setLookAndFeel(
-            UIManager.getSystemLookAndFeelClassName());
+                    UIManager.getSystemLookAndFeelClassName());
             UIManager.put("Button.font", new Font("Segoe UI", Font.PLAIN, 11));
             UIManager.put("ToggleButton.font", new Font("Segoe UI", Font.PLAIN, 11));
             UIManager.put("RadioButton.font", new Font("Segoe UI", Font.PLAIN, 11));
@@ -823,11 +845,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JDialog Connect2DB;
     public static javax.swing.JFrame Display;
     public static javax.swing.JLabel cNowServing;
+    private javax.swing.JButton callAgainBT;
     private javax.swing.JMenuItem cleanup;
     private javax.swing.JMenuItem clearQueue;
     private javax.swing.JMenuItem closeDisplay;
     private javax.swing.JButton connectBT;
-    private static javax.swing.JLabel dNowServing;
+    public static javax.swing.JLabel dNowServing;
     private javax.swing.JMenuItem fullscreen;
     public static javax.swing.JList guestList;
     private javax.swing.JTextField hostTF;

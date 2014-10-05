@@ -81,7 +81,6 @@ public class Common {
         {
             System.err.println(sqle.getMessage());
         }
-        System.out.println(lastNumber);
         return lastNumber;
     }
     
