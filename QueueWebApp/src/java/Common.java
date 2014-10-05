@@ -42,11 +42,11 @@ public class Common {
         return con;
     }
     
-    public static void add2History(Connection con, int num, String cellNo, boolean vip, int ref, String name, String trans)
+    public static void add2History(Connection con, int num, String cellNo, boolean vip, int ref, String name, String trans, Boolean sms)
     {
         try
         {
-            PreparedStatement ps = con.prepareStatement("insert into RECORDSHISTORY values (" + num + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,?,'" + trans + "')");
+            PreparedStatement ps = con.prepareStatement("insert into RECORDSHISTORY values (" + num + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,?,'" + trans + "'," + sms + ")");
             
             java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());  //get current date
             ps.setDate(1, sqlDate);     //set date on SQL statement
@@ -138,10 +138,10 @@ public class Common {
                 /*end of record delete*/
                 
                 lastNumber++;   //temporarily increment to actual position
-                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,'" + trans + "',NULL,NULL," + sms + ")");
+                PreparedStatement insert = con.prepareStatement("insert into QUEUETBL values (" + lastNumber + ",'" + cellNo + "'," + vip + "," + ref + ",'" + name + "',?,'" + trans + "',NULL," + sms + ")");
                 insert.setDate(1, sqlDate);
                 insert.executeUpdate();
-                add2History(con,lastNumber,cellNo,vip,ref,name,trans);    //add to reccordshistory table
+                add2History(con,lastNumber,cellNo,vip,ref,name,trans,sms);    //add to reccordshistory table
                 lastNumber--;   //revert to lastNumber after writing to database
                 insert.close();
             }
@@ -163,7 +163,7 @@ public class Common {
         String nowserving = null;
         try {
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select NUM,VIP,COUNTER from QUEUETBL where NOWSERVING=true");
+            ResultSet rs = stmt.executeQuery("select NUM,VIP,COUNTER from QUEUETBL where COUNTER IS NOT NULL");
             if(rs.next())
             {
                 if(rs.getBoolean("VIP"))
@@ -191,13 +191,13 @@ public class Common {
         String nowserving = "";
         try {
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select NUM,VIP,COUNTER from QUEUETBL where NOWSERVING=true");
+            ResultSet rs = stmt.executeQuery("select NUM,VIP,COUNTER from QUEUETBL where COUNTER IS NOT NULL");
             if(rs.next()) {
                 do {
                     if(rs.getBoolean("VIP"))
                         nowserving = nowserving + "<h1>Counter " + rs.getInt("COUNTER") + ": V" + rs.getInt("NUM") + "</h1>";
                     else
-                        nowserving = nowserving + "<h1>Counter " + rs.getInt("COUNTER") + ": V" + rs.getInt("NUM") + "</h1>";
+                        nowserving = nowserving + "<h1>Counter " + rs.getInt("COUNTER") + ": N" + rs.getInt("NUM") + "</h1>";
                 } while(rs.next());
             }
             else
@@ -223,9 +223,9 @@ public class Common {
             PreparedStatement ps;
             ResultSet rs;
             if(all)
-                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=? AND NOWSERVING IS NULL");
+                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=? AND COUNTER IS NULL");
             else
-                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=? AND NOWSERVING IS NULL AND VIP=" + vip);
+                ps = con.prepareStatement("SELECT COUNT(NUM) FROM QUEUETBL WHERE DATE=? AND COUNTER IS NULL AND VIP=" + vip);
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
             rs = ps.executeQuery();
             rs.next();

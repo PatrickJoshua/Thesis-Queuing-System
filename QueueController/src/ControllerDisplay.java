@@ -523,7 +523,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     //start of developer-creaed methods
     void deletePreviouslyServed() {
         try {
-            con.createStatement().executeUpdate("delete from QUEUETBL where NOWSERVING=true AND COUNTER=" + counter);
+            con.createStatement().executeUpdate("delete from QUEUETBL where COUNTER=" + counter);
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(null, "Error deleting previously served number.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -543,7 +543,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
             transLBL.setText(rs.getString("TRANS"));
             rs.close();
             Statement stmt = con.createStatement();
-            stmt.executeUpdate("update QUEUETBL set NOWSERVING=true,COUNTER=" + counter + " where MOBILENUM='" + mobilenumLBL.getText() + "'"); //set now serving field to true
+            stmt.executeUpdate("update QUEUETBL set COUNTER=" + counter + " where MOBILENUM='" + mobilenumLBL.getText() + "'"); //set now serving field to true
             stmt.close();
             dNowServing.setText("  " + cNowServing.getText() + "  ");   //set now serving on display
             //insert SMS code here
@@ -555,7 +555,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private void nextBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBTActionPerformed
         try {
             deletePreviouslyServed();
-            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true and NOWSERVING IS NULL");    //query to get VIP first
+            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true and COUNTER IS NULL");    //query to get VIP first
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
             ResultSet rs = ps.executeQuery();   //execute SQL statement
             if (rs.next()) {    //if there is a VIP on queue
@@ -564,7 +564,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 blink.start();
                 callAgainBT.setEnabled(true);
             } else {
-                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false and NOWSERVING IS NULL");  //get non-vip guest
+                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false and COUNTER IS NULL");  //get non-vip guest
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
                 rs = ps.executeQuery();
                 if (rs.next()) {    //if there is a non-vip guest on queue
@@ -738,7 +738,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
             
             //retrieve now serving
             try {
-                PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and NOWSERVING=true and COUNTER=" + counter);
+                PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and COUNTER=" + counter);
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {

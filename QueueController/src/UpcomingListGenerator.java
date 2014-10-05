@@ -21,7 +21,7 @@ public class UpcomingListGenerator extends Thread {
         while(true) {
             try {
                 //Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                PreparedStatement ps = con.prepareStatement("select NUM from QUEUETBL where VIP=true AND DATE=? and NOWSERVING IS NULL",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                PreparedStatement ps = con.prepareStatement("select NUM from QUEUETBL where VIP=true AND DATE=? and COUNTER IS NULL",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 ResultSet rs = ps.executeQuery();
                 if(rs.last()) {     //go to last; determine number of rows returned
@@ -35,7 +35,7 @@ public class UpcomingListGenerator extends Thread {
                     ControllerDisplay.vipList.setListData(new String[0]);
                 
                 //for guest list
-                ps = con.prepareStatement("select NUM from QUEUETBL where VIP=false AND DATE=? and NOWSERVING IS NULL",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ps = con.prepareStatement("select NUM from QUEUETBL where VIP=false AND DATE=? and COUNTER IS NULL",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 rs = ps.executeQuery();
                 if(rs.last()) {     //go to last; determine number of rows returned
