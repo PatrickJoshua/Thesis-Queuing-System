@@ -56,6 +56,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
         refLBL = new javax.swing.JLabel();
         nameLBL = new javax.swing.JLabel();
         transLBL = new javax.swing.JLabel();
+        nextLBL = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        guestList = new javax.swing.JList();
+        scroll = new javax.swing.JScrollPane();
+        vipList = new javax.swing.JList();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -259,11 +265,16 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("CSA Queuing System");
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
                 formWindowStateChanged(evt);
+            }
+        });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
@@ -285,6 +296,25 @@ public class ControllerDisplay extends javax.swing.JFrame {
         nameLBL.setText("Name");
 
         transLBL.setText("Transaction");
+
+        nextLBL.setForeground(new java.awt.Color(153, 153, 153));
+        nextLBL.setText("Next:");
+
+        jLabel4.setText("Now Serving");
+
+        guestList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(guestList);
+
+        vipList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        scroll.setViewportView(vipList);
 
         jMenu1.setText("Menu");
 
@@ -385,37 +415,51 @@ public class ControllerDisplay extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(72, 72, 72)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(nextBT)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(cNowServing)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(refLBL)
+                            .addComponent(cNowServing)
+                            .addComponent(jLabel4)
                             .addComponent(mobilenumLBL)
-                            .addComponent(nameLBL)
+                            .addComponent(nameLBL))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                        .addComponent(scroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nextBT)
+                            .addComponent(nextLBL)
+                            .addComponent(refLBL)
                             .addComponent(transLBL))
-                        .addGap(115, 115, 115))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(nameLBL)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cNowServing)
-                    .addComponent(mobilenumLBL))
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(14, 14, 14)
+                        .addComponent(cNowServing)
+                        .addGap(18, 18, 18)
+                        .addComponent(nameLBL)
+                        .addGap(18, 18, 18)
+                        .addComponent(mobilenumLBL))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(refLBL)
                 .addGap(18, 18, 18)
                 .addComponent(transLBL)
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(nextLBL)
+                .addGap(18, 18, 18)
                 .addComponent(nextBT)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -494,6 +538,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                     dNowServing.setText("None");
                 }
             }
+            rs.close();
             ps.close();
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(null, "Error retreiving data\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
@@ -602,6 +647,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
         Display.setVisible(true);
     }//GEN-LAST:event_DisplayMouseClicked
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) 
+            System.exit(0);
+    }//GEN-LAST:event_formWindowClosing
+
     public void connectToDatabase(String host, String user, String pw)
     {
         try
@@ -640,6 +691,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
             } catch (SQLException sqle) {
               JOptionPane.showMessageDialog(null, "There was a problem retrieving the number currently being served.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
+            
+            //start upcoming list generator thread
+            Thread upcominglistgeneratorThread = new UpcomingListGenerator(con);
+            upcominglistgeneratorThread.start();
         }
     }
     
@@ -774,10 +829,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JButton connectBT;
     private static javax.swing.JLabel dNowServing;
     private javax.swing.JMenuItem fullscreen;
+    public static javax.swing.JList guestList;
     private javax.swing.JTextField hostTF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -786,15 +843,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    public static javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuItem launchDisplay;
     private javax.swing.JLabel mobilenumLBL;
     private javax.swing.JLabel nameLBL;
     public static javax.swing.JButton nextBT;
+    private javax.swing.JLabel nextLBL;
     public static javax.swing.JLabel nowServingLBL;
     private javax.swing.JPasswordField passwordTF;
     private javax.swing.JLabel refLBL;
     private javax.swing.JMenuItem restore;
+    private javax.swing.JScrollPane scroll;
     private javax.swing.JButton sqlBT;
     private javax.swing.JTextField sqlTF;
     public javax.swing.JTable table;
@@ -804,5 +864,6 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JFrame viewDatabase;
     private javax.swing.JMenuItem viewRecords;
     private javax.swing.JMenuItem viewVIP;
+    public static javax.swing.JList vipList;
     // End of variables declaration//GEN-END:variables
 }
