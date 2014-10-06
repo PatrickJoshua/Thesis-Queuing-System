@@ -118,9 +118,11 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         editDeleteVIP = new javax.swing.JMenuItem();
         editTrans = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenu5 = new javax.swing.JMenu();
         cleanup = new javax.swing.JMenuItem();
         clearQueue = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        clrHistory = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         launchDisplay = new javax.swing.JMenuItem();
         fullscreen = new javax.swing.JMenuItem();
@@ -755,7 +757,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jMenu1.add(editTrans);
 
         jMenu2.add(jMenu1);
-        jMenu2.add(jSeparator1);
+
+        jMenu5.setText("Clear Database");
 
         cleanup.setText("Cleanup Queue");
         cleanup.addActionListener(new java.awt.event.ActionListener() {
@@ -763,7 +766,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 cleanupActionPerformed(evt);
             }
         });
-        jMenu2.add(cleanup);
+        jMenu5.add(cleanup);
 
         clearQueue.setText("Clear Queue");
         clearQueue.addActionListener(new java.awt.event.ActionListener() {
@@ -771,7 +774,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 clearQueueActionPerformed(evt);
             }
         });
-        jMenu2.add(clearQueue);
+        jMenu5.add(clearQueue);
+        jMenu5.add(jSeparator1);
+
+        clrHistory.setText("Clear Records History");
+        clrHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clrHistoryActionPerformed(evt);
+            }
+        });
+        jMenu5.add(clrHistory);
+
+        jMenu2.add(jMenu5);
 
         jMenuBar1.add(jMenu2);
 
@@ -1319,6 +1333,19 @@ public class ControllerDisplay extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_editTransActionPerformed
 
+    private void clrHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clrHistoryActionPerformed
+        int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the entire records history?\nThis process is irreversible.", "Clear Database Table Warning", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+            try {
+                Statement stmt = con.createStatement();
+                JOptionPane.showMessageDialog(null, stmt.executeUpdate("delete from RECORDSHISTORY") + " Record(s) have been deleted", "Records History Table Deleted", JOptionPane.INFORMATION_MESSAGE);
+                stmt.close();
+            } catch (SQLException sqle) {
+                JOptionPane.showMessageDialog(null, "Cannot delete the records.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_clrHistoryActionPerformed
+
     public void connectToDatabase(String host, String user, String pw, String counterNum) {
         try {
             counter = Integer.parseInt(counterNum);
@@ -1504,6 +1531,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JMenuItem cleanup;
     private javax.swing.JMenuItem clearQueue;
     private javax.swing.JMenuItem closeDisplay;
+    private javax.swing.JMenuItem clrHistory;
     private javax.swing.JComboBox combo;
     private javax.swing.JComboBox comboTrans;
     private javax.swing.JButton connectBT;
@@ -1551,6 +1579,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
