@@ -10,12 +10,12 @@
     </servlet-mapping>
     -->
     <servlet>
-        <servlet-name>CancelRequestN</servlet-name>
-        <servlet-class>CancelRequest</servlet-class>
+        <servlet-name>Home</servlet-name>
+        <servlet-class>Home</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CancelRequestN</servlet-name>
-        <url-pattern>/CancelRequestN</url-pattern>
+        <servlet-name>Home</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

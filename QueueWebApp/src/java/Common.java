@@ -255,4 +255,18 @@ public class Common {
         }
         return total;
     }
+    
+    public static String getTransactions(Connection con) {
+        String x = "<select>";
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select TRANSACTIONTYPE from TRANSACTIONSTBL");
+            while(rs.next())
+                x = x + "<option>" + rs.getString(1) + "</option>";
+            x = x + "</select>";
+        } catch (SQLException y) {
+            System.err.println("Cannot retrieve transactions. " + y.getMessage());
+        }
+        return x;
+    }
 }
