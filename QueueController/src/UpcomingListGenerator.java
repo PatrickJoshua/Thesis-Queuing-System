@@ -20,6 +20,7 @@ public class UpcomingListGenerator extends Thread {
     public void run() {
         while(true) {
             try {
+                boolean nextIsVIP = false;
                 //Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 PreparedStatement ps = con.prepareStatement("select NUM from QUEUETBL where VIP=true AND DATE=? and COUNTER IS NULL",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
@@ -30,9 +31,11 @@ public class UpcomingListGenerator extends Thread {
                     for(int i=0; rs.next(); i++)    //transfer returned data to an array
                         list[i] = "V" + rs.getInt(1);
                     ControllerDisplay.vipList.setListData(list);
+                    ControllerDisplay.nextLBL.setText("Next: " + list[0]);
+                    nextIsVIP = true;
                 }
                 else
-                    ControllerDisplay.vipList.setListData(new String[0]);
+                    ControllerDisplay.vipList.setListData(new String[]{"     "});
                 
                 //for guest list
                 ps = con.prepareStatement("select NUM from QUEUETBL where VIP=false AND DATE=? and COUNTER IS NULL",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -44,9 +47,14 @@ public class UpcomingListGenerator extends Thread {
                     for(int i=0; rs.next(); i++)    //transfer returned data to an array
                         list[i] = "N" + rs.getInt(1);
                     ControllerDisplay.guestList.setListData(list);
+                    if(!nextIsVIP)
+                        ControllerDisplay.nextLBL.setText("Next: " + list[0]);
                 }
-                else
-                    ControllerDisplay.guestList.setListData(new String[0]);
+                else {
+                    ControllerDisplay.guestList.setListData(new String[]{"     "});
+                    if(!nextIsVIP)
+                        ControllerDisplay.nextLBL.setText("Next: None");
+                }
                 
                 //repeat after 5 seconds
                 Thread.sleep(5000);
