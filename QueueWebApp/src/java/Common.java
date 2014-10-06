@@ -262,7 +262,7 @@ public class Common {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select TRANSACTIONTYPE from TRANSACTIONSTBL");
             while(rs.next())
-                x = x + "<option>" + rs.getString(1) + "</option>";
+                x = x + "<option value=\"" + rs.getString(1) + "\">" + rs.getString(1) + "</option>";
             x = x + "</select>";
         } catch (SQLException y) {
             System.err.println("Cannot retrieve transactions. " + y.getMessage());

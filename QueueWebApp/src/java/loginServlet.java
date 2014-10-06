@@ -79,8 +79,11 @@ public class loginServlet extends HttpServlet {
                 out.println("<br><br>Your mobile number is: ");
                 out.println("<form name=viploginsuccess action=getVIPNumberServlet>");      //do not modify
                 out.println("<input type=text name=cellNo value=" + mobilenumber + ">");    //do not modify
-                out.println("<br><font size=\"2\"><i>Format: +639XXXXXXXXX</i></font> <br><br>");   
+                out.println("<br><font size=\"2\"><i>Format: +639XXXXXXXXX</i></font> <br>");   
                 out.println("<input type=hidden name=name value=\"" + name + "\">");    //do not modify
+                con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
+                out.println(Common.getTransactions(con));
+                out.println("<br>");
                 out.println("<input type=checkbox name=sms checked>Send me SMS Notifications<br>");
                 out.println("<input type=submit value=\"Get VIP Number\">");        //do not modify
                 out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
