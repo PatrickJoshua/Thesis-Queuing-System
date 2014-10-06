@@ -79,6 +79,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
         pwe = new javax.swing.JPasswordField();
         editVIPBT = new javax.swing.JButton();
         deleteVIPBT = new javax.swing.JButton();
+        editTransDiag = new javax.swing.JDialog();
+        comboTrans = new javax.swing.JComboBox();
+        editTransBT = new javax.swing.JButton();
+        deleteTransBT = new javax.swing.JButton();
         cNowServing = new javax.swing.JLabel();
         nextBT = new javax.swing.JButton();
         mobilenumLBL = new javax.swing.JLabel();
@@ -110,8 +114,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
         viewVIP = new javax.swing.JMenuItem();
         add = new javax.swing.JMenu();
         addVIP = new javax.swing.JMenuItem();
+        addTrans = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         editDeleteVIP = new javax.swing.JMenuItem();
+        editTrans = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         cleanup = new javax.swing.JMenuItem();
         clearQueue = new javax.swing.JMenuItem();
@@ -518,6 +524,51 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        editTransDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        editTransDiag.setTitle("Select Transaction");
+
+        comboTrans.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        editTransBT.setText("Edit Transaction");
+        editTransBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editTransBTActionPerformed(evt);
+            }
+        });
+
+        deleteTransBT.setText("Delete Transaction");
+        deleteTransBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteTransBTActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout editTransDiagLayout = new javax.swing.GroupLayout(editTransDiag.getContentPane());
+        editTransDiag.getContentPane().setLayout(editTransDiagLayout);
+        editTransDiagLayout.setHorizontalGroup(
+            editTransDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(editTransDiagLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(editTransDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(comboTrans, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(editTransDiagLayout.createSequentialGroup()
+                        .addComponent(editTransBT)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteTransBT)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        editTransDiagLayout.setVerticalGroup(
+            editTransDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(editTransDiagLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(comboTrans, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(editTransDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(editTransBT)
+                    .addComponent(deleteTransBT))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Offline");
         addWindowStateListener(new java.awt.event.WindowStateListener() {
@@ -665,7 +716,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         jMenu2.add(jMenu4);
 
-        add.setText("Add Record");
+        add.setText("Add");
 
         addVIP.setText("Add a VIP...");
         addVIP.addActionListener(new java.awt.event.ActionListener() {
@@ -675,9 +726,17 @@ public class ControllerDisplay extends javax.swing.JFrame {
         });
         add.add(addVIP);
 
+        addTrans.setText("Add Transaction...");
+        addTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addTransActionPerformed(evt);
+            }
+        });
+        add.add(addTrans);
+
         jMenu2.add(add);
 
-        jMenu1.setText("Edit/Delete Record");
+        jMenu1.setText("Edit/Delete");
 
         editDeleteVIP.setText("Edit/Delete VIP Record...");
         editDeleteVIP.addActionListener(new java.awt.event.ActionListener() {
@@ -686,6 +745,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
             }
         });
         jMenu1.add(editDeleteVIP);
+
+        editTrans.setText("Edit/Delete Transaction...");
+        editTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editTransActionPerformed(evt);
+            }
+        });
+        jMenu1.add(editTrans);
 
         jMenu2.add(jMenu1);
         jMenu2.add(jSeparator1);
@@ -1181,6 +1248,77 @@ public class ControllerDisplay extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_editVIPBTActionPerformed
 
+    private void addTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTransActionPerformed
+        String trans = JOptionPane.showInputDialog("Type the transaction name: ");
+        if(trans != null) {
+            try {
+                Statement stmt = con.createStatement();
+                if(stmt.executeUpdate("insert into TRANSACTIONSTBL values ('" + trans + "')") == 1) {
+                    Thread thread = new Information("New transaction added - " + trans, false);
+                    thread.start();
+                }
+                stmt.close();
+            } catch (SQLException x) {
+                JOptionPane.showMessageDialog(null,"Error occured while adding transaction.\nReason: " + x.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_addTransActionPerformed
+
+    private void editTransBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editTransBTActionPerformed
+        String trans = JOptionPane.showInputDialog("Type the new transaction name: ");
+        try {
+            Statement stmt = con.createStatement();
+            if(stmt.executeUpdate("update TRANSACTIONSTBL set TRANSACTIONTYPE='" + trans + "' where TRANSACTIONTYPE='" + comboTrans.getSelectedItem().toString() + "'") == 1) {
+                Thread thread = new Information("Transaction has been edited - " + trans, false);
+                thread.start();
+                editTransActionPerformed(evt);
+            }
+            stmt.close();
+        } catch (SQLException x) {
+            JOptionPane.showMessageDialog(null,"Error occured while adding transaction.\nReason: " + x.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_editTransBTActionPerformed
+
+    private void deleteTransBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteTransBTActionPerformed
+        int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this transaction?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+            try {
+                Statement stmt = con.createStatement();
+                if(stmt.executeUpdate("delete from TRANSACTIONSTBL where TRANSACTIONTYPE='" + comboTrans.getSelectedItem().toString() + "'")==1) {
+                    Thread thread = new Information("Transaction has been deleted", false);
+                    thread.start();
+                    editTransActionPerformed(evt);
+                }
+                stmt.close();
+            } catch (SQLException sqle) {
+                JOptionPane.showMessageDialog(null, "Cannot delete the record.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_deleteTransBTActionPerformed
+
+    private void editTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editTransActionPerformed
+        try {    
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = stmt.executeQuery("select TRANSACTIONTYPE from TRANSACTIONSTBL");
+            if(rs.last()) {
+                String [] list = new String[rs.getRow()];   //create array
+                rs.beforeFirst();   //go back to first
+                for(int i=0; rs.next(); i++)    //transfer returned data to an array
+                    list[i] = rs.getString(1);
+                comboTrans.setModel(new JComboBox(list).getModel());
+                editTransDiag.pack();
+                editTransDiag.setLocationRelativeTo(this);
+                editTransDiag.setVisible(true);
+            }
+            else
+                JOptionPane.showMessageDialog(null, "Empty Transactions List", "Transactions Table is empty", JOptionPane.ERROR_MESSAGE);
+            rs.close();
+            stmt.close();
+        } catch (SQLException x) {
+            JOptionPane.showMessageDialog(null, "Database Error", "Cannot retrieve Transactions List from database.\nReason: " + x.getMessage(), JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_editTransActionPerformed
+
     public void connectToDatabase(String host, String user, String pw, String counterNum) {
         try {
             counter = Integer.parseInt(counterNum);
@@ -1357,6 +1495,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JDialog Connect2DB;
     public static javax.swing.JFrame Display;
     private javax.swing.JMenu add;
+    private javax.swing.JMenuItem addTrans;
     private javax.swing.JMenuItem addVIP;
     private javax.swing.JDialog addVIPDiag;
     private javax.swing.JButton addVIPOK;
@@ -1366,13 +1505,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JMenuItem clearQueue;
     private javax.swing.JMenuItem closeDisplay;
     private javax.swing.JComboBox combo;
+    private javax.swing.JComboBox comboTrans;
     private javax.swing.JButton connectBT;
     private javax.swing.JMenuItem connectToDatabaseAgain;
     private javax.swing.JSpinner counterSpinner;
     private javax.swing.JPasswordField cpw;
     public static javax.swing.JLabel dNowServing;
+    private javax.swing.JButton deleteTransBT;
     private javax.swing.JButton deleteVIPBT;
     private javax.swing.JMenuItem editDeleteVIP;
+    private javax.swing.JMenuItem editTrans;
+    private javax.swing.JButton editTransBT;
+    private javax.swing.JDialog editTransDiag;
     private javax.swing.JButton editVIPBT;
     private javax.swing.JDialog editVIPDiag;
     private javax.swing.JTextField fn;
