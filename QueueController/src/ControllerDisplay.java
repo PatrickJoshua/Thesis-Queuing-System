@@ -51,6 +51,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         sqlTF = new javax.swing.JTextField();
         sqlBT = new javax.swing.JButton();
+        addVIPDiag = new javax.swing.JDialog();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        fn = new javax.swing.JTextField();
+        mn = new javax.swing.JTextField();
+        un = new javax.swing.JTextField();
+        pw = new javax.swing.JPasswordField();
+        cpw = new javax.swing.JPasswordField();
+        addVIPOK = new javax.swing.JButton();
         cNowServing = new javax.swing.JLabel();
         nextBT = new javax.swing.JButton();
         mobilenumLBL = new javax.swing.JLabel();
@@ -81,6 +93,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         viewDB = new javax.swing.JMenuItem();
         viewRecords = new javax.swing.JMenuItem();
         viewVIP = new javax.swing.JMenuItem();
+        add = new javax.swing.JMenu();
+        addVIP = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         cleanup = new javax.swing.JMenuItem();
         clearQueue = new javax.swing.JMenuItem();
@@ -286,6 +300,80 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        addVIPDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addVIPDiag.setTitle("Add a VIP");
+
+        jLabel12.setText("Full Name:");
+
+        jLabel13.setText("Mobile Number: ");
+
+        jLabel14.setText("Username: ");
+
+        jLabel15.setText("Password:");
+
+        jLabel16.setText("Confirm Password:");
+
+        addVIPOK.setText("OK");
+        addVIPOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addVIPOKActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout addVIPDiagLayout = new javax.swing.GroupLayout(addVIPDiag.getContentPane());
+        addVIPDiag.getContentPane().setLayout(addVIPDiagLayout);
+        addVIPDiagLayout.setHorizontalGroup(
+            addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addVIPDiagLayout.createSequentialGroup()
+                .addGroup(addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addVIPDiagLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel16))
+                        .addGap(27, 27, 27)
+                        .addGroup(addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(fn)
+                            .addComponent(mn)
+                            .addComponent(un)
+                            .addComponent(pw)
+                            .addComponent(cpw, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
+                    .addGroup(addVIPDiagLayout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addComponent(addVIPOK, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        addVIPDiagLayout.setVerticalGroup(
+            addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addVIPDiagLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(fn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(mn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(un, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(pw, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(addVIPDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(cpw, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(addVIPOK)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Counter " + counter);
         addWindowStateListener(new java.awt.event.WindowStateListener() {
@@ -434,6 +522,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jMenu4.add(viewVIP);
 
         jMenu2.add(jMenu4);
+
+        add.setText("Add Record");
+
+        addVIP.setText("Add a VIP...");
+        addVIP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addVIPActionPerformed(evt);
+            }
+        });
+        add.add(addVIP);
+
+        jMenu2.add(add);
         jMenu2.add(jSeparator1);
 
         cleanup.setText("Cleanup Queue");
@@ -790,6 +890,38 @@ public class ControllerDisplay extends javax.swing.JFrame {
         Connect2DB.show();
     }//GEN-LAST:event_connectToDatabaseAgainActionPerformed
 
+    private void addVIPOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addVIPOKActionPerformed
+        if(fn.getText().isEmpty())
+            JOptionPane.showMessageDialog(null, "Full Name cannot be blank", "No Name Supplied" , JOptionPane.ERROR_MESSAGE);
+        else if(mn.getText().isEmpty())
+            JOptionPane.showMessageDialog(null, "Mobile Number cannot be blank", "No Mobile Number Supplied" , JOptionPane.ERROR_MESSAGE);
+        else if(un.getText().isEmpty())
+            JOptionPane.showMessageDialog(null, "Username cannot be blank", "No Username Supplied" , JOptionPane.ERROR_MESSAGE);
+        else if(pw.getText().length()<6)
+            JOptionPane.showMessageDialog(null,"Password length must be greater than or equal to 6", "Error",  JOptionPane.ERROR_MESSAGE);
+        else if(!(pw.getText().equals(cpw.getText())))
+            JOptionPane.showMessageDialog(null,"Passwords do not match", "Error",  JOptionPane.ERROR_MESSAGE);
+        else if(!(mn.getText().substring(0, 3)).equals("+63") || (mn.getText().trim().length()!=13))
+            JOptionPane.showMessageDialog(null, "Please use this 13 character Mobile Number format:\n+639XXXXXXXXX", "Invalid Mobile Number Format" , JOptionPane.ERROR_MESSAGE);
+        else {
+            try {
+                Statement stmt = con.createStatement();
+                if(stmt.executeUpdate("insert into vipclientstbl (username,password,mobilenumber,fullname) values ('" + un.getText() + "','" + pw.getText() + "','" + mn.getText() + "','" + fn.getText() + "')") == 1) {
+                    JOptionPane.showMessageDialog(null, "Record has been added to the VIP List", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    addVIPDiag.dispose();
+                }
+            } catch (SQLException x) {
+                JOptionPane.showMessageDialog(null, "Database Error", "Error occured while adding record.\nReason: " + x.getMessage(), JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_addVIPOKActionPerformed
+
+    private void addVIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addVIPActionPerformed
+        addVIPDiag.pack();
+        addVIPDiag.setLocationRelativeTo(null);
+        addVIPDiag.setVisible(true);
+    }//GEN-LAST:event_addVIPActionPerformed
+
     public void connectToDatabase(String host, String user, String pw, String counterNum) {
         try {
             counter = Integer.parseInt(counterNum);
@@ -963,6 +1095,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JDialog Connect2DB;
     public static javax.swing.JFrame Display;
+    private javax.swing.JMenu add;
+    private javax.swing.JMenuItem addVIP;
+    private javax.swing.JDialog addVIPDiag;
+    private javax.swing.JButton addVIPOK;
     public static javax.swing.JLabel cNowServing;
     private javax.swing.JButton callAgainBT;
     private javax.swing.JMenuItem cleanup;
@@ -972,7 +1108,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JMenuItem connectToDatabaseAgain;
     private javax.swing.JLabel counterLBL;
     private javax.swing.JSpinner counterSpinner;
+    private javax.swing.JPasswordField cpw;
     public static javax.swing.JLabel dNowServing;
+    private javax.swing.JTextField fn;
     private javax.swing.JMenuItem fullscreen;
     public static javax.swing.JList guestList;
     private javax.swing.JTextField hostTF;
@@ -980,6 +1118,11 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -999,12 +1142,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenu jmenu1;
     private javax.swing.JMenuItem launchDisplay;
+    private javax.swing.JTextField mn;
     private javax.swing.JLabel mobilenumLBL;
     private javax.swing.JLabel nameLBL;
     public static javax.swing.JButton nextBT;
     public static javax.swing.JLabel nextLBL;
     public static javax.swing.JLabel nowServingLBL;
     private javax.swing.JPasswordField passwordTF;
+    private javax.swing.JPasswordField pw;
     private javax.swing.JLabel refLBL;
     private javax.swing.JMenuItem restore;
     private javax.swing.JScrollPane scroll;
@@ -1012,6 +1157,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JTextField sqlTF;
     public javax.swing.JTable table;
     private javax.swing.JLabel transLBL;
+    private javax.swing.JTextField un;
     private javax.swing.JTextField usernameTF;
     private javax.swing.JMenuItem viewDB;
     public static javax.swing.JFrame viewDatabase;
