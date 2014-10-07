@@ -25,81 +25,6 @@ public class getNumberServlet extends HttpServlet {
 
     int ref;
     
-    public static int  SendSMS(String strAccountId,String strEmail,String strPassword,String strMSISDN,String strMessage,StringBuffer strResponse)
-    {
-            String  sRequestURL;
-            String  sData;
-            int nResult = -1;
-
-            sRequestURL = "http://www.redoxygen.net/sms.dll?Action=SendSMS";
-
-            try
-            {		
-
-                    sData  = ("AccountId="  + URLEncoder.encode(strAccountId,"UTF-8"));
-                    sData += ("&Email="     + URLEncoder.encode(strEmail,"UTF-8"));
-                    sData += ("&Password="  + URLEncoder.encode(strPassword,"UTF-8"));
-                    sData += ("&Recipient=" + URLEncoder.encode(strMSISDN,"UTF-8"));
-                    sData += ("&Message="   + URLEncoder.encode(strMessage,"UTF-8"));
-
-
-
-                    URL urlObject = new URL(sRequestURL); 
-
-                    HttpURLConnection con = (HttpURLConnection) urlObject.openConnection();
-                    con.setRequestMethod("POST");
-                    con.setDoInput (true);
-                    con.setDoOutput (true);
-
-
-                    DataOutputStream out;
-                    out = new DataOutputStream(con.getOutputStream());
-                    out.writeBytes (sData);
-                    out.flush();
-                    out.close();
-
-                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())); 
-
-                    String inputLine; 
-                    StringBuffer responseBuffer = new StringBuffer(); 
-
-                    while ((inputLine = in.readLine()) != null)
-                    {
-                          responseBuffer = responseBuffer.append(inputLine);
-                          responseBuffer = responseBuffer.append("\n\n\n");
-                    }
-
-                    strResponse.replace(0,0,responseBuffer.toString());
-
-                    String sResultCode = strResponse.substring(0,4);
-                    nResult = Integer.parseInt(sResultCode);
-
-                    in.close();
-            }
-
-            catch (Exception e)
-            {
-                    System.out.println("Exception caught sending SMS\n"); 
-                    nResult = -2;
-            }
-            return nResult;
-	}
-    
-    public void sendSMS(String strMSISDN, String strMessage) {
-        String strAccountId  = "CI00136581";  // Put your AccountId here
-        String strEmail      = "ipa3kjoshua@gmail.com";  // Put your Email address here (Used for authentication and replies)
-        String strPassword   = "gmF6oHn5";  // Put your Password here
-        //String strMSISDN     = "+639151272800";   // Put a recipient mobile number here
-        //String strMessage    = "Test SMS via Red Oxygen API";  // Put your SMS message text here
-        int nResult;
-        StringBuffer strResponse = new StringBuffer();
-        
-        nResult = SendSMS(strAccountId,strEmail,strPassword,strMSISDN,strMessage,strResponse);
-
-        System.out.println("Result Code = " + nResult + "\n");
-        System.out.println("Response Text = " + strResponse + "\n");
-    }
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -146,9 +71,10 @@ public class getNumberServlet extends HttpServlet {
                     rs.next();
                     String smsnotif = "";
                     if(rs.getBoolean("SMSNOTIFICATION"))
-                        smsnotif = " SMS Notifications are enabled.";
-                    sendSMS(rs.getString("MOBILENUM"), "Welcome to CSA Queuing System. Your number is N" + rs.getInt("NUM") + ". Reference number: " + rs.getInt("REF")
-                            + " Transaction: " + rs.getString("TRANS") + smsnotif);
+                        smsnotif = ". SMS Notifications are enabled";
+                    Common.sendSMS(rs.getString("MOBILENUM"), "Welcome to CSA Queuing System. Your number is N" + rs.getInt("NUM")
+                            + ". Reference number: " + rs.getInt("REF") + " for " + rs.getString("TRANS") + smsnotif
+                            + ". View the queue in real-time anywhere! Go to http://patrickjoshua.ddns.net/realtime");
                     rs.close();
                     stmt.close();
                 } catch (SQLException e) {
