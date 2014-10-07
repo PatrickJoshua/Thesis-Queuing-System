@@ -47,7 +47,8 @@ public class Home extends HttpServlet {
             Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
             out.println(Common.getTransactions(con));
             out.println("<br><br>");
-            out.println("<input type=\"image\" src=\"getnumber.png\" alt=\"Get Number\"/>");
+            out.println("<input type=\"image\" src=\"" + System.getProperty("user.home") + "/getnumber.png\" alt=\"Get Number\"/>");
+            out.println("<image src=\"" + System.getProperty("user.home") + "\\getnumber.PNG\">");
             out.println("</form>");
             out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
             out.println("<a href=VIPlogin.html>VIP Login</a>");
