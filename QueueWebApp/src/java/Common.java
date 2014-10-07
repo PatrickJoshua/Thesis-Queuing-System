@@ -257,7 +257,7 @@ public class Common {
     }
     
     public static String getTransactions(Connection con) {
-        String x = "<select>";
+        String x = "<select name=trans>";
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select TRANSACTIONTYPE from TRANSACTIONSTBL");
