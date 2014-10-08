@@ -26,15 +26,21 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="hostTF" pref="220" max="32767" attributes="0"/>
+                      <Component id="hostTF" pref="250" max="32767" attributes="0"/>
                       <Component id="usernameTF" max="32767" attributes="0"/>
-                      <Component id="passwordTF" max="32767" attributes="0"/>
-                      <Component id="counterSpinner" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="counterSpinner" min="-2" pref="40" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="intervalSpinner" min="-2" pref="39" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="passwordTF" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="140" max="32767" attributes="0"/>
+                  <EmptySpace pref="160" max="32767" attributes="0"/>
                   <Component id="cancelPrefsBT" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="connectBT" min="-2" max="-2" attributes="0"/>
@@ -64,8 +70,10 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="counterSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="intervalSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="19" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="connectBT" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cancelPrefsBT" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -136,6 +144,18 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelPrefsBTActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel23">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="SMS Notifications Interval:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSpinner" name="intervalSpinner">
+          <Properties>
+            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+              <SpinnerModel initial="1" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+            </Property>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

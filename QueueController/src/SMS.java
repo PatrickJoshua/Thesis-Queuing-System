@@ -26,10 +26,24 @@ public class SMS extends Thread {
     @Override
     public void run() {
         try {
-            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? order by VIP desc, NUM asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and COUNTER IS NULL order by VIP desc, NUM asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
             ResultSet rs = ps.executeQuery();
-            
+            for(int i = 1; rs.next(); i++) {
+                rs.absolute(i);
+                if(rs.getBoolean("SMSNOTIFICATION")) {
+                    String num;
+                    if(rs.getBoolean("VIP"))
+                        num = "V" + rs.getInt("NUM");
+                    else
+                        num = "N" + rs.getInt("NUM");
+                    
+                    if(i==1)
+                        System.out.println("[Next]" + num + " - " + rs.getString("MOBILENUM"));
+                    else if(i==2 || i==3 || i==4 || (i%ControllerDisplay.SMSINTERVAL)==0) 
+                        System.out.println(num + " - " + rs.getString("MOBILENUM"));
+                }
+            }
             rs.close();
             ps.close();
         } catch (SQLException x) {

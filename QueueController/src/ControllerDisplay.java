@@ -25,6 +25,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     Preferences prefs;
     String currentTBL;
     public static int counter;
+    public static int SMSINTERVAL;
 
     public ControllerDisplay() {
         initComponents();
@@ -37,12 +38,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
         System.setErr(out);
         System.out.println("Welcome to Queuing Management System Controller");
         
+        //retrieve preferences
         prefs = Preferences.userNodeForPackage(this.getClass());
         hostTF.setText(prefs.get("DBHOST", "jdbc:derby://localhost:1527/QueueDB"));
         usernameTF.setText(prefs.get("DBUSERNAME", "dbadmin"));
         passwordTF.setText(prefs.get("DBPASSWORD", "dba"));
         counterSpinner.setValue(Integer.parseInt(prefs.get("COUNTER", "1")));
-        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString());
+        intervalSpinner.setValue(Integer.parseInt(prefs.get("SMSINTERVAL", "5")));
+        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString(), intervalSpinner.getValue().toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -60,6 +63,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         counterSpinner = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
         cancelPrefsBT = new javax.swing.JButton();
+        jLabel23 = new javax.swing.JLabel();
+        intervalSpinner = new javax.swing.JSpinner();
         Display = new javax.swing.JFrame();
         nowServingLBL = new javax.swing.JLabel();
         dNowServing = new javax.swing.JLabel();
@@ -198,6 +203,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
             }
         });
 
+        jLabel23.setText("SMS Notifications Interval:");
+
+        intervalSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(0), null, Integer.valueOf(1)));
+
         javax.swing.GroupLayout Connect2DBLayout = new javax.swing.GroupLayout(Connect2DB.getContentPane());
         Connect2DB.getContentPane().setLayout(Connect2DBLayout);
         Connect2DBLayout.setHorizontalGroup(
@@ -211,13 +220,18 @@ public class ControllerDisplay extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                     .addComponent(usernameTF)
-                    .addComponent(passwordTF)
-                    .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(Connect2DBLayout.createSequentialGroup()
+                        .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel23)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(intervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passwordTF))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Connect2DBLayout.createSequentialGroup()
-                .addContainerGap(140, Short.MAX_VALUE)
+                .addContainerGap(160, Short.MAX_VALUE)
                 .addComponent(cancelPrefsBT)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(connectBT)
@@ -241,8 +255,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel23)
+                    .addComponent(intervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(connectBT)
                     .addComponent(cancelPrefsBT))
@@ -982,7 +998,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameTFActionPerformed
 
     private void connectBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectBTActionPerformed
-        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString());
+        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString(), intervalSpinner.getValue().toString());
     }//GEN-LAST:event_connectBTActionPerformed
 
     private void passwordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFActionPerformed
@@ -1051,6 +1067,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
                     updateLabels(rs);
                     Thread blink = new BlinkySound();
                     blink.start();
+                    Thread sendSMS = new SMS(con);
+                    sendSMS.start();
                     callAgainBT.setEnabled(true);
                 } else {  //if queue is empty
                     cNowServing.setText("None");//transfer data from db to GUI labels on controller
@@ -1439,9 +1457,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
         logFrame.setVisible(true);
     }//GEN-LAST:event_logMenuActionPerformed
 
-    public void connectToDatabase(String host, String user, String pw, String counterNum) {
+    public void connectToDatabase(String host, String user, String pw, String counterNum, String interval) {
         try {
             counter = Integer.parseInt(counterNum);
+            SMSINTERVAL = Integer.parseInt(interval);
             Class.forName("org.apache.derby.jdbc.ClientDriver");
             con = DriverManager.getConnection(host, user, pw);
             //con = DriverManager.getConnection("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");
@@ -1460,6 +1479,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
             prefs.put("DBUSERNAME", user);
             prefs.put("DBPASSWORD", pw);
             prefs.put("COUNTER", counterNum);
+            prefs.put("SMSINTERVAL", interval);
             
             //do necessary GUI actions
             Connect2DB.dispose();
@@ -1662,6 +1682,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JList guestList;
     private javax.swing.JTextField hostTF;
     public static javax.swing.JLabel info;
+    private javax.swing.JSpinner intervalSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1677,6 +1698,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

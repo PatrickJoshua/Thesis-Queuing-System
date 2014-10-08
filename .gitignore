@@ -2,3 +2,5 @@
 /QueueController/build/
 *.class
 hs_err_pid*
+/QueueWebApp/nbproject/private/
+/QueueWebApp/build/
