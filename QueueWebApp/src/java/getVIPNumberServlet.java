@@ -31,13 +31,21 @@ public class getVIPNumberServlet extends HttpServlet {
             out.println("<body>");
             out.println("<center>");
             out.println("<h2>Thank you!</h2>");
+            
+            //<editor-fold defaultstate="collapsed" desc=" Do not modify ">
+            //start of do not modify
             String cellNo = request.getParameter("cellNo");     //do not modify
             String name = request.getParameter("name");         //do not modify
-            String trans = "";      //do not modify
+            String trans = request.getParameter("trans");      //do not modify
             Boolean sms = true;
             String checkbox = request.getParameter("sms");
             if(checkbox==null)
                 sms = false;
+            Boolean prioritize = true;
+            String prioritizeMe = request.getParameter("prioritize");
+            if(prioritizeMe == null)
+                prioritize = false;
+            
             if(cellNo.equals("") || !(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length()!=13))     //if mobile number is incorrect format
             {
                 out.println("<script type=\"text/javascript\">");  
@@ -48,24 +56,33 @@ public class getVIPNumberServlet extends HttpServlet {
             else
             {
                 Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-                int num = Common.add2DB(con,cellNo,name,true,trans,sms);
-                out.println("Your number is: <b>V" + num + "</b><br>Reference Number: " + Common.ref + "<br><br>");
+                int num = Common.add2DB(con,cellNo,name,prioritize,trans,sms);
+                String labeledNum;
+                if(prioritize)
+                    labeledNum = "V" + num;
+                else
+                    labeledNum = "N" + num;
+            //end of do not modify
+            //</editor-fold>    
+                out.println("Your number is: <b>" + labeledNum + "</b><br>Reference Number: " + Common.ref + "<br><br>");
                 out.println("Please wait for the text confirmation.");
                 out.println("<form name=\"cancelrequest\" action=\"CancelRequest\"><br>");
                 out.println("<input type=hidden name=num value=" + num + ">");
-                out.println("<input type=hidden name=vip value=true>");
+                out.println("<input type=hidden name=vip value=" + prioritize + ">");
                 out.println("<input type=submit value=\"Cancel Request\">");
                 out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
-                con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
+                
+                //start of real-time snippet
+                con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //do not modify
                 out.println("<h2>Now Serving:</h2>");
-                out.println(Common.getNowServingCounters(con));
+                out.println(Common.getNowServingCounters(con)); //do not modify
                 out.println("<br><h3>On Queue:</h3>");
                 out.println("<table><tr><td align=center>");
-                out.println("VIP: " + Common.getTotal(con, false, true));
+                out.println("VIP: " + Common.getTotal(con, false, true));   //do not modify
                 out.println("</td><td align=center>");
-                out.println("Guests: " + Common.getTotal(con, false, false));
+                out.println("Guests: " + Common.getTotal(con, false, false));   //do not modify
                 out.println("</td></tr><td colspan=2 align=center>");
-                out.println("<br>Total persons on queue: " + Common.getTotal(con, true, true));
+                out.println("<br>Total persons on queue: " + Common.getTotal(con, true, true)); //do not modify
                 out.println("</td></tr></table>");
             }
             out.println("</center>");

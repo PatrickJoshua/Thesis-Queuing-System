@@ -1023,7 +1023,6 @@ public class ControllerDisplay extends javax.swing.JFrame {
             stmt.executeUpdate("update QUEUETBL set COUNTER=" + counter + " where MOBILENUM='" + mobilenumLBL.getText() + "'"); //set now serving field to true
             stmt.close();
             dNowServing.setText("  " + cNowServing.getText() + "  ");   //set now serving on display
-            //insert SMS code here
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(null, "Error retreiving data\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -1032,6 +1031,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private void nextBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBTActionPerformed
         try {
             deletePreviouslyServed();
+            
+            //For VIP
             PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true and COUNTER IS NULL");    //query to get VIP first
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
             ResultSet rs = ps.executeQuery();   //execute SQL statement
@@ -1039,8 +1040,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 updateLabels(rs);   //transfer retrieved DB data to GUI
                 Thread blink = new BlinkySound();
                 blink.start();
+                Thread sendSMS = new SMS(con);
+                sendSMS.start();
                 callAgainBT.setEnabled(true);
-            } else {
+            } else {    //for guests
                 ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false and COUNTER IS NULL");  //get non-vip guest
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
                 rs = ps.executeQuery();
@@ -1075,7 +1078,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
     private void viewDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewDBActionPerformed
         currentTBL = "QUEUETBL";
-        sqlTF.setText("select * from QUEUETBL");
+        sqlTF.setText("select * from QUEUETBL order by VIP desc, NUM");
         executeSQL("QUEUETBL");
         viewDatabase.pack();
         viewDatabase.setLocationRelativeTo(null);

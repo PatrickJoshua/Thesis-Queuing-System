@@ -84,6 +84,7 @@ public class loginServlet extends HttpServlet {
                 con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
                 out.println(Common.getTransactions(con));
                 out.println("<br>");
+                out.println("<input type=\"checkbox\" name=\"prioritize\" checked>Prioritize me<br>");
                 out.println("<input type=checkbox name=sms checked>Send me SMS Notifications<br>");
                 out.println("<input type=submit value=\"Get VIP Number\">");        //do not modify
                 out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
