@@ -50,7 +50,7 @@ public class Home extends HttpServlet {
             out.println("<input type=\"image\" src=../resources/getnumber.PNG alt=\"Get Number\"/>");
             out.println("</form>");
             out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
-            out.println("<a href=VIPlogin.html>VIP Login</a>");
+            out.println("<a href=vip>VIP Login</a>");
             out.println("<br>");
             out.println("<a href=realtime>Real-time Queue Status</a>");
             out.println("<br>");

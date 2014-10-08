@@ -14,16 +14,16 @@
         <servlet-class>Home</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NewServlet</servlet-name>
-        <servlet-class>NewServlet</servlet-class>
+        <servlet-name>vip</servlet-name>
+        <servlet-class>vip</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Home</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>NewServlet</servlet-name>
-        <url-pattern>/NewServlet</url-pattern>
+        <servlet-name>vip</servlet-name>
+        <url-pattern>/vip</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
