@@ -27,7 +27,7 @@ public class BlinkySound extends Thread {
             tone.start();
             if(System.getProperty("os.name").contains("Mac OS X"))
             {
-                String tts = "Now serving " + ControllerDisplay.dNowServing.getText();
+                String tts = "Now serving " + ControllerDisplay.dNowServing.getText() + " on counter " + ControllerDisplay.counter;
                 Runtime.getRuntime().exec("say " + tts);
             }
             ControllerDisplay.dNowServing.setForeground(Color.red);

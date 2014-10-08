@@ -46,7 +46,7 @@ public class getNumberServlet extends HttpServlet {
             String checkbox = request.getParameter("sms");
             if(checkbox==null)
                 sms = false;
-            if(!(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length()!=13))     //if mobile number is incorrect format
+            if(cellNo.equals("") || !(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length()!=13))     //if mobile number is incorrect format
             {
                 out.println("<script type=\"text/javascript\">");  
                 out.println("alert('Mobile Number not valid. Please use this format: +639XXXXXXXXX');");      //display pop up message
