@@ -1,14 +1,17 @@
 import java.awt.Font;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.prefs.Preferences;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultCaret;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -19,14 +22,27 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
     public static Connection con = null;
     DefaultTableModel model;
+    Preferences prefs;
     String currentTBL;
-    int counter;
+    public static int counter;
 
     public ControllerDisplay() {
         initComponents();
-        Connect2DB.pack();
-        Connect2DB.setLocationRelativeTo(null);
-        Connect2DB.setVisible(true);
+        
+        //for logging
+        DefaultCaret caret = (DefaultCaret)log.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        PrintStream out = new PrintStream(new Log(log));
+        System.setOut(out);
+        System.setErr(out);
+        System.out.println("Welcome to Queuing Management System Controller");
+        
+        prefs = Preferences.userNodeForPackage(this.getClass());
+        hostTF.setText(prefs.get("DBHOST", "jdbc:derby://localhost:1527/QueueDB"));
+        usernameTF.setText(prefs.get("DBUSERNAME", "dbadmin"));
+        passwordTF.setText(prefs.get("DBPASSWORD", "dba"));
+        counterSpinner.setValue(Integer.parseInt(prefs.get("COUNTER", "1")));
+        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -43,6 +59,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         connectBT = new javax.swing.JButton();
         counterSpinner = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
+        cancelPrefsBT = new javax.swing.JButton();
         Display = new javax.swing.JFrame();
         nowServingLBL = new javax.swing.JLabel();
         dNowServing = new javax.swing.JLabel();
@@ -83,6 +100,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
         comboTrans = new javax.swing.JComboBox();
         editTransBT = new javax.swing.JButton();
         deleteTransBT = new javax.swing.JButton();
+        logFrame = new javax.swing.JFrame();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        log = new javax.swing.JTextArea();
         cNowServing = new javax.swing.JLabel();
         nextBT = new javax.swing.JButton();
         mobilenumLBL = new javax.swing.JLabel();
@@ -107,6 +127,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jmenu1 = new javax.swing.JMenu();
         connectToDatabaseAgain = new javax.swing.JMenuItem();
+        preferences = new javax.swing.JMenuItem();
+        logMenu = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         viewDB = new javax.swing.JMenuItem();
@@ -129,12 +151,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
         restore = new javax.swing.JMenuItem();
         closeDisplay = new javax.swing.JMenuItem();
 
+        Connect2DB.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Connect2DB.setTitle("Connect to Database");
         Connect2DB.setModal(true);
 
         jLabel1.setText("Database URL:");
 
-        hostTF.setText("jdbc:derby://localhost:1527/QueueDB");
         hostTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hostTFActionPerformed(evt);
@@ -143,7 +165,6 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         jLabel2.setText("Username:");
 
-        usernameTF.setText("dbadmin");
         usernameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameTFActionPerformed(evt);
@@ -152,14 +173,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         jLabel3.setText("Password:");
 
-        passwordTF.setText("dba");
         passwordTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwordTFActionPerformed(evt);
             }
         });
 
-        connectBT.setText("Connect");
+        connectBT.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
+        connectBT.setText("Save Preferences");
         connectBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectBTActionPerformed(evt);
@@ -170,29 +191,37 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         jLabel5.setText("Counter #:");
 
+        cancelPrefsBT.setText("Cancel");
+        cancelPrefsBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelPrefsBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout Connect2DBLayout = new javax.swing.GroupLayout(Connect2DB.getContentPane());
         Connect2DB.getContentPane().setLayout(Connect2DBLayout);
         Connect2DBLayout.setHorizontalGroup(
             Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Connect2DBLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(Connect2DBLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(usernameTF)
-                            .addComponent(passwordTF)
-                            .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(Connect2DBLayout.createSequentialGroup()
-                        .addGap(127, 127, 127)
-                        .addComponent(connectBT)))
-                .addGap(20, 20, 20))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(usernameTF)
+                    .addComponent(passwordTF)
+                    .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Connect2DBLayout.createSequentialGroup()
+                .addContainerGap(140, Short.MAX_VALUE)
+                .addComponent(cancelPrefsBT)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(connectBT)
+                .addContainerGap())
         );
         Connect2DBLayout.setVerticalGroup(
             Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,8 +242,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addComponent(connectBT)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(connectBT)
+                    .addComponent(cancelPrefsBT))
                 .addContainerGap())
         );
 
@@ -571,6 +602,29 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        logFrame.setTitle("System Log");
+
+        log.setColumns(20);
+        log.setRows(5);
+        jScrollPane3.setViewportView(log);
+
+        javax.swing.GroupLayout logFrameLayout = new javax.swing.GroupLayout(logFrame.getContentPane());
+        logFrame.getContentPane().setLayout(logFrameLayout);
+        logFrameLayout.setHorizontalGroup(
+            logFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        logFrameLayout.setVerticalGroup(
+            logFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Offline");
         addWindowStateListener(new java.awt.event.WindowStateListener() {
@@ -678,13 +732,29 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         jmenu1.setText("Menu");
 
-        connectToDatabaseAgain.setText("Connect to Database Server");
+        connectToDatabaseAgain.setText("Connect to Database Server...");
         connectToDatabaseAgain.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectToDatabaseAgainActionPerformed(evt);
             }
         });
         jmenu1.add(connectToDatabaseAgain);
+
+        preferences.setText("Preferences...");
+        preferences.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                preferencesActionPerformed(evt);
+            }
+        });
+        jmenu1.add(preferences);
+
+        logMenu.setText("System Log...");
+        logMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logMenuActionPerformed(evt);
+            }
+        });
+        jmenu1.add(logMenu);
 
         jMenuBar1.add(jmenu1);
 
@@ -1346,6 +1416,26 @@ public class ControllerDisplay extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_clrHistoryActionPerformed
 
+    private void cancelPrefsBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelPrefsBTActionPerformed
+        Connect2DB.dispose();
+    }//GEN-LAST:event_cancelPrefsBTActionPerformed
+
+    private void preferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_preferencesActionPerformed
+        hostTF.setText(prefs.get("DBHOST", "jdbc:derby://localhost:1527/QueueDB"));
+        usernameTF.setText(prefs.get("DBUSERNAME", "dbadmin"));
+        passwordTF.setText(prefs.get("DBPASSWORD", "dba"));
+        counterSpinner.setValue(Integer.parseInt(prefs.get("COUNTER", "1")));
+        Connect2DB.pack();
+        Connect2DB.setLocationRelativeTo(null);
+        Connect2DB.setVisible(true);
+    }//GEN-LAST:event_preferencesActionPerformed
+
+    private void logMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logMenuActionPerformed
+        logFrame.pack();
+        logFrame.setLocationRelativeTo(this);
+        logFrame.setVisible(true);
+    }//GEN-LAST:event_logMenuActionPerformed
+
     public void connectToDatabase(String host, String user, String pw, String counterNum) {
         try {
             counter = Integer.parseInt(counterNum);
@@ -1362,7 +1452,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid Counter", JOptionPane.ERROR_MESSAGE);
         }
         if (con != null) {
-            Connect2DB.hide();
+            //save preferences
+            prefs.put("DBHOST", host);
+            prefs.put("DBUSERNAME", user);
+            prefs.put("DBPASSWORD", pw);
+            prefs.put("COUNTER", counterNum);
+            
+            //do necessary GUI actions
+            Connect2DB.dispose();
             Display.pack();
             Display.setLocationRelativeTo(null);
             Display.setVisible(true);
@@ -1370,7 +1467,6 @@ public class ControllerDisplay extends javax.swing.JFrame {
             connectToDatabaseAgain.setEnabled(false);
             connectToDatabaseAgain.setText("Connected to Database");
             Display.setTitle("Counter " + counter);
-            //counterLBL.setText("Counter " + counter);
             nowServingLBL.setText("Counter " + counter + " - Now Serving");
             Thread thread = new Information("Connected to Database Server", false);
             thread.start();
@@ -1383,6 +1479,15 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 if (rs.next()) {
                     updateLabels(rs);
                     callAgainBT.setEnabled(true);
+                }
+                else {
+                    cNowServing.setText("None");//transfer data from db to GUI labels on controller
+                    mobilenumLBL.setText("-");
+                    refLBL.setText("-");
+                    nameLBL.setText("-");
+                    transLBL.setText("-");
+                    dNowServing.setText("None");
+                    callAgainBT.setEnabled(false);
                 }
                 rs.close();
                 ps.close();
@@ -1528,6 +1633,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JButton addVIPOK;
     public static javax.swing.JLabel cNowServing;
     private javax.swing.JButton callAgainBT;
+    private javax.swing.JButton cancelPrefsBT;
     private javax.swing.JMenuItem cleanup;
     private javax.swing.JMenuItem clearQueue;
     private javax.swing.JMenuItem closeDisplay;
@@ -1586,9 +1692,13 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenu jmenu1;
     private javax.swing.JMenuItem launchDisplay;
+    public static javax.swing.JTextArea log;
+    private javax.swing.JFrame logFrame;
+    private javax.swing.JMenuItem logMenu;
     private javax.swing.JTextField mn;
     private javax.swing.JTextField mne;
     private javax.swing.JLabel mobilenumLBL;
@@ -1597,6 +1707,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JLabel nextLBL;
     public static javax.swing.JLabel nowServingLBL;
     private javax.swing.JPasswordField passwordTF;
+    private javax.swing.JMenuItem preferences;
     private javax.swing.JPasswordField pw;
     private javax.swing.JPasswordField pwe;
     private javax.swing.JLabel refLBL;
