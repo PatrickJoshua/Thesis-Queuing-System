@@ -37,10 +37,11 @@ public class Home extends HttpServlet {
             out.println("<title>Queuing System Web App</title>");            
             out.println("<meta charset=\"UTF-8\">");
             out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");   
+            out.println("<link rel = stylesheet href = \"thesis.css\" type = \"text/css\">");
             out.println("</head>");
             out.println("<body>");
             out.println("<center>");
-            out.println("<h1>New Home Page</h1>");
+            out.println("<font face=\"Segoe UI Light\" size=50>Welcome</font><br><br>");
             out.println("<form action=getNumberServlet>");
             out.println("<input type=\"text\" name=\"cellNo\" style = \"font-size: 20px;\">");
             out.println("<p><input type=\"checkbox\" name=\"sms\" checked>Send me SMS Notifications</p>");

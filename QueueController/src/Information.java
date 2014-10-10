@@ -23,7 +23,7 @@ public class Information extends Thread {
     @Override
     public void run() {
         try {
-            ControllerDisplay.info.setText("Information: " + message);
+            ControllerDisplay.info.setText(" " + message);
             if(blink) {
                 Color origColor = new Color(51,51,51);
                 ControllerDisplay.info.setForeground(Color.red);
@@ -31,7 +31,7 @@ public class Information extends Thread {
                 ControllerDisplay.info.setForeground(origColor);
             }
             Thread.sleep(5000);
-            ControllerDisplay.info.setText("Information: ");
+            ControllerDisplay.info.setText(" ");
         } catch (InterruptedException ie) {
             System.out.println("Cannot display this error message on GUI: " + message);
             System.err.println("Reason: " + ie.getMessage());
