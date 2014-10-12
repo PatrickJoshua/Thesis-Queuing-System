@@ -263,7 +263,7 @@ public class Common {
     }
     
     public static String getTransactions(Connection con) {
-        String x = "<select name=trans>";
+        String x = "<select name=trans id=centered>";
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select TRANSACTIONTYPE from TRANSACTIONSTBL");
