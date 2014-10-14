@@ -39,21 +39,68 @@ public class vip extends HttpServlet {
             out.println("<h1>Servlet vip at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");*/
-            out.println("<html>\n" +
+            out.println("<!DOCTYPE html>\n" +
+"<!--\n" +
+"To change this license header, choose License Headers in Project Properties.\n" +
+"To change this template file, choose Tools | Templates\n" +
+"and open the template in the editor.\n" +
+"-->\n" +
+"<html>\n" +
 "    <head>\n" +
-"        <title>VIP Login - Queuing System Web App</title>\n" +
+"        <title>VIP Log In</title>\n" +
 "        <meta charset=\"UTF-8\">\n" +
 "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+"        <link rel=\"stylesheet\" media=\"(max-width: 768px)\" href=\"../mobile.css\">\n" +
+"        <link rel=\"stylesheet\" media=\"(min-width: 769px)\" href=\"../desktop.css\">\n" +
 "    </head>\n" +
-"    <body>\n" +
-"        <center>\n" +
-"        <h2>VIP Login</h2>\n" +
-"        <form name=\"viplogin\" action=\"loginServlet\">\n" +
-"            Username: <input type=\"text\" name=\"username\" value=\"\" placeholder=\"Username\" /> <br><br>\n" +
-"            Password: <input type=\"password\" name=\"password\" value=\"\" placeholder=\"Password\" /> <br><br>\n" +
-"            <input name=\"login\" type=\"submit\" value=\"Login\" />\n" +
-"        </form>\n" +
-"    </center>\n" +
+"    <body class=\"segoe\">\n" +
+"        <div class=\"lightpink\" id=\"header\">\n" +
+"            <img id=\"imgheader\" src=\"../logo.png\">\n" +
+"            <div id=\"menu\" class=\"darkpink\">\n" +
+"                <div id=\"menubar\">\n" +
+"                    <div id=\"menuitem\">\n" +
+"                        <a href=\"\">\n" +
+"                            Home\n" +
+"                        </a>\n" +
+"                    </div>\n" +
+"                    <div class=\"darkerpink\" id=\"menuitem\">\n" +
+"                        <a href=\"/vip\">\n" +
+"                            VIP\n" +
+"                        </a>\n" +
+"                    </div>\n" +
+"                    <div id=\"menuitem\">\n" +
+"                        <a href=\"/realtime\">\n" +
+"                            Real-time\n" +
+"                        </a>\n" +
+"                    </div>\n" +
+"                </div>\n" +
+"            </div>\n" +
+"        </div>\n" +
+"        <div id=\"spacer\"></div>\n" +
+"        <div id=\"loginbody\">\n" +
+"        	<img src=\"../vipimg.jpg\" id=\"vipbg\">\n" +
+"        	<div id=\"content\">\n" +
+"	        	<div id=\"loginbox\">\n" +
+"	        		<div id=\"logincontent\">\n" +
+"	        			<p id=\"viplogintxt\">VIP Log In</p>\n" +
+"						<br><br>\n" +
+"	        			Log in using the account credentials given to you when you availed your VIP status.\n" +
+"	        			<br><br><br>\n" +
+"	        			<p id=\"bottomspaced\">Username:</p>\n" +
+"	        			<input type=\"text\" name=\"username\" placeholder=\"Username\">\n" +
+"	        			<br><br>\n" +
+"	        			<p id=\"bottomspaced\">Password:</p>\n" +
+"	        			<input type=\"password\" name=\"password\" placeholder=\"Password\">\n" +
+"	        			<br><br><br>\n" +
+"	        			<p align=\"center\"><input type=\"submit\" value=\"Log In\"></p>\n" +
+"	        			<br><br>\n" +
+"	        			<hr width=\"50%\">\n" +
+"	        			<br>\n" +
+"	        			<p style=\"font-size: .8em;\">Get in touch with our personnels anytime when you want to inquire or make changes to your account.</p>\n" +
+"	        		</div>\n" +
+"	        	</div>\n" +
+"        	</div>\n" +
+"        </div>\n" +
 "    </body>\n" +
 "</html>");
         }
