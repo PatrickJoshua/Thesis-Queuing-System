@@ -75,6 +75,7 @@ public class Home extends HttpServlet {
 "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
 "        <link rel=\"stylesheet\" media=\"(max-width: 768px)\" href=\"../mobile.css\">\n" +
 "        <link rel=\"stylesheet\" media=\"(min-width: 769px)\" href=\"../desktop.css\">\n" +
+                    "<script src=\"../jquery-2.1.1.js\"></script>" +
 "    </head>\n" +
 "    <body class=\"segoe\">\n" +
 "        <div class=\"lightpink\" id=\"header\">\n" +
@@ -144,6 +145,18 @@ public class Home extends HttpServlet {
 "                <p style=\"margin-bottom: 5%\">Patrick Saguinsin | Maidy Santos | Justine Diza | Jasmine Eve</p>\n" +
 "            </div>\n" +
 "        </div>\n" +
+         "<script>\n" +
+"            jQuery(window).scroll(function(){\n" +
+"                var fromTopPx = 80; // distance to trigger\n" +
+"                var scrolledFromtop = jQuery(window).scrollTop();\n" +
+"                if(scrolledFromtop > fromTopPx){\n" +
+"                    jQuery('img').removeAttr('id');\n" +
+"                    jQuery('img').attr('id','scrolled');\n" +
+"                }else{\n" +
+"                    jQuery('img').removeAttr('scrolled');\n" +
+"                    jQuery('img').attr('id','imgheader');\n" +
+"                }\n" +
+"            });</script>" +
 "    </body>\n" +
 "</html>");
         }

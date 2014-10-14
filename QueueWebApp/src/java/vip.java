@@ -86,13 +86,14 @@ public class vip extends HttpServlet {
 "						<br><br>\n" +
 "	        			Log in using the account credentials given to you when you availed your VIP status.\n" +
 "	        			<br><br><br>\n" +
+                    "<form action=\"loginServlet\">" +
 "	        			<p id=\"bottomspaced\">Username:</p>\n" +
 "	        			<input type=\"text\" name=\"username\" placeholder=\"Username\">\n" +
 "	        			<br><br>\n" +
 "	        			<p id=\"bottomspaced\">Password:</p>\n" +
 "	        			<input type=\"password\" name=\"password\" placeholder=\"Password\">\n" +
 "	        			<br><br><br>\n" +
-"	        			<p align=\"center\"><input type=\"submit\" value=\"Log In\"></p>\n" +
+"	        			<p align=\"center\"><input type=\"submit\" value=\"Log In\"></p></form>\n" +
 "	        			<br><br>\n" +
 "	        			<hr width=\"50%\">\n" +
 "	        			<br>\n" +

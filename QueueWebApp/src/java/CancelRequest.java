@@ -52,11 +52,19 @@ public class CancelRequest extends HttpServlet {
                 System.out.println("Removed " + stmt.executeUpdate("delete from QUEUETBL where NUM=" + num + " and VIP=" + vip));
                 stmt.close();
                 con.close();
+                //out.println("<center>Your number has been removed from the queue</center>");
+                out.println("<script type=\"text/javascript\">");  
+                out.println("alert('Your number has been removed from the queue. Press OK to go back to the homepage');");      //display pop up message
+                out.println("window.location = '/QueueWebApp';");                      //go back to login page
+                out.println("</script>");
             } catch (SQLException sqle) {
-                out.println("Cannot cancel request. " + sqle.getMessage());
+                //out.println("Cannot cancel request. " + sqle.getMessage());
+                out.println("<script type=\"text/javascript\">");  
+                out.println("alert('Cannot cancel request. " + sqle.getMessage() +"');");      //display pop up message
+                out.println("window.location = '/QueueWebApp';");                      //go back to login page
+                out.println("</script>");
             }
             /*End of do not modify*/
-            out.println("<center>Your number has been removed from the queue</center>");
             out.println("</body>");
             out.println("</html>");
         }
