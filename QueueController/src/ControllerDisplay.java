@@ -323,6 +323,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("SQL Statement"));
 
+        sqlTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sqlTFActionPerformed(evt);
+            }
+        });
+
         sqlBT.setText("Execute SQL");
         sqlBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1047,7 +1053,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
             deletePreviouslyServed();
             
             //For VIP
-            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true and COUNTER IS NULL");    //query to get VIP first
+            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true and COUNTER IS NULL ORDER BY NUM");    //query to get VIP first
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
             ResultSet rs = ps.executeQuery();   //execute SQL statement
             if (rs.next()) {    //if there is a VIP on queue
@@ -1058,7 +1064,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 sendSMS.start();
                 callAgainBT.setEnabled(true);
             } else {    //for guests
-                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false and COUNTER IS NULL");  //get non-vip guest
+                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false and COUNTER IS NULL ORDER BY NUM");  //get non-vip guest
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
                 rs = ps.executeQuery();
                 if (rs.next()) {    //if there is a non-vip guest on queue
@@ -1454,6 +1460,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
         logFrame.setLocationRelativeTo(this);
         logFrame.setVisible(true);
     }//GEN-LAST:event_logMenuActionPerformed
+
+    private void sqlTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sqlTFActionPerformed
+        executeSQL("QUEUETBL");
+    }//GEN-LAST:event_sqlTFActionPerformed
 
     public void connectToDatabase(String host, String user, String pw, String counterNum, String interval) {
         try {

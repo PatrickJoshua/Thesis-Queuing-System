@@ -109,6 +109,7 @@ public class realtime extends HttpServlet {
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     out.println("<div id=\"start\" class=\"segoe\">Now Serving</div><br>");
+                    out.println("<div id=\"tilecontainer\">");
                     rs.beforeFirst();
                     while (rs.next()) {
                         if (rs.getBoolean("VIP")) {
@@ -117,8 +118,7 @@ public class realtime extends HttpServlet {
                             ticket = "N" + rs.getInt("NUM");
                         }
 
-                        out.println("<div id=\"tilecontainer\">\n"
-                                + "                <div class=\"tile\">\n"
+                        out.println("             <div class=\"tile\">\n"
                                 + "                    <div id=\"left\">\n"
                                 + "                        <p style=\"font-size:1em;\">Counter " + rs.getInt("COUNTER") + "</p>\n"
                                 + "                        <br><br>\n"
@@ -127,7 +127,7 @@ public class realtime extends HttpServlet {
                                 + "                    <div id=\"right\" class=\"segoe\">" + ticket + "</div>\n"
                                 + "                </div>");
                     }
-                    out.println("<br><br><br>");
+                    out.println("</div><br><br><br>");
                     rs.close();
                     ps.close();
 
