@@ -72,14 +72,14 @@ public class Home extends HttpServlet {
 "    <head>\n" +
 "        <title>CSA Queuing System Web App</title>\n" +
 "        <meta charset=\"UTF-8\">\n" +
-"        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+"        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no\">\n" +
 "        <link rel=\"stylesheet\" media=\"(max-width: 768px)\" href=\"../mobile.css\">\n" +
 "        <link rel=\"stylesheet\" media=\"(min-width: 769px)\" href=\"../desktop.css\">\n" +
                     "<script src=\"../jquery-2.1.1.js\"></script>" +
 "    </head>\n" +
 "    <body class=\"segoe\">\n" +
 "        <div class=\"lightpink\" id=\"header\">\n" +
-"            <img id=\"imgheader\" src=\"../logo.png\">\n" +
+"            <a href=\"/QueueWebApp\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n" +
 "            <div id=\"menu\" class=\"darkpink\">\n" +
 "                <div id=\"menubar\">\n" +
 "                    <div class=\"darkerpink\" id=\"menuitem\">\n" +
@@ -88,12 +88,12 @@ public class Home extends HttpServlet {
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div id=\"menuitem\">\n" +
-"                        <a href=\"vip\">\n" +
+"                        <a href=\"/QueueWebApp/vip\">\n" +
 "                            VIP\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div id=\"menuitem\">\n" +
-"                        <a href=\"realtime\">\n" +
+"                        <a href=\"/QueueWebApp/realtime\">\n" +
 "                            Real-time\n" +
 "                        </a>\n" +
 "                    </div>\n" +
@@ -103,17 +103,18 @@ public class Home extends HttpServlet {
 "        <div id=\"content\">\n" +
 "            <div id=\"main\">\n" +
 "                <p id=\"Welcome\">Welcome</p>\n" +
-"                <br>\n" +
-"                <p id=\"bottomspaced\">Enter your mobile address:</p>\n" +
-"                <form action=\"getNumberServlet\">\n" +
-"                    <input id=\"centered\" type=\"text\" name=\"cellNo\" value=\"+63\">\n" +
-"                    <p id=\"format\"><i>Format: +639XXXXXXXXXX</i></p>\n" +
-"                    <br>\n" +
+"                <p id=\"bottomspaced\">Enter your mobile number:</p>\n" +
+"                <form action=\"/QueueWebApp/getNumberServlet\">\n" +
+                    "<input id=\"centered\" type=\"text\" name=\"cellNo\" value=\"+63\" placeholder=\"Ex. +639151272800\" onfocus=\"document.getElementById('note').style.display='block'\" onblur=\"document.getElementById('note').style.display='none'\">\n" +
+"                    <div id=\"note\">\n" +
+"                        <p id=\"format\"><i>Format: +639XXXXXXXXXX</i></p>\n" +
+"                    </div>" +
 "                    <p id=bottomspaced>Service to be availed:</p>");
             Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
             out.println(Common.getTransactions(con));
-            out.println("<p id=\"topspaced\"><input type=\"checkbox\" name=\"sms\" checked> Send me SMS Notifications</p>\n" +
-"                    <center><input type=\"submit\" value=\"Enter Queue\"></center>\n" +
+            out.println("<p id=\"topspaced\"><input type=\"checkbox\" name=\"sms\" value=\"Send me SMS Notifications\" checked> Send me SMS Notifications</p>\n" +
+                    "<p id=\"smalldesc\">You will receive text message updates regarding the status of the queue</p>" +
+"                    <p id=\"topspaced\" style=\"padding-top:30px;padding-bottom:20px;\" align=\"center\"><input type=\"submit\" value=\"Enter Queue\"></p>\n" +
 "                </form>\n" +
 "                <br><br>\n" +
 "            </div>\n" +

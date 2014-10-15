@@ -49,27 +49,27 @@ public class vip extends HttpServlet {
 "    <head>\n" +
 "        <title>VIP Log In</title>\n" +
 "        <meta charset=\"UTF-8\">\n" +
-"        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+"        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no\">\n" +
 "        <link rel=\"stylesheet\" media=\"(max-width: 768px)\" href=\"../mobile.css\">\n" +
 "        <link rel=\"stylesheet\" media=\"(min-width: 769px)\" href=\"../desktop.css\">\n" +
 "    </head>\n" +
 "    <body class=\"segoe\">\n" +
 "        <div class=\"lightpink\" id=\"header\">\n" +
-"            <img id=\"imgheader\" src=\"../logo.png\">\n" +
+"            <a href=\"/QueueWebApp\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n" +
 "            <div id=\"menu\" class=\"darkpink\">\n" +
 "                <div id=\"menubar\">\n" +
 "                    <div id=\"menuitem\">\n" +
-"                        <a href=\"\">\n" +
+"                        <a href=\"/QueueWebApp\">\n" +
 "                            Home\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div class=\"darkerpink\" id=\"menuitem\">\n" +
-"                        <a href=\"/vip\">\n" +
+"                        <a href=\"/QueueWebApp/vip\">\n" +
 "                            VIP\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div id=\"menuitem\">\n" +
-"                        <a href=\"/realtime\">\n" +
+"                        <a href=\"/QueueWebApp/realtime\">\n" +
 "                            Real-time\n" +
 "                        </a>\n" +
 "                    </div>\n" +
