@@ -52,6 +52,7 @@ public class vip extends HttpServlet {
 "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no\">\n" +
 "        <link rel=\"stylesheet\" media=\"(max-width: 768px)\" href=\"../mobile.css\">\n" +
 "        <link rel=\"stylesheet\" media=\"(min-width: 769px)\" href=\"../desktop.css\">\n" +
+                    "        <script src=\"../jquery-2.1.1.js\"></script>" +
 "    </head>\n" +
 "    <body class=\"segoe\">\n" +
 "        <div class=\"lightpink\" id=\"header\">\n" +
@@ -60,23 +61,23 @@ public class vip extends HttpServlet {
 "                <div id=\"menubar\">\n" +
 "                    <div id=\"menuitem\">\n" +
 "                        <a href=\"/QueueWebApp\">\n" +
-"                            Home\n" +
+"                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Home\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div class=\"darkerpink\" id=\"menuitem\">\n" +
 "                        <a href=\"/QueueWebApp/vip\">\n" +
-"                            VIP\n" +
+"                            <img src=\"../vip.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;VIP\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div id=\"menuitem\">\n" +
 "                        <a href=\"/QueueWebApp/realtime\">\n" +
-"                            Real-time\n" +
+"                            <img src=\"../clock.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Real-time\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                </div>\n" +
 "            </div>\n" +
 "        </div>\n" +
-"        <div id=\"spacer\"></div>\n" +
+"        <div id=\"vipspacer\"></div>\n" +
 "        <div id=\"loginbody\">\n" +
 "        	<img src=\"../vipimg.jpg\" id=\"vipbg\">\n" +
 "        	<div id=\"content\">\n" +
@@ -102,6 +103,16 @@ public class vip extends HttpServlet {
 "	        	</div>\n" +
 "        	</div>\n" +
 "        </div>\n" +
+                    "<script>\n" +
+"            jQuery(window).scroll(function(){\n" +
+"                var fromTopPx = 80; // distance to trigger\n" +
+"                var scrolledFromtop = jQuery(window).scrollTop();\n" +
+"                if(scrolledFromtop > fromTopPx){\n" +
+"                    jQuery('#imgheader').attr('id','scrolled');\n" +
+"                }else{\n" +
+"                    jQuery('img#scrolled').attr('id','imgheader');\n" +
+"                }\n" +
+"            });</script>" +
 "    </body>\n" +
 "</html>");
         }

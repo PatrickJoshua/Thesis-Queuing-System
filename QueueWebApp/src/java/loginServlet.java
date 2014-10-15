@@ -132,17 +132,17 @@ public class loginServlet extends HttpServlet {
 "                <div id=\"menubar\">\n" +
 "                    <div id=\"menuitem\">\n" +
 "                        <a href=\"/QueueWebApp\">\n" +
-"                            Home\n" +
+"                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Home\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div class=\"darkerpink\" id=\"menuitem\">\n" +
 "                        <a href=\"/QueueWebApp/vip\">\n" +
-"                            VIP\n" +
+"                            <img src=\"../vip.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;VIP\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div id=\"menuitem\">\n" +
 "                        <a href=\"/QueueWebApp/realtime\">\n" +
-"                            Real-time\n" +
+"                            <img src=\"../clock.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Real-time\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                </div>\n" +
@@ -183,7 +183,19 @@ public class loginServlet extends HttpServlet {
 "                    <p id=\"nowservingtxt\">Now Serving</p>\n" +
 "                    <table class=\"counter\">");
             
-            //table here
+            String [] nowServing = Common.getNowServingCounters(con);
+            try {
+                for(int i=0; i<nowServing.length; i++) {
+                    if(nowServing.length > 3) {
+                        out.println("<tr><td>" + nowServing[i] + "</td>");
+                        out.println("<td>" + nowServing[++i] + "</td></tr>");
+                    }
+                    else
+                        out.println("<tr><td>" + nowServing[i] + "</td></tr>");
+                }
+            } catch (java.lang.ArrayIndexOutOfBoundsException x) {
+                out.println("</tr>");
+            }
             
             out.println("</table>\n" +
 "                </div>\n" +
@@ -201,7 +213,7 @@ public class loginServlet extends HttpServlet {
 "            </div>\n" +
 "\n" +
 "            <div id=\"footervip\">\n" +
-"                <p style=\"margin-bottom:1%\">Capstone Project 2014-2015</p>\n" +
+"                <p style=\"margin-bottom:1%\">Capstone Project 2014</p>\n" +
 "                <p style=\"margin-bottom: 5%\">Patrick Saguinsin | Maidy Santos | Justine Diza | Jasmine Eve</p>\n" +
 "            </div>\n" +
 "        </div>\n" +
@@ -210,11 +222,9 @@ public class loginServlet extends HttpServlet {
 "                var fromTopPx = 80; // distance to trigger\n" +
 "                var scrolledFromtop = jQuery(window).scrollTop();\n" +
 "                if(scrolledFromtop > fromTopPx){\n" +
-"                    jQuery('img').removeAttr('id');\n" +
-"                    jQuery('img').attr('id','scrolled');\n" +
+"                    jQuery('#imgheader').attr('id','scrolled');\n" +
 "                }else{\n" +
-"                    jQuery('img').removeAttr('scrolled');\n" +
-"                    jQuery('img').attr('id','imgheader');\n" +
+"                    jQuery('img#scrolled').attr('id','imgheader');\n" +
 "                }\n" +
 "            });</script>");
             }

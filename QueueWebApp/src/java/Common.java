@@ -193,26 +193,28 @@ public class Common {
         return nowserving;
     }
     
-    public static String getNowServingCounters(Connection con) {
-        String nowserving = "";
+    public static String[] getNowServingCounters(Connection con) {
+        String [] nowserving = null;
         try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select NUM,VIP,COUNTER from QUEUETBL where COUNTER IS NOT NULL");
-            if(rs.next()) {
-                do {
+            Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = stmt.executeQuery("select NUM,VIP,COUNTER from QUEUETBL where COUNTER IS NOT NULL ORDER BY COUNTER ASC");
+            if(rs.last()) {
+                nowserving = new String[rs.getRow()];
+                rs.beforeFirst();
+                for(int i = 0; rs.next(); i++) {
                     if(rs.getBoolean("VIP"))
-                        nowserving = nowserving + "<h1>Counter " + rs.getInt("COUNTER") + ": V" + rs.getInt("NUM") + "</h1>";
+                        nowserving[i] = "Counter " + rs.getInt("COUNTER") + ": V" + rs.getInt("NUM");
                     else
-                        nowserving = nowserving + "<h1>Counter " + rs.getInt("COUNTER") + ": N" + rs.getInt("NUM") + "</h1>";
-                } while(rs.next());
+                        nowserving[i] = "Counter " + rs.getInt("COUNTER") + ": N" + rs.getInt("NUM");
+                }
             }
             else
             {
                 int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
                 if(currentTime > 9 && currentTime < 21)     //9AM to 9PM
-                    nowserving = "None";
+                    nowserving = new String[]{"None"};
                 else
-                    nowserving = "Store is closed";
+                    nowserving = new String[]{"Store is closed"};
             }
             rs.close();
             stmt.close();
