@@ -1,0 +1,495 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 10 12, 14, 12:30:25 AM
+    Author     : PatrickJoshua
+*/
+
+@font-face {
+    font-family: 'SEGOEUIL';
+    src: url('fonts/SEGOEUIL.eot');
+    src: local('SEGOEUIL'), url('fonts/SEGOEUIL.woff') format('woff'), url('fonts/SEGOEUIL.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'SEGOEUI';
+    src: url('fonts/segoe-ui-webfont.eot');
+    src: local('SEGOEUI'), url('fonts/segoe-ui-webfont.woff') format('woff'), url('fonts/segoe-ui-webfont.ttf') format('truetype');
+}
+/* use this class to attach this font to any element i.e. <p class="fontsforweb_fontid_1409">Text with this font applied</p> */
+.segoe {
+    font-family: 'SEGOEUIL',"HelveticaNeue-Thin","Helvetica Nueue Thin" !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'SEGOEUI',"Segoe UI","HelveticaNeue-Light","Helvetica Nueue Light","Open Sans" !important;
+}
+
+html 
+    transition-timing-function: cubic-bezier(0,0,0,1);
+    -webkit-transition-timing-function: cubic-bezier(0,0,0,1);
+   transition: height .10s;
+   -moz-transition: height .10s;
+   -webkit-transition: height .10s;
+}
+
+body {
+    font-size: .9em;
+    width: 100%;
+    height: 100%;
+    background: #222;
+}
+
+div {
+    
+}
+
+.lightpink {
+    background-color: #D35D92;
+}
+
+.darkpink {
+    background-color: #B2306B;
+}
+
+.darkerpink {
+    background-color: #701E43;
+    //text-shadow: 2px 2px 4px black;
+}
+
+#header {
+    font-family: 'SEGOEUIL',"HelveticaNeue-Thin","Helvetica Nueue Thin" !important;
+    font-size: 3em;
+    font-weight: lighter;
+    width: 100%;
+    height: auto;
+    /*margin-left: auto;
+    margin-right: auto;*/
+    padding: 0px;
+    box-shadow: 0px 2px 30px dimgray;
+    position: fixed;
+    z-index: 1;
+}
+
+#content {
+	width: 100%;
+}
+
+#menu {
+    width: 100%;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#menubar {
+    width: 100%;
+    margin: 0 auto;
+    font-size: .8em;
+}
+
+#menuitem {
+    width: 33.33%;
+    height: 50px;
+    font-size: 0.4em;
+    text-align: center;
+    color: white;
+    float: left;
+    line-height: 50px;
+   transition: background-color .10s;
+   -moz-transition: background-color .10s;
+   -webkit-transition: background-color .10s;
+}
+
+#menuitem:hover {
+	background-color: #E08EB3;
+}
+
+#menuitem a {
+    display: block;
+    color: white;
+    height: 50px;
+   transition: color .10s;
+   -moz-transition: color .10s;
+   -webkit-transition: color .10s;
+}
+
+#menuitem a:hover {
+    color: black;
+}
+
+#main {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#queue {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#nowserving {
+    width: 100%;
+    height: 0px;
+    padding-bottom: 50%;
+    background-color: #D35D92;
+    color: white;
+    -webkit-animation: slideup 1s;
+    animation: slideup 1s;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes slideup {
+    0%   {margin-top:500px;background-color: white; width: 0px; height: 0px; position:}
+    50%  {margin-top:500px;background-color: white; width: 0px; height: 0px; position:}
+    100% {margin-top:0px; background-color: #D35D92;}
+ }
+
+/* Standard syntax */
+@keyframes slideup {
+    0%   {margin-top:500px;background-color: white; width: 0px; height: 0px; position:}
+    50%  {margin-top:500px;background-color: white; width: 0px; height: 0px; position:}
+    100% {margin-top:0px; background-color: #D35D92;}
+ }
+
+ #upcomingvip {
+ 	width: 49%;
+ 	margin-top: 2%;
+ 	margin-right: 2%;
+    background-color: #D35D92;
+    color: white;
+    float: left;
+    height: 0px;
+    padding-bottom: 49%;
+    font-size: 3.5vmin;
+    -webkit-animation: slideup 1.5s;
+    animation: slideup 1.5s;
+ }
+
+ #upcomingguest {
+ 	width: 49%;
+ 	margin-top: 2%;
+    background-color: #D35D92;
+    color: white;
+    float: right;
+    height: 0px;
+    padding-bottom: 49%;
+    font-size: 3.5vmin;
+    -webkit-animation: slideup 2s;
+    animation: slideup 2s;
+ }
+
+ #footer {
+ 	width: 100%;
+ 	padding-top: 18em;
+ 	text-align: center;
+ 	font-size: 2vmin;
+ }
+
+  #footervip {
+    width: 100%;
+    padding-top: 18em;
+    text-align: center;
+    font-size: 2vmin;
+ }
+
+ #loginbody {
+    padding-top: 200px;
+ }
+
+#loginbody {
+    width: 100%;
+    height: 100%;
+ }
+
+ #loginbox {
+    //width: 364px;
+    background-color: white;
+    //opacity: .7;
+    //margin-left: 384px;
+    //z-index: -4;
+    position: relative;
+    top: -40px;
+    display: block;
+ }
+
+ #logincontent {
+    padding: 30px;
+ }
+
+ #spacer {
+    padding-top: 200px;
+ }
+
+ #vipspacer {}
+
+ #note {
+    color: dimgray;
+    font-size: .7em;
+    display: none;
+    box-shadow: 1px 1px 5px #AAAAAA;
+    padding: 10px;
+    margin: 10px;
+}
+
+.tile {
+    background-color: #D35D92;
+    height: 100px;
+    width: 250px;
+    box-shadow: 0px 2px 5px #AAAAAA;
+    margin:5px;
+    //padding: 10px;
+    color: white;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#start {
+    font-size: 3em;
+    font-weight: lighter;
+}
+
+#sublabel {
+    font-size: 1.5em;
+    font-weight: lighter;
+    color: gray;
+}
+
+#left {
+    display: inline-block;
+    width: 55%;
+    //background-color:yellow;
+    padding-left: 10px;
+    padding-top: 10px;
+    height: 88%;
+    text-align:left;
+}
+
+#right {
+    display: inline-block;
+    font-size: 3em;
+    text-align: right;
+    font-weight: lighter;
+    width: 35%;
+    //background-color: red;
+    padding-right: 10px;
+    float: right;
+}
+
+#tilecontainer {
+    display: block;
+    //width: auto;
+    margin: 0 auto;
+    //background-color: yellow;
+    //text-align: center;
+}
+
+.upcomingtile {
+    background-color: #D35D92;
+    height: 100px;
+    width: 100px;
+    box-shadow: 0px 2px 5px #AAAAAA;
+    margin:5px;
+    //padding: 10px;
+    color: white;
+    display: inline-block;
+    vertical-align: top;
+}
+
+img {
+
+}
+
+#scrolled {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 50px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+   transition: height .10s;
+   -moz-transition: height .10s;
+   -webkit-transition: height .10s;
+}
+
+#imgheader {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+   transition: height .10s;
+   -moz-transition: height .10s;
+   -webkit-transition: height .10s;
+}
+
+#vipbg {
+    width: 100%;
+    display: block;
+}
+
+img#imgheader {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 80px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+img.navicon {
+    height: 25px;
+    vertical-align: middle;
+}
+
+#vipbg {
+    display: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    
+}
+
+#num {
+    font-size: 3em;
+    font-weight: lighter;
+    text-align: center;
+}
+
+#smalltrans {
+    font-size: .7em;
+    color: #DDDDDD;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#Welcome {
+    font-family: 'SEGOEUIL',"HelveticaNeue-Thin","Helvetica Nueue Thin" !important;
+    font-size: 3em;
+    font-weight: lighter;
+    padding-top: 200px;
+    text-align: center;
+}
+
+#viplogintxt {
+    font-family: 'SEGOEUIL',"HelveticaNeue-Thin","Helvetica Nueue Thin" !important;
+    font-size: 2.5em;
+    font-weight: lighter;
+    padding-top: 0;
+    margin-top: 0;
+    text-align: center;
+}
+
+#number {
+    font-family: 'SEGOEUIL',"HelveticaNeue-Thin","Helvetica Nueue Thin" !important;
+    font-size: 20vmin;
+    font-weight: lighter;
+    text-align: center;
+}
+
+#queuelabel {
+
+}
+
+#nowservingtxt {
+    font-family: 'SEGOEUIL',"HelveticaNeue-Thin","Helvetica Nueue Thin" !important;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	font-size: 8vmin;
+}
+
+#bottomspaced {
+    padding-bottom: 10px;
+    padding-top: 20px;
+}
+
+#topspaced {
+    //padding-bottom: 30px;
+    padding-top: 20px;
+}
+
+#format {
+    font-size: .85em;
+    text-align: center;
+    padding-top: 3px;
+    color: dimgray;
+}
+
+#smalldesc {
+    color: dimgray;
+    font-size: .7em;
+    padding-left: 20px;
+}
+
+#name {
+    font-weight: bold;
+    text-align: center;
+}
+
+input[type=text] {
+    padding:5px 0px; 
+    padding-left: 10px;
+    font-size: 1.1em;
+    border:2px black solid;
+    width: 95%;
+}
+
+input[type=submit] {
+    padding:5px 15px; background:#ccc; border:2px black solid;
+    cursor:pointer;
+    -webkit-border-radius: 0px;
+    border-radius: 0px; 
+   transition: background .15s;
+   -moz-transition: background .15s;
+   -webkit-transition: background .15s;
+
+}
+
+input[type=password] {
+    padding:5px 0px; 
+    padding-left: 10px;
+    font-size: 1em;
+    border:2px black solid;
+    width: 95%;
+}
+
+input[type=submit]:hover {
+    padding:5px 15px; background:#D35D92; border:2px black solid;
+    color: white;
+    cursor:pointer;
+    -webkit-border-radius: 0px;
+    border-radius: 0px; 
+}
+
+select#centered {
+    padding:5px 0px; 
+    padding-left: 10px;
+    padding-right: 10px;
+    border:2px black solid;
+    width: 100%;
+    -webkit-border-radius: 0px;
+    border-radius: 0px; 
+}
+
+td {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+table.counter {
+	font-size: 3.5vmin;
+	margin-bottom: 10%;
+}
+//dark B2306B
+//darker hover 701E43

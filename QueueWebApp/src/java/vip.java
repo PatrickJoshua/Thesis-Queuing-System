@@ -79,7 +79,7 @@ public class vip extends HttpServlet {
 "        </div>\n" +
 "        <div id=\"vipspacer\"></div>\n" +
 "        <div id=\"loginbody\">\n" +
-"        	<img src=\"../vipimg.jpg\" id=\"vipbg\">\n" +
+"        	<img src=\"../vipimg.png\" id=\"vipbg\">\n" +
 "        	<div id=\"content\">\n" +
 "	        	<div id=\"loginbox\">\n" +
 "	        		<div id=\"logincontent\">\n" +
