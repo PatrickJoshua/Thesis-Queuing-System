@@ -28,6 +28,8 @@ public class UpcomingListGenerator extends Thread {
     public void run() {
         boolean emptyVIP = true;
         boolean emptyGuest = true;
+        int previousVIPList = 0;
+        int previousGuestList = 0;
         
         while(true) {
             try {
@@ -37,9 +39,14 @@ public class UpcomingListGenerator extends Thread {
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 ResultSet rs = ps.executeQuery();
                 if(rs.last()) {     //go to last; determine number of rows returned
-                    //play tone
-                    if(emptyVIP) {
-                        emptyVIP = false;
+                    String [] list = new String[rs.getRow()];   //create array
+                    rs.beforeFirst();   //go back to first
+                    for(int i=0; rs.next(); i++)    //transfer returned data to an array
+                        list[i] = "V" + rs.getInt(1);
+                    ControllerDisplay.vipList.setListData(list);
+                    ControllerDisplay.nextLBL.setText("Next: " + list[0]);
+                    if(list.length != previousVIPList) {
+                        //play tone
                         try {
                             AudioInputStream ais = AudioSystem.getAudioInputStream(new File("newvip.wav"));
                             Clip tone = AudioSystem.getClip();
@@ -48,18 +55,11 @@ public class UpcomingListGenerator extends Thread {
                         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException x) {
                             System.err.println("Error playing notification tone. " + x.getMessage());
                         }
+                        previousVIPList = list.length;
                     }
-                    String [] list = new String[rs.getRow()];   //create array
-                    rs.beforeFirst();   //go back to first
-                    for(int i=0; rs.next(); i++)    //transfer returned data to an array
-                        list[i] = "V" + rs.getInt(1);
-                    ControllerDisplay.vipList.setListData(list);
-                    ControllerDisplay.nextLBL.setText("Next: " + list[0]);
-                    nextIsVIP = true;
                 }
                 else {
                     ControllerDisplay.vipList.setListData(new String[]{"     "});
-                    emptyVIP = true;
                 }
                 
                 //for guest list
@@ -67,18 +67,6 @@ public class UpcomingListGenerator extends Thread {
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 rs = ps.executeQuery();
                 if(rs.last()) {     //go to last; determine number of rows returned
-                    //play tone
-                    if(emptyGuest) {
-                        emptyGuest = false;
-                        try {
-                            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("newguest.wav"));
-                            Clip tone = AudioSystem.getClip();
-                            tone.open(ais);
-                            tone.start();
-                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException x) {
-                            System.err.println("Error playing notification tone. " + x.getMessage());
-                        }
-                    }
                     String [] list = new String[rs.getRow()];   //create array
                     rs.beforeFirst();   //go back to first
                     for(int i=0; rs.next(); i++)    //transfer returned data to an array
@@ -86,6 +74,19 @@ public class UpcomingListGenerator extends Thread {
                     ControllerDisplay.guestList.setListData(list);
                     if(!nextIsVIP)
                         ControllerDisplay.nextLBL.setText("Next: " + list[0]);
+                    //play tone
+                    if(list.length != previousGuestList) {
+                        try {
+                            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("newguest.wav"));
+                            Clip tone = AudioSystem.getClip();
+                            tone.open(ais);
+                            tone.start();
+                            System.out.println("Play tone guest");
+                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException x) {
+                            System.err.println("Error playing notification tone. " + x.getMessage());
+                        }
+                        previousGuestList = list.length;
+                    }
                 }
                 else {
                     ControllerDisplay.guestList.setListData(new String[]{"     "});

@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -108,6 +110,17 @@ public class ControllerDisplay extends javax.swing.JFrame {
         logFrame = new javax.swing.JFrame();
         jScrollPane3 = new javax.swing.JScrollPane();
         log = new javax.swing.JTextArea();
+        selectedDiag = new javax.swing.JDialog();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        selectedSMS = new javax.swing.JCheckBox();
+        selectedRef = new javax.swing.JLabel();
+        selectedTrans = new javax.swing.JLabel();
+        selectedNum = new javax.swing.JLabel();
+        selectedName = new javax.swing.JLabel();
         cNowServing = new javax.swing.JLabel();
         nextBT = new javax.swing.JButton();
         mobilenumLBL = new javax.swing.JLabel();
@@ -647,6 +660,78 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        selectedDiag.setTitle("View Queue Details");
+
+        jLabel24.setText("Name: ");
+
+        jLabel25.setText("Mobile Number:");
+
+        jLabel26.setText("Reference Number:");
+
+        jLabel27.setText("Transactions:");
+
+        jLabel28.setText("SMS Notifications:");
+
+        selectedSMS.setText("Enabled");
+        selectedSMS.setFocusable(false);
+        selectedSMS.setRequestFocusEnabled(false);
+        selectedSMS.setRolloverEnabled(false);
+
+        selectedRef.setText("Ref");
+
+        selectedTrans.setText("Trans");
+
+        selectedNum.setText("Number");
+
+        selectedName.setText("Name");
+
+        javax.swing.GroupLayout selectedDiagLayout = new javax.swing.GroupLayout(selectedDiag.getContentPane());
+        selectedDiag.getContentPane().setLayout(selectedDiagLayout);
+        selectedDiagLayout.setHorizontalGroup(
+            selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(selectedDiagLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel26)
+                    .addComponent(jLabel28)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel25)
+                    .addComponent(jLabel24))
+                .addGap(18, 18, 18)
+                .addGroup(selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(selectedName)
+                    .addComponent(selectedNum)
+                    .addComponent(selectedTrans)
+                    .addComponent(selectedSMS)
+                    .addComponent(selectedRef))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        selectedDiagLayout.setVerticalGroup(
+            selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(selectedDiagLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(selectedName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(selectedNum))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(selectedRef))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(selectedTrans))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(selectedDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel28)
+                    .addComponent(selectedSMS))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Offline");
         addWindowStateListener(new java.awt.event.WindowStateListener() {
@@ -710,12 +795,28 @@ public class ControllerDisplay extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
+        guestList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                guestListMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                guestListMousePressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(guestList);
 
         vipList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Not", " ", "Con", "nec", "ted" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
+        });
+        vipList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                vipListMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                vipListMousePressed(evt);
+            }
         });
         scroll.setViewportView(vipList);
 
@@ -923,39 +1024,39 @@ public class ControllerDisplay extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(refLBL))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(transLBL))
-                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(cNowServing)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
+                                .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nameLBL))
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mobilenumLBL))
-                    .addComponent(nextLBL)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(nextBT)
-                        .addGap(18, 18, 18)
-                        .addComponent(callAgainBT)))
+                                .addComponent(refLBL))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(transLBL))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(cNowServing)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(nameLBL))
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(mobilenumLBL))
+                            .addComponent(nextLBL)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(nextBT)
+                                .addGap(18, 18, 18)
+                                .addComponent(callAgainBT))))
+                    .addComponent(info))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(info)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -982,14 +1083,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
                             .addComponent(transLBL))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                         .addComponent(nextLBL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nextBT)
                             .addComponent(callAgainBT)))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(info))
         );
 
@@ -1210,6 +1311,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_callAgainBTActionPerformed
 
     private void connectToDatabaseAgainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectToDatabaseAgainActionPerformed
+        Connect2DB.pack();
+        Connect2DB.setLocationRelativeTo(null);
         Connect2DB.show();
     }//GEN-LAST:event_connectToDatabaseAgainActionPerformed
 
@@ -1465,6 +1568,24 @@ public class ControllerDisplay extends javax.swing.JFrame {
         executeSQL("QUEUETBL");
     }//GEN-LAST:event_sqlTFActionPerformed
 
+    private void guestListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guestListMouseClicked
+        //vipList.clearSelection();
+    }//GEN-LAST:event_guestListMouseClicked
+
+    private void vipListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vipListMouseClicked
+//        guestList.clearSelection();
+    }//GEN-LAST:event_vipListMouseClicked
+
+    private void vipListMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vipListMousePressed
+        guestList.clearSelection();
+        displaySelected(vipList.getSelectedValue().toString());
+    }//GEN-LAST:event_vipListMousePressed
+
+    private void guestListMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guestListMousePressed
+        vipList.clearSelection();
+        displaySelected(guestList.getSelectedValue().toString());
+    }//GEN-LAST:event_guestListMousePressed
+
     public void connectToDatabase(String host, String user, String pw, String counterNum, String interval) {
         try {
             counter = Integer.parseInt(counterNum);
@@ -1474,7 +1595,10 @@ public class ControllerDisplay extends javax.swing.JFrame {
             //con = DriverManager.getConnection("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");
         } catch (SQLException sqle) {
             System.err.println(sqle.getMessage());
-            JOptionPane.showMessageDialog(null, sqle.getMessage() + ".\nCheck if the Database Server is running.", "Database Connection Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Failed connecting to the Database Server."
+                    + "\nGo to preferences, and confirm that the ip address is correct"
+                    + "\n or check if the Database Server is running."
+                    + "\n\nError: " + sqle.getMessage(), "Database Connection Error", JOptionPane.ERROR_MESSAGE);
         } catch (ClassNotFoundException cnfe) {
             JOptionPane.showMessageDialog(null, cnfe.getMessage(), "Database Connection Error", JOptionPane.ERROR_MESSAGE);
             cnfe.printStackTrace();
@@ -1552,6 +1676,40 @@ public class ControllerDisplay extends javax.swing.JFrame {
             stmt.close();
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(null, "Error executing statement: " + sqlTF.getText() + "\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    void displaySelected(String selected) {
+        if(!selected.trim().isEmpty()) {
+            try {
+                Statement stmt = con.createStatement();
+                ResultSet selectedrs;
+                if(selected.contains("V"))
+                    selectedrs = stmt.executeQuery("select * from QUEUETBL where VIP=true and NUM=" + selected.substring(1));
+                else
+                    selectedrs = stmt.executeQuery("select * from QUEUETBL where VIP=false and NUM=" + selected.substring(1));
+                selectedrs.next();
+                //update GUI
+                selectedName.setText(selectedrs.getString("NAME"));
+                selectedNum.setText(selectedrs.getString("MOBILENUM"));
+                selectedRef.setText(selectedrs.getInt("REF") + "");
+                selectedTrans.setText(selectedrs.getString("TRANS"));
+                if(selectedrs.getBoolean("SMSNOTIFICATION")) {
+                    selectedSMS.setText("Enabled");
+                    selectedSMS.setSelected(true);
+                } else {
+                    selectedSMS.setText("Disabled");
+                    selectedSMS.setSelected(false);
+                }
+                selectedDiag.setTitle(selected + " - Details");
+                selectedDiag.pack();
+                selectedDiag.setLocationRelativeTo(this);
+                selectedDiag.setVisible(true);
+                selectedrs.close();
+                stmt.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -1707,6 +1865,11 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1746,6 +1909,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel refLBL;
     private javax.swing.JMenuItem restore;
     private javax.swing.JScrollPane scroll;
+    private javax.swing.JDialog selectedDiag;
+    private javax.swing.JLabel selectedName;
+    private javax.swing.JLabel selectedNum;
+    private javax.swing.JLabel selectedRef;
+    private javax.swing.JCheckBox selectedSMS;
+    private javax.swing.JLabel selectedTrans;
     private javax.swing.JButton sqlBT;
     private javax.swing.JTextField sqlTF;
     public javax.swing.JTable table;

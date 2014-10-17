@@ -130,57 +130,56 @@ public class realtime extends HttpServlet {
                     out.println("</div><br><br><br>");
                     rs.close();
                     ps.close();
-
-                    //start of upcoming queue
-                    out.println("<div id=\"start\" class=\"segoe\">On Queue</div>");
-
-                    //start of VIP
-                    ps = con.prepareStatement("select NUM,TRANS from QUEUETBL where DATE=? AND VIP=true AND COUNTER IS NULL ORDER BY COUNTER ASC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                    ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
-                    rs = ps.executeQuery();
-                    if (rs.last()) {    
-                        out.println("<div id=\"sublabel\" class=\"segoe\">VIP - " + rs.getRow() + "</div><br>");
-                        rs.beforeFirst();
-                        while(rs.next()) {
-                            out.println("<div class=\"upcomingtile\">\n"
-                                    + "                    <p id=\"num\" class=\"segoe\">V" + rs.getInt("NUM") + "</p>\n"
-                                    + "                    <p id=\"smalltrans\">" + rs.getString("TRANS") + "</p>\n"
-                                    + "                </div>");
-                        }
-                        out.println("<br><br>");
-                    }
-                    rs.close();
-                    ps.close();
-                    
-                    //start of guests
-                    ps = con.prepareStatement("select NUM,TRANS from QUEUETBL where DATE=? AND VIP=false AND COUNTER IS NULL ORDER BY COUNTER ASC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                    ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
-                    rs = ps.executeQuery();
-                    if (rs.last()) {  
-                        out.println("<div id=\"sublabel\" class=\"segoe\">Guests - " + rs.getRow() + "</div><br>");
-                        rs.beforeFirst();
-                        while(rs.next()) {
-                            out.println("<div class=\"upcomingtile\">\n"
-                                    + "                    <p id=\"num\" class=\"segoe\">N" + rs.getInt("NUM") + "</p>\n"
-                                    + "                    <p id=\"smalltrans\">" + rs.getString("TRANS") + "</p>\n"
-                                    + "                </div>");
-                        }
-                        out.println("<br><br>");
-                    }
-                    rs.close();
-                    ps.close();
-                    
                 } else {
                     //store is now closed
                     int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
                     if (currentTime > 9 && currentTime < 21) //9AM to 9PM
                     {
-                        out.println("<div id=\"start\" class=\"segoe\">Serving None</div><br>");
+                        out.println("<div id=\"start\" class=\"segoe\">Status:<br>Not Serving Anyone</div><br>");
                     } else {
                         out.println("<div id=\"start\" class=\"segoe\">Clinic is now Closed</div>"
                                 + "<div id=\"sublabel\" class=\"segoe\">Clinic opens from 9AM to 9PM</div><br>");
                     }
                 }
+                //start of upcoming queue
+                out.println("<div id=\"start\" class=\"segoe\">On Queue</div>");
+
+                //start of VIP
+                ps = con.prepareStatement("select NUM,TRANS from QUEUETBL where DATE=? AND VIP=true AND COUNTER IS NULL ORDER BY COUNTER ASC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+                rs = ps.executeQuery();
+                if (rs.last()) {    
+                    out.println("<div id=\"sublabel\" class=\"segoe\">VIP - " + rs.getRow() + "</div><br>");
+                    rs.beforeFirst();
+                    while(rs.next()) {
+                        out.println("<div class=\"upcomingtile\">\n"
+                                + "                    <p id=\"num\" class=\"segoe\">V" + rs.getInt("NUM") + "</p>\n"
+                                + "                    <p id=\"smalltrans\">" + rs.getString("TRANS") + "</p>\n"
+                                + "                </div>");
+                    }
+                    out.println("<br><br>");
+                }
+                rs.close();
+                ps.close();
+
+                //start of guests
+                ps = con.prepareStatement("select NUM,TRANS from QUEUETBL where DATE=? AND VIP=false AND COUNTER IS NULL ORDER BY COUNTER ASC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+                rs = ps.executeQuery();
+                if (rs.last()) {  
+                    out.println("<div id=\"sublabel\" class=\"segoe\">Guests - " + rs.getRow() + "</div><br>");
+                    rs.beforeFirst();
+                    while(rs.next()) {
+                        out.println("<div class=\"upcomingtile\">\n"
+                                + "                    <p id=\"num\" class=\"segoe\">N" + rs.getInt("NUM") + "</p>\n"
+                                + "                    <p id=\"smalltrans\">" + rs.getString("TRANS") + "</p>\n"
+                                + "                </div>");
+                    }
+                    out.println("<br><br>");
+                }
+                rs.close();
+                ps.close();
+
             } catch (SQLException x) {
                 System.err.println(x.getMessage());
             }
