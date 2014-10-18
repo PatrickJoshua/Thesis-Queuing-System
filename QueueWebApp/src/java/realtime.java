@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.prefs.Preferences;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -133,12 +134,43 @@ public class realtime extends HttpServlet {
                 } else {
                     //store is now closed
                     int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
-                    if (currentTime > 9 && currentTime < 21) //9AM to 9PM
+                    Preferences prefs = Preferences.userRoot();
+                    if (currentTime > Integer.parseInt(prefs.get("OPENING", "9")) && currentTime < Integer.parseInt(prefs.get("CLOSING", "21"))) //9AM to 9PM
                     {
                         out.println("<div id=\"start\" class=\"segoe\">Status:<br>Not Serving Anyone</div><br>");
                     } else {
                         out.println("<div id=\"start\" class=\"segoe\">Clinic is now Closed</div>"
-                                + "<div id=\"sublabel\" class=\"segoe\">Clinic opens from 9AM to 9PM</div><br>");
+                                + "<div id=\"sublabel\" class=\"segoe\">Clinic opens from ");
+                        if(Integer.parseInt(prefs.get("OPENING", "9")) < 12) {
+                            if(Integer.parseInt(prefs.get("OPENING", "9")) == 0)
+                                out.print("12");
+                            else
+                                out.print(prefs.get("OPENING", "9"));
+                            out.print(" AM");
+                        }
+                        else {
+                            if(Integer.parseInt(prefs.get("OPENING", "9")) == 12)
+                                out.print("12");
+                            else
+                                out.print(Integer.parseInt(prefs.get("OPENING", "21"))-12);
+                            out.print(" PM");
+                        }
+                        out.println(" to ");
+                        if(Integer.parseInt(prefs.get("CLOSING", "21")) < 12) {
+                            if(Integer.parseInt(prefs.get("CLOSING", "21")) == 12)
+                                out.print("12");
+                            else
+                                out.print(prefs.get("CLOSING", "21"));
+                            out.print(" AM");
+                        }
+                        else {
+                            if(Integer.parseInt(prefs.get("CLOSING", "21")) == 12)
+                                out.print("12");
+                            else
+                                out.print(Integer.parseInt(prefs.get("CLOSING", "21"))-12);
+                            out.print(" PM");
+                        }
+                        out.println("</div><br>");
                     }
                 }
                 //start of upcoming queue

@@ -17,6 +17,14 @@
         <servlet-name>vip</servlet-name>
         <servlet-class>vip</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>admin</servlet-name>
+        <servlet-class>admin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>saveChanges</servlet-name>
+        <servlet-class>saveChanges</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Home</servlet-name>
         <url-pattern>/</url-pattern>
@@ -24,6 +32,14 @@
     <servlet-mapping>
         <servlet-name>vip</servlet-name>
         <url-pattern>/vip</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>admin</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>saveChanges</servlet-name>
+        <url-pattern>/saveChanges</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
