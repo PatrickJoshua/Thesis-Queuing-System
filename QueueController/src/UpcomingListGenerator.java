@@ -30,21 +30,26 @@ public class UpcomingListGenerator extends Thread {
         boolean emptyGuest = true;
         int previousVIPList = 0;
         int previousGuestList = 0;
+        String trans = null;
         
         while(true) {
             try {
                 boolean nextIsVIP = false;
                 //Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                PreparedStatement ps = con.prepareStatement("select NUM from QUEUETBL where VIP=true AND DATE=? and COUNTER IS NULL ORDER BY NUM",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                PreparedStatement ps = con.prepareStatement("select NUM,TRANS from QUEUETBL where VIP=true AND DATE=? and COUNTER IS NULL ORDER BY NUM",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 ResultSet rs = ps.executeQuery();
                 if(rs.last()) {     //go to last; determine number of rows returned
                     String [] list = new String[rs.getRow()];   //create array
                     rs.beforeFirst();   //go back to first
-                    for(int i=0; rs.next(); i++)    //transfer returned data to an array
+                    for(int i=0; rs.next(); i++) {    //transfer returned data to an array
                         list[i] = "V" + rs.getInt(1);
+                        if(i==0)
+                            trans = rs.getString(2);
+                    }
                     ControllerDisplay.vipList.setListData(list);
-                    ControllerDisplay.nextLBL.setText("Next: " + list[0]);
+                    ControllerDisplay.nextLBL.setText("Next: " + list[0] + " (" + trans + ")");
+                    nextIsVIP = true;
                     if(list.length != previousVIPList) {
                         //play tone
                         try {
@@ -63,17 +68,20 @@ public class UpcomingListGenerator extends Thread {
                 }
                 
                 //for guest list
-                ps = con.prepareStatement("select NUM from QUEUETBL where VIP=false AND DATE=? and COUNTER IS NULL ORDER BY NUM",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ps = con.prepareStatement("select NUM,TRANS from QUEUETBL where VIP=false AND DATE=? and COUNTER IS NULL ORDER BY NUM",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
                 rs = ps.executeQuery();
                 if(rs.last()) {     //go to last; determine number of rows returned
                     String [] list = new String[rs.getRow()];   //create array
                     rs.beforeFirst();   //go back to first
-                    for(int i=0; rs.next(); i++)    //transfer returned data to an array
+                    for(int i=0; rs.next(); i++) {    //transfer returned data to an array
                         list[i] = "N" + rs.getInt(1);
+                        if(i==0)
+                            trans = rs.getString(2);
+                    }
                     ControllerDisplay.guestList.setListData(list);
                     if(!nextIsVIP)
-                        ControllerDisplay.nextLBL.setText("Next: " + list[0]);
+                        ControllerDisplay.nextLBL.setText("Next: " + list[0] + " (" + trans + ")");
                     //play tone
                     if(list.length != previousGuestList) {
                         try {

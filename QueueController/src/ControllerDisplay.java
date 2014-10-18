@@ -6,9 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -171,6 +170,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         Connect2DB.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Connect2DB.setTitle("Connect to Database");
+        Connect2DB.setIconImage(new ImageIcon("icon.png").getImage());
         Connect2DB.setModal(true);
 
         jLabel1.setText("Database URL:");
@@ -281,6 +281,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         Display.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Display.setTitle("Now Serving");
         Display.setBackground(new java.awt.Color(255, 255, 255));
+        Display.setIconImage(new ImageIcon("icon.png").getImage());
         Display.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 DisplayMouseClicked(evt);
@@ -323,6 +324,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         viewDatabase.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         viewDatabase.setTitle("View Database");
+        viewDatabase.setIconImage(new ImageIcon("icon.png").getImage());
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -393,6 +395,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         addVIPDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addVIPDiag.setTitle("Add a VIP");
+        addVIPDiag.setIconImage(new ImageIcon("icon.png").getImage());
 
         jLabel12.setText("Full Name:");
 
@@ -471,6 +474,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addComponent(addVIPOK)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        editVIPDiag.setIconImage(new ImageIcon("icon.png").getImage());
 
         combo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         combo.addActionListener(new java.awt.event.ActionListener() {
@@ -594,6 +599,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         editTransDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         editTransDiag.setTitle("Select Transaction");
+        editTransDiag.setIconImage(new ImageIcon("icon.png").getImage());
 
         comboTrans.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -638,6 +644,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         );
 
         logFrame.setTitle("System Log");
+        logFrame.setIconImage(new ImageIcon("icon.png").getImage());
 
         log.setColumns(20);
         log.setRows(5);
@@ -660,7 +667,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        selectedDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         selectedDiag.setTitle("View Queue Details");
+        selectedDiag.setIconImage(new ImageIcon("icon.png").getImage());
 
         jLabel24.setText("Name: ");
 
@@ -677,12 +686,16 @@ public class ControllerDisplay extends javax.swing.JFrame {
         selectedSMS.setRequestFocusEnabled(false);
         selectedSMS.setRolloverEnabled(false);
 
+        selectedRef.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectedRef.setText("Ref");
 
+        selectedTrans.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectedTrans.setText("Trans");
 
+        selectedNum.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectedNum.setText("Number");
 
+        selectedName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectedName.setText("Name");
 
         javax.swing.GroupLayout selectedDiagLayout = new javax.swing.GroupLayout(selectedDiag.getContentPane());
@@ -734,6 +747,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Offline");
+        setIconImage(new ImageIcon("icon.png").getImage());
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
                 formWindowStateChanged(evt);
@@ -756,12 +770,16 @@ public class ControllerDisplay extends javax.swing.JFrame {
             }
         });
 
+        mobilenumLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         mobilenumLBL.setText("Mobile Number");
 
+        refLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         refLBL.setText("Reference Number");
 
+        nameLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         nameLBL.setText("Name");
 
+        transLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         transLBL.setText("Transaction");
 
         nextLBL.setForeground(new java.awt.Color(153, 153, 153));
@@ -1054,7 +1072,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(callAgainBT))))
                     .addComponent(info))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
