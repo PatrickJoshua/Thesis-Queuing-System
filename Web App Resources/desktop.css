@@ -102,6 +102,11 @@ div {
 
 #menuitem:hover {
 	background-color: #E08EB3;
+    //box-shadow: 0 0 20px pink;
+}
+
+#menuitem:hover img {
+     -webkit-filter: invert(100%);
 }
 
 #menuitem a {
@@ -308,6 +313,25 @@ div {
     vertical-align: top;
 }
 
+#login {
+    display: block;
+    visibility: visible;
+    width: 100%;
+    height: 100%;
+   transition: visibility 1s;
+   -moz-transition: visibility 1s;
+   -webkit-transition: visibility 1s;
+}
+
+#loginform {
+    display: none;
+    visibility: hidden;
+    padding-top: 30px;
+   transition: visibility 1s;
+   -moz-transition: visibility 1s;
+   -webkit-transition: visibility 1s;
+}
+
 img {
 
 }
@@ -457,6 +481,25 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
+    padding:5px 15px; background:#D35D92; border:2px black solid;
+    color: white;
+    cursor:pointer;
+    -webkit-border-radius: 0px;
+    border-radius: 0px; 
+}
+
+button {
+    padding:5px 15px; background:#ccc; border:2px black solid;
+    cursor:pointer;
+    -webkit-border-radius: 0px;
+    border-radius: 0px; 
+   transition: background .15s;
+   -moz-transition: background .15s;
+   -webkit-transition: background .15s;
+
+}
+
+button:hover {
     padding:5px 15px; background:#D35D92; border:2px black solid;
     color: white;
     cursor:pointer;

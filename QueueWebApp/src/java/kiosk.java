@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author PatrickJoshua
  */
-public class Home extends HttpServlet {
+@WebServlet(urlPatterns = {"/kiosk"})
+public class kiosk extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -80,21 +82,21 @@ public class Home extends HttpServlet {
 "    </head>\n" +
 "    <body class=\"segoe\">\n" +
 "        <div class=\"lightpink\" id=\"header\">\n" +
-"            <a href=\"/QueueWebApp\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n" +
+"            <a href=\"/QueueWebApp/kiosk\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n" +
 "            <div id=\"menu\" class=\"darkpink\">\n" +
 "                <div id=\"menubar\">\n" +
 "                    <div class=\"darkerpink\" id=\"menuitem\">\n" +
-"                        <a href=\"\">\n" +
-"                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Home\n" +
+"                        <a href=\"/QueueWebApp/kiosk\">\n" +
+"                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Kiosk Home\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div id=\"menuitem\">\n" +
-"                        <a href=\"/QueueWebApp/vip\">\n" +
+"                        <a href=\"/QueueWebApp/kioskvip\">\n" +
 "                            <img src=\"../vip.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;VIP\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div id=\"menuitem\">\n" +
-"                        <a href=\"/QueueWebApp/realtime\">\n" +
+"                        <a href=\"/QueueWebApp/kioskrealtime\">\n" +
 "                            <img src=\"../clock.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Real-time\n" +
 "                        </a>\n" +
 "                    </div>\n" +
@@ -105,16 +107,18 @@ public class Home extends HttpServlet {
 "            <div id=\"main\">\n" +
 "                <p id=\"Welcome\">Welcome</p>\n" +
 "                <p id=\"bottomspaced\">Enter your mobile number:</p>\n" +
-"                <form action=\"/QueueWebApp/getNumberServlet\">\n" +
-                    "<input id=\"centered\" type=\"text\" name=\"cellNo\" value=\"+63\" placeholder=\"Ex. +639151272800\" onfocus=\"document.getElementById('note').style.display='block'\" onblur=\"document.getElementById('note').style.display='none'\">\n" +
+"                <form action=\"/QueueWebApp/kioskGetNumberServlet\">\n" +
+                    "<input id=\"centered\" type=\"text\" name=\"cellNo\" value=\"+63\" placeholder=\"No Mobile Phone\" onfocus=\"document.getElementById('note').style.display='block'\" onblur=\"document.getElementById('note').style.display='none'\">\n" +
 "                    <div id=\"note\">\n" +
-"                        <p id=\"format\"><i>Format: +639XXXXXXXXXX</i></p>\n" +
+"                        <p id=\"format\"><i>Format: +639XXXXXXXXXX<br><b>Leave it blank if you currently don't have any phone.</b></i></p>\n" +
 "                    </div>" +
 "                    <p id=bottomspaced>Service to be availed:</p>");
             Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
             out.println(Common.getTransactions(con));
             out.println("<p id=\"topspaced\"><input type=\"checkbox\" name=\"sms\" value=\"Send me SMS Notifications\" checked> Send me SMS Notifications</p>\n" +
                     "<p id=\"smalldesc\">You will receive text message updates regarding the status of the queue</p>" +
+                    "<p id=\"topspaced\"><input type=\"checkbox\" name=\"print\" value=\"print\"> Print ticket</p>\n" +
+                    "<p id=\"smalldesc\">Support our green movement. Our system supports SMS Notifications and Real-time queue status through web without needing printed ticket. Help us conserve paper by opting physical ticket only when necessary.</p>" +
 "                    <p id=\"topspaced\" style=\"padding-top:30px;padding-bottom:20px;\" align=\"center\"><input type=\"submit\" value=\"Enter Queue\"></p>\n" +
 "                </form>\n" +
 "                <br><br>\n" +
@@ -151,10 +155,11 @@ public class Home extends HttpServlet {
             out.println(Common.getTotal(con, false, false));
             out.println("</p>Guests\n" +
 "                </div>\n" +
+                    "<p id=\"smalldesc\" style=\"position:relative;top:20px;\">*Not updating in real-time</p>" +
 "            </center>\n" +
 "            </div>\n" +
 "\n" +
-"            <div id=\"footer\">\n" +
+"            <div id=\"footer\" style=\"padding-top:710px;\">\n" +
 "                <p style=\"margin-bottom:1%\">Capstone Project 2014</p>\n" +
 "                <p style=\"margin-bottom: 5%\">Patrick Saguinsin | Maidy Santos | Justine Diza | Jasmine Eve</p>\n" +
 "            </div>\n" +

@@ -118,6 +118,7 @@ public class loginServlet extends HttpServlet {
 "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no\">\n" +
 "        <link rel=\"stylesheet\" media=\"(max-width: 768px)\" href=\"../mobile.css\">\n" +
 "        <link rel=\"stylesheet\" media=\"(min-width: 769px)\" href=\"../desktop.css\">\n" +
+                    "<link rel=\"shortcut icon\" type=\"image/png\" href=\"../favicon.png\"/>" +
 "        <script src=\"../jquery-2.1.1.js\"></script>\n" +
 "    </head>\n" +
 "    <body class=\"segoe\">\n");

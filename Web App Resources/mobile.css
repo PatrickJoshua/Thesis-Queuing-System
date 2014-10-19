@@ -110,6 +110,10 @@ div {
 	background-color: #E08EB3;
 }
 
+#menuitem:hover img {
+     -webkit-filter: invert(100%);
+}
+
 #menuitem a {
     display: block;
     color: white;
@@ -299,6 +303,25 @@ div {
     color: white;
     display: inline-block;
     vertical-align: top;
+}
+
+#login {
+    display: block;
+    visibility: visible;
+    width: 100%;
+    height: 100%;
+   transition: visibility 1s;
+   -moz-transition: visibility 1s;
+   -webkit-transition: visibility 1s;
+}
+
+#loginform {
+    display: none;
+    visibility: hidden;
+    padding-top: 30px;
+   transition: visibility 1s;
+   -moz-transition: visibility 1s;
+   -webkit-transition: visibility 1s;
 }
 
 img {

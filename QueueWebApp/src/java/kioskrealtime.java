@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author PatrickJoshua
  */
-@WebServlet(urlPatterns = {"/realtime"})
-public class realtime extends HttpServlet {
+@WebServlet(urlPatterns = {"/kioskrealtime"})
+public class kioskrealtime extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -77,21 +77,21 @@ public class realtime extends HttpServlet {
                     + "    </head>\n"
                     + "    <body class=\"segoe\">\n"
                     + "        <div class=\"lightpink\" id=\"header\">\n"
-                    + "            <a href=\"/QueueWebApp\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n"
+                    + "            <a href=\"/QueueWebApp/kiosk\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n"
                     + "            <div id=\"menu\" class=\"darkpink\">\n"
                     + "                <div id=\"menubar\">\n"
                     + "                    <div id=\"menuitem\">\n"
-                    + "                        <a href=\"/QueueWebApp\">\n"
-                    + "                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Home\n"
+                    + "                        <a href=\"/QueueWebApp/kiosk\">\n"
+                    + "                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Kiosk Home\n"
                     + "                        </a>\n"
                     + "                    </div>\n"
                     + "                    <div id=\"menuitem\">\n"
-                    + "                        <a href=\"/QueueWebApp/vip\">\n"
+                    + "                        <a href=\"/QueueWebApp/kioskvip\">\n"
                     + "                            <img src=\"../vip.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;VIP\n"
                     + "                        </a>\n"
                     + "                    </div>\n"
                     + "                    <div class=\"darkerpink\" id=\"menuitem\">\n"
-                    + "                        <a href=\"/QueueWebApp/realtime\">\n"
+                    + "                        <a href=\"/QueueWebApp/kioskrealtime\">\n"
                     + "                            <img src=\"../clock.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Real-time\n"
                     + "                        </a>\n"
                     + "                    </div>\n"
