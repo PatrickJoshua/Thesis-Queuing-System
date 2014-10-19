@@ -27,6 +27,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
     String currentTBL;
     public static int counter;
     public static int SMSINTERVAL;
+    ResultSet previousRS = null;
+    ResultSet currentRS = null;
+    PreparedStatement previousPS = null;
+    PreparedStatement currentPS = null;
+    boolean undoed = false;
+    String [] previous,current;
 
     public ControllerDisplay() {
         initComponents();
@@ -141,6 +147,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         vipList = new javax.swing.JList();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        previousBT = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmenu1 = new javax.swing.JMenu();
         connectToDatabaseAgain = new javax.swing.JMenuItem();
@@ -170,7 +177,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         Connect2DB.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Connect2DB.setTitle("Connect to Database");
-        Connect2DB.setIconImage(new ImageIcon("icon.png").getImage());
+        Connect2DB.setIconImage(new ImageIcon("resources/icon.png").getImage());
         Connect2DB.setModal(true);
 
         jLabel1.setText("Database URL:");
@@ -281,7 +288,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         Display.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Display.setTitle("Now Serving");
         Display.setBackground(new java.awt.Color(255, 255, 255));
-        Display.setIconImage(new ImageIcon("icon.png").getImage());
+        Display.setIconImage(new ImageIcon("resources/icon.png").getImage());
         Display.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 DisplayMouseClicked(evt);
@@ -324,7 +331,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         viewDatabase.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         viewDatabase.setTitle("View Database");
-        viewDatabase.setIconImage(new ImageIcon("icon.png").getImage());
+        viewDatabase.setIconImage(new ImageIcon("resources/icon.png").getImage());
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -395,7 +402,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         addVIPDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addVIPDiag.setTitle("Add a VIP");
-        addVIPDiag.setIconImage(new ImageIcon("icon.png").getImage());
+        addVIPDiag.setIconImage(new ImageIcon("resources/icon.png").getImage());
 
         jLabel12.setText("Full Name:");
 
@@ -475,7 +482,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        editVIPDiag.setIconImage(new ImageIcon("icon.png").getImage());
+        editVIPDiag.setIconImage(new ImageIcon("resources/icon.png").getImage());
 
         combo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         combo.addActionListener(new java.awt.event.ActionListener() {
@@ -599,7 +606,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         editTransDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         editTransDiag.setTitle("Select Transaction");
-        editTransDiag.setIconImage(new ImageIcon("icon.png").getImage());
+        editTransDiag.setIconImage(new ImageIcon("resources/icon.png").getImage());
 
         comboTrans.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -644,7 +651,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         );
 
         logFrame.setTitle("System Log");
-        logFrame.setIconImage(new ImageIcon("icon.png").getImage());
+        logFrame.setIconImage(new ImageIcon("resources/icon.png").getImage());
 
         log.setColumns(20);
         log.setRows(5);
@@ -669,7 +676,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         selectedDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         selectedDiag.setTitle("View Queue Details");
-        selectedDiag.setIconImage(new ImageIcon("icon.png").getImage());
+        selectedDiag.setIconImage(new ImageIcon("resources/icon.png").getImage());
 
         jLabel24.setText("Name: ");
 
@@ -747,7 +754,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Offline");
-        setIconImage(new ImageIcon("icon.png").getImage());
+        setIconImage(new ImageIcon("resources/icon.png").getImage());
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
                 formWindowStateChanged(evt);
@@ -771,6 +778,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         });
 
         mobilenumLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        mobilenumLBL.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         mobilenumLBL.setText("Mobile Number");
 
         refLBL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -870,6 +878,14 @@ public class ControllerDisplay extends javax.swing.JFrame {
                     .addComponent(scroll)
                     .addComponent(jScrollPane2)))
         );
+
+        previousBT.setText("Previous (Undo)");
+        previousBT.setEnabled(false);
+        previousBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previousBTActionPerformed(evt);
+            }
+        });
 
         jmenu1.setText("Menu");
 
@@ -1048,31 +1064,36 @@ public class ControllerDisplay extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(refLBL))
+                                .addComponent(nextBT)
+                                .addGap(18, 18, 18)
+                                .addComponent(callAgainBT)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                                .addComponent(previousBT))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
+                                .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(transLBL))
+                                .addComponent(mobilenumLBL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(cNowServing)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(refLBL))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(transLBL))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel6)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(nameLBL))
-                                    .addComponent(jLabel7))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(mobilenumLBL))
-                            .addComponent(nextLBL)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(nextBT)
-                                .addGap(18, 18, 18)
-                                .addComponent(callAgainBT))))
+                                    .addComponent(nextLBL)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel4)
+                                        .addComponent(cNowServing)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addComponent(info))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1101,12 +1122,13 @@ public class ControllerDisplay extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
                             .addComponent(transLBL))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addGap(57, 57, 57)
                         .addComponent(nextLBL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nextBT)
-                            .addComponent(callAgainBT)))
+                            .addComponent(callAgainBT)
+                            .addComponent(previousBT)))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(info))
@@ -1166,48 +1188,70 @@ public class ControllerDisplay extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error retreiving data\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    void updateLabels(String [] label) {
+        nameLBL.setText(label[0]);
+        mobilenumLBL.setText(label[1]);
+        refLBL.setText(label[2]);
+        transLBL.setText(label[3]);
+        cNowServing.setText(label[4]);
+        dNowServing.setText(label[4]);
+    }
 
     private void nextBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBTActionPerformed
         try {
-            deletePreviouslyServed();
-            
-            //For VIP
-            PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true and COUNTER IS NULL ORDER BY NUM");    //query to get VIP first
-            ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
-            ResultSet rs = ps.executeQuery();   //execute SQL statement
-            if (rs.next()) {    //if there is a VIP on queue
-                updateLabels(rs);   //transfer retrieved DB data to GUI
-                Thread blink = new BlinkySound();
-                blink.start();
-                Thread sendSMS = new SMS(con);
-                sendSMS.start();
-                callAgainBT.setEnabled(true);
-            } else {    //for guests
-                ps = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false and COUNTER IS NULL ORDER BY NUM");  //get non-vip guest
-                ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
-                rs = ps.executeQuery();
-                if (rs.next()) {    //if there is a non-vip guest on queue
-                    updateLabels(rs);
+            if(!undoed) {       //normal operation without undo
+                deletePreviouslyServed();
+                //if(previousRS != null)      //backup to previous rs
+                //previousRS = currentRS;
+                //previousPS = currentPS;
+                //if(!previousRS.equals(currentRS))
+                previous = new String[]{nameLBL.getText(),mobilenumLBL.getText(),refLBL.getText(),transLBL.getText(),cNowServing.getText()};
+                previousBT.setEnabled(true);
+                
+                //For VIP
+                currentPS = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=true and COUNTER IS NULL ORDER BY NUM");    //query to get VIP first
+                currentPS.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
+                currentRS = currentPS.executeQuery();   //execute SQL statement
+                if (currentRS.next()) {    //if there is a VIP on queue
+                    updateLabels(currentRS);   //transfer retrieved DB data to GUI
                     Thread blink = new BlinkySound();
                     blink.start();
                     Thread sendSMS = new SMS(con);
                     sendSMS.start();
                     callAgainBT.setEnabled(true);
-                } else {  //if queue is empty
-                    cNowServing.setText("None");//transfer data from db to GUI labels on controller
-                    mobilenumLBL.setText("-");
-                    refLBL.setText("-");
-                    nameLBL.setText("-");
-                    transLBL.setText("-");
-                    dNowServing.setText("None");
-                    callAgainBT.setEnabled(false);
-                    //JOptionPane.showMessageDialog(this, "No one is on queue", "Empty Queue", JOptionPane.INFORMATION_MESSAGE);
-                    Thread thread = new Information("No one is on queue", true);
-                    thread.start();
+                } else {    //for guests
+                    currentPS = con.prepareStatement("select * from QUEUETBL where DATE=? and VIP=false and COUNTER IS NULL ORDER BY NUM");  //get non-vip guest
+                    currentPS.setDate(1, new java.sql.Date(new java.util.Date().getTime()));   //get current date
+                    currentRS = currentPS.executeQuery();
+                    if (currentRS.next()) {    //if there is a non-vip guest on queue
+                        updateLabels(currentRS);
+                        Thread blink = new BlinkySound();
+                        blink.start();
+                        Thread sendSMS = new SMS(con);
+                        sendSMS.start();
+                        callAgainBT.setEnabled(true);
+                    } else {  //if queue is empty
+                        cNowServing.setText("None");//transfer data from db to GUI labels on controller
+                        mobilenumLBL.setText("-");
+                        refLBL.setText("-");
+                        nameLBL.setText("-");
+                        transLBL.setText("-");
+                        dNowServing.setText("None");
+                        callAgainBT.setEnabled(false);
+                        //JOptionPane.showMessageDialog(this, "No one is on queue", "Empty Queue", JOptionPane.INFORMATION_MESSAGE);
+                        Thread thread = new Information("No one is on queue", true);
+                        thread.start();
+                    }
                 }
+            } else {    //if previoused
+                updateLabels(current);
+                Thread blink = new BlinkySound();
+                blink.start();
+                callAgainBT.setEnabled(true);
+                undoed = false;
+                previousBT.setEnabled(true);
             }
-            rs.close();
-            ps.close();
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(null, "Error retreiving data\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -1317,7 +1361,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_DisplayMouseClicked
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
@@ -1603,6 +1647,20 @@ public class ControllerDisplay extends javax.swing.JFrame {
         vipList.clearSelection();
         displaySelected(guestList.getSelectedValue().toString());
     }//GEN-LAST:event_guestListMousePressed
+
+    private void previousBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousBTActionPerformed
+        if(previous == null) {
+            System.err.println("Previous Queue record data not found.");
+        } else {
+            current = new String[]{nameLBL.getText(),mobilenumLBL.getText(),refLBL.getText(),transLBL.getText(),cNowServing.getText()};
+            updateLabels(previous);
+            callAgainBT.setEnabled(true);
+            undoed = true;
+            previousBT.setEnabled(false);
+            Thread blink = new BlinkySound();
+            blink.start();
+        }
+    }//GEN-LAST:event_previousBTActionPerformed
 
     public void connectToDatabase(String host, String user, String pw, String counterNum, String interval) {
         try {
@@ -1922,6 +1980,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JLabel nowServingLBL;
     private javax.swing.JPasswordField passwordTF;
     private javax.swing.JMenuItem preferences;
+    private javax.swing.JButton previousBT;
     private javax.swing.JPasswordField pw;
     private javax.swing.JPasswordField pwe;
     private javax.swing.JLabel refLBL;

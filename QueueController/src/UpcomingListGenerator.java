@@ -53,7 +53,7 @@ public class UpcomingListGenerator extends Thread {
                     if(list.length != previousVIPList) {
                         //play tone
                         try {
-                            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("newvip.wav"));
+                            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("resources/newvip.wav"));
                             Clip tone = AudioSystem.getClip();
                             tone.open(ais);
                             tone.start();
@@ -85,11 +85,10 @@ public class UpcomingListGenerator extends Thread {
                     //play tone
                     if(list.length != previousGuestList) {
                         try {
-                            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("newguest.wav"));
+                            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("resources/newguest.wav"));
                             Clip tone = AudioSystem.getClip();
                             tone.open(ais);
                             tone.start();
-                            System.out.println("Play tone guest");
                         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException x) {
                             System.err.println("Error playing notification tone. " + x.getMessage());
                         }

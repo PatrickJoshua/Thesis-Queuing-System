@@ -21,7 +21,7 @@ public class BlinkySound extends Thread {
     @Override
     public void run() {
         try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("tone.wav"));
+            AudioInputStream ais = AudioSystem.getAudioInputStream(new File("resources/tone.wav"));
             Clip tone = AudioSystem.getClip();
             tone.open(ais);
             tone.start();

@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author PatrickJoshua
  */
-@WebServlet(urlPatterns = {"/vip"})
-public class vip extends HttpServlet {
+@WebServlet(urlPatterns = {"/kioskvip"})
+public class kioskvip extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,21 +59,21 @@ public class vip extends HttpServlet {
 "    </head>\n" +
 "    <body class=\"segoe\">\n" +
 "        <div class=\"lightpink\" id=\"header\">\n" +
-"            <a href=\"/QueueWebApp\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n" +
+"            <a href=\"/QueueWebApp/kiosk\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n" +
 "            <div id=\"menu\" class=\"darkpink\">\n" +
 "                <div id=\"menubar\">\n" +
 "                    <div id=\"menuitem\">\n" +
-"                        <a href=\"/QueueWebApp\">\n" +
-"                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Home\n" +
+"                        <a href=\"/QueueWebApp/kiosk\">\n" +
+"                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Kiosk Home\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div class=\"darkerpink\" id=\"menuitem\">\n" +
-"                        <a href=\"/QueueWebApp/vip\">\n" +
+"                        <a href=\"/QueueWebApp/kioskvip\">\n" +
 "                            <img src=\"../vip.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;VIP\n" +
 "                        </a>\n" +
 "                    </div>\n" +
 "                    <div id=\"menuitem\">\n" +
-"                        <a href=\"/QueueWebApp/realtime\">\n" +
+"                        <a href=\"/QueueWebApp/kioskrealtime\">\n" +
 "                            <img src=\"../clock.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Real-time\n" +
 "                        </a>\n" +
 "                    </div>\n" +
@@ -90,7 +90,7 @@ public class vip extends HttpServlet {
 "						<br><br>\n" +
 "	        			Log in using the account credentials given to you when you availed your VIP status.\n" +
 "	        			<br><br><br>\n" +
-                    "<form action=\"loginServlet\">" +
+                    "<form action=\"kioskloginServlet\">" +
 "	        			<p id=\"bottomspaced\">Username:</p>\n" +
 "	        			<input type=\"text\" name=\"username\" placeholder=\"Username\">\n" +
 "	        			<br><br>\n" +

@@ -175,7 +175,7 @@ public class getVIPNumberServlet extends HttpServlet {
                 con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
                 try {
                     Statement stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("select * from QUEUETBL where VIP=false and NUM=" + num);
+                    ResultSet rs = stmt.executeQuery("select * from QUEUETBL where VIP=true and NUM=" + num);
                     rs.next();
                     String smsnotif = "";
                     if (rs.getBoolean("SMSNOTIFICATION")) {

@@ -1,5 +1,3 @@
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -16,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author PatrickJoshua
  */
-@WebServlet(urlPatterns = {"/kioskGetNumberServlet"})
-public class kioskGetNumberServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/kioskgetVIPNumberServlet"})
+public class kioskgetVIPNumberServlet extends HttpServlet {
 
     int ref;
 
@@ -28,63 +26,66 @@ public class kioskGetNumberServlet extends HttpServlet {
 //            out.println("<!DOCTYPE html>");
 //            out.println("<html>");
 //            out.println("<head>");
-//            out.println("<title>Queuing Successful - Queuing System Web App</title>");         
+//            out.println("<title>Queuing Successful - Queuing System Web App</title>");
 //            out.println("<meta charset=\"UTF-8\">");
-//            out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");   
+//            out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
 //            out.println("</head>");
 //            out.println("<body>");
 //            out.println("<center>");
 //            out.println("<h2>Thank you!</h2>");
+//
+//            //<editor-fold defaultstate="collapsed" desc=" Do not modify ">
+//            //start of do not modify
 //            String cellNo = request.getParameter("cellNo");     //do not modify
+//            String name = request.getParameter("name");         //do not modify
 //            String trans = request.getParameter("trans");      //do not modify
 //            Boolean sms = true;
 //            String checkbox = request.getParameter("sms");
-//            if(checkbox==null)
+//            if (checkbox == null) {
 //                sms = false;
-//            if(cellNo.equals("") || !(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length()!=13))     //if mobile number is incorrect format
+//            }
+//            Boolean prioritize = true;
+//            String prioritizeMe = request.getParameter("prioritize");
+//            if (prioritizeMe == null) {
+//                prioritize = false;
+//            }
+//
+//            if (cellNo.equals("") || !(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length() != 13)) //if mobile number is incorrect format
 //            {
-//                out.println("<script type=\"text/javascript\">");  
+//                out.println("<script type=\"text/javascript\">");
 //                out.println("alert('Mobile Number not valid. Please use this format: +639XXXXXXXXX');");      //display pop up message
 //                out.println("window.history.back();");                      //go back to get number page
 //                out.println("</script>");
-//            }
-//            else
-//            {
+//            } else {
 //                Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-//                int num = Common.add2DB(con,cellNo,"",false,trans,sms);
-//                out.println("Your number is: <b>N" + num + "</b><br>Reference Number: " + Common.ref + "<br><br>");
+//                int num = Common.add2DB(con, cellNo, name, prioritize, trans, sms);
+//                String labeledNum;
+//                if (prioritize) {
+//                    labeledNum = "V" + num;
+//                } else {
+//                    labeledNum = "N" + num;
+//                }
+//            //end of do not modify
+//                //</editor-fold>    
+//                out.println("Your number is: <b>" + labeledNum + "</b><br>Reference Number: " + Common.ref + "<br><br>");
 //                out.println("Please wait for the text confirmation.");
 //                out.println("<form name=\"cancelrequest\" action=\"CancelRequest\"><br>");
 //                out.println("<input type=hidden name=num value=" + num + ">");
-//                out.println("<input type=hidden name=vip value=false>");
+//                out.println("<input type=hidden name=vip value=" + prioritize + ">");
 //                out.println("<input type=submit value=\"Cancel Request\">");
 //                out.println("<br><br><hr width=\"50%\"><br>");      //horizontal line
-//                con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-//                try {
-//                    Statement stmt = con.createStatement();
-//                    ResultSet rs = stmt.executeQuery("select * from QUEUETBL where VIP=false and NUM=" + num);
-//                    rs.next();
-//                    String smsnotif = "";
-//                    if(rs.getBoolean("SMSNOTIFICATION"))
-//                        smsnotif = ". SMS Notifications are enabled";
-//                    Common.sendSMS(rs.getString("MOBILENUM"), "Welcome to CSA Queuing System. Your number is N" + rs.getInt("NUM")
-//                            + ". Reference number: " + rs.getInt("REF") + " for " + rs.getString("TRANS") + smsnotif
-//                            + ". View the queue in real-time anywhere! Go to http://patrickjoshua.ddns.net/realtime");
-//                    rs.close();
-//                    stmt.close();
-//                } catch (SQLException e) {
-//                    System.err.println(e.getMessage());
-//                    e.printStackTrace();
-//                }
+//
+//                //start of real-time snippet
+//                con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //do not modify
 //                out.println("<h2>Now Serving:</h2>");
-//                out.println(Common.getNowServingCounters(con));
+//                out.println(Common.getNowServingCounters(con)); //do not modify
 //                out.println("<br><h3>On Queue:</h3>");
 //                out.println("<table><tr><td align=center>");
-//                out.println("VIP: " + Common.getTotal(con, false, true));
+//                out.println("VIP: " + Common.getTotal(con, false, true));   //do not modify
 //                out.println("</td><td align=center>");
-//                out.println("Guests: " + Common.getTotal(con, false, false));
+//                out.println("Guests: " + Common.getTotal(con, false, false));   //do not modify
 //                out.println("</td></tr><td colspan=2 align=center>");
-//                out.println("<br>Total persons on queue: " + Common.getTotal(con, true, true));
+//                out.println("<br>Total persons on queue: " + Common.getTotal(con, true, true)); //do not modify
 //                out.println("</td></tr></table>");
 //            }
 //            out.println("</center>");
@@ -107,12 +108,12 @@ public class kioskGetNumberServlet extends HttpServlet {
                     + "            <a href=\"/QueueWebApp/kiosk\"><img id=\"imgheader\" src=\"../logo.png\"></a>\n"
                     + "            <div id=\"menu\" class=\"darkpink\">\n"
                     + "                <div id=\"menubar\">\n"
-                    + "                    <div class=\"darkerpink\" id=\"menuitem\">\n"
+                    + "                    <div id=\"menuitem\">\n"
                     + "                        <a href=\"/QueueWebApp/kiosk\">\n"
-                    + "                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Kiosk Home\n"
+                    + "                            <img src=\"../home.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;Home\n"
                     + "                        </a>\n"
                     + "                    </div>\n"
-                    + "                    <div id=\"menuitem\">\n"
+                    + "                    <div class=\"darkerpink\" id=\"menuitem\">\n"
                     + "                        <a href=\"/QueueWebApp/kioskvip\">\n"
                     + "                            <img src=\"../vip.png\" class=\"navicon\">&nbsp;&nbsp;&nbsp;VIP\n"
                     + "                        </a>\n"
@@ -128,74 +129,78 @@ public class kioskGetNumberServlet extends HttpServlet {
                     + "        <div id=\"content\">\n"
                     + "            <div id=\"main\">\n"
                     + "                <p id=\"Welcome\" style=\"font-size: 1.5em;\">Your Number:</p>\n");
+
+            //<editor-fold defaultstate="collapsed" desc=" Do not modify ">
+            //start of do not modify
             String cellNo = request.getParameter("cellNo");     //do not modify
+            String name = request.getParameter("name");         //do not modify
             String trans = request.getParameter("trans");      //do not modify
             Boolean sms = true;
             String checkbox = request.getParameter("sms");
             if (checkbox == null) {
                 sms = false;
             }
-
-            Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-            int num = 0;
-            boolean noPhone = false;
-            if(cellNo.isEmpty()) {
-                noPhone=true;  
-                num = Common.add2DB(con, "None", "", false, trans, false);
-                try {
-                    con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");
-                    Statement stmt = con.createStatement();
-                    System.out.println("Added " + stmt.executeUpdate("update QUEUETBL set MOBILENUM='N" + num + "' where MOBILENUM='None'") + " record w/ no mobile");
-                    stmt.close();
-                    cellNo = "+639XXXXXXXXX";
-                } catch (SQLException e) {
-                    System.err.println("Failed to update record with no mobile number. " + e.getMessage());
-                }
+            Boolean prioritize = true;
+            String prioritizeMe = request.getParameter("prioritize");
+            if (prioritizeMe == null) {
+                prioritize = false;
             }
-            if ((cellNo.substring(0, 3)).equals("+63") && (cellNo.trim().length() == 13)) //if mobile number is correct format
+
+            if (cellNo.equals("") || !(cellNo.substring(0, 3)).equals("+63") || (cellNo.trim().length() != 13)) //if mobile number is incorrect format
             {
-                if(!noPhone)
-                    num = Common.add2DB(con, cellNo, "", false, trans, sms);
-                out.println("<p id=\"Welcome\" style=\"padding-top:0;font-size:5em\">N" + num + "</p>");
+                out.println("<script type=\"text/javascript\">");
+                out.println("alert('Mobile Number not valid. Please use this format: +639XXXXXXXXX');");      //display pop up message
+                out.println("window.history.back();");                      //go back to get number page
+                out.println("</script>");
+            } else {
+                Connection con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
+                int num = Common.add2DB(con, cellNo, name, prioritize, trans, sms);
+                String labeledNum;
+                if (prioritize) {
+                    labeledNum = "V" + num;
+                } else {
+                    labeledNum = "N" + num;
+                }
+                //end of do not modify
+                out.println("<p id=\"Welcome\" style=\"padding-top:0;font-size:5em\">" + labeledNum + "</p>");
                 out.println("<p id=\"bottomspaced\" align=\"center\">Reference number: <b>" + Common.ref + "</b></p>\n");
-                
                 //printing code
-                if((request.getParameter("print") != null) || noPhone) {
+                if((request.getParameter("print") != null)) {
                     new PrintTicket("N" + num,trans,Common.ref);
                     out.println("<p id=\"smalldesc\" style=\"padding-bottom:0;padding-left:0\" align=\"center\">Your ticket is being printed.</p>\n");
                 }
-                
-                if(!noPhone)
-                    out.println("<p id=\"smalldesc\" style=\"padding-bottom:0;padding-left:0\" align=\"center\">Please wait for the text confirmation</p>\n");
-                
+                out.println(         "                <p id=\"smalldesc\" style=\"padding-bottom:0;padding-left:0\" align=\"center\">Please wait for the text confirmation</p>");
                 out.println("<form name=\"cancelrequest\" action=\"kioskCancelRequest\"><br>");
                 out.println("<input type=hidden name=num value=" + num + ">");
-                out.println("<input type=hidden name=vip value=false>"
-                        + "<p id=\"topspaced\" style=\"padding-top:30px;padding-bottom:50px;\" align=\"center\">"
-                        + "<button type=\"button\" onClick=\"window.location = '/QueueWebApp/kiosk';\"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OK &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </button> &nbsp; &nbsp; &nbsp; "
+                out.println("<input type=hidden name=vip value=" + prioritize + ">");
+                out.println("<p id=\"topspaced\" style=\"padding-top:30px;padding-bottom:50px;\" align=\"center\">"
+                        + "<button type=\"button\" onClick=\"window.location = '/QueueWebApp/kiosk';\">"
+                        + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OK &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </button> &nbsp; &nbsp; &nbsp; "
                         + "<input type=\"submit\" value=\"Cancel Request\"></p>"
-                        + "            </div>");
-                
-                if(!noPhone) {
-                    con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
-                    try {
-                        Statement stmt = con.createStatement();
-                        ResultSet rs = stmt.executeQuery("select * from QUEUETBL where VIP=false and NUM=" + num);
-                        rs.next();
-                        String smsnotif = "";
-                        if (rs.getBoolean("SMSNOTIFICATION")) {
-                            smsnotif = ". SMS Notifications are enabled";
-                        }
-                        Common.sendSMS(rs.getString("MOBILENUM"), "Welcome to CSA Queuing System. Your number is N" + rs.getInt("NUM")
-                                + ". Reference number: " + rs.getInt("REF") + " for " + rs.getString("TRANS") + smsnotif
-                                + ". View the queue in real-time anywhere! Go to http://patrickjoshua.ddns.net/realtime");
-                        rs.close();
-                        stmt.close();
-                    } catch (SQLException e) {
-                        System.err.println(e.getMessage());
-                        e.printStackTrace();
+                        + "</form></div>");
+
+                //SMS code
+                con = Common.connectToDatabase("jdbc:derby://localhost:1527/QueueDB", "dbadmin", "dba");    //connect to server
+                try {
+                    Statement stmt = con.createStatement();
+                    ResultSet rs = stmt.executeQuery("select * from QUEUETBL where VIP=true and NUM=" + num);
+                    rs.next();
+                    String smsnotif = "";
+                    if (rs.getBoolean("SMSNOTIFICATION")) {
+                        smsnotif = ". SMS Notifications are enabled";
                     }
+                    Common.sendSMS(rs.getString("MOBILENUM"), "Welcome to CSA Queuing System, " + rs.getString("NAME") + ". Your number is " + labeledNum
+                            + ". Reference number: " + rs.getInt("REF") + " for " + rs.getString("TRANS") + smsnotif
+                            + ". View the queue in real-time anywhere! Go to http://patrickjoshua.ddns.net/realtime");
+                    rs.close();
+                    stmt.close();
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                    e.printStackTrace();
                 }
+                //end of SMS
+                
+                
 
                 out.println("<div id=\"queue\">\n"
                         + "            <center>\n"
@@ -229,21 +234,15 @@ public class kioskGetNumberServlet extends HttpServlet {
                 out.println(Common.getTotal(con, false, false));
                 out.println("</p>Guests\n"
                         + "                </div>\n"
-                  +  "<p id=\"smalldesc\" style=\"position:relative;top:20px;\">*Accurate at the time of last update</p>" 
                         + "            </center>\n"
                         + "            </div>\n"
+                        + "\n"
                         + "            <div id=\"footer\">\n"
                         + "                <p style=\"margin-bottom:1%\">Capstone Project 2014</p>\n"
                         + "                <p style=\"margin-bottom: 5%\">Patrick Saguinsin | Maidy Santos | Justine Diza | Jasmine Eve</p>\n"
                         + "            </div>\n"
                         + "        </div>\n");
-            } else {
-                out.println("<script type=\"text/javascript\">");
-                out.println("alert('Mobile Number not valid. Please use this format: +639XXXXXXXXX');");      //display pop up message
-                out.println("window.history.back();");                      //go back to get number page
-                out.println("</script>");
-            }
-            out.println("        <script>\n" +
+                out.println("        <script>\n" +
 "            jQuery(window).scroll(function(){\n" +
 "                var fromTopPx = 80; // distance to trigger\n" +
 "                var scrolledFromtop = jQuery(window).scrollTop();\n" +
@@ -252,33 +251,24 @@ public class kioskGetNumberServlet extends HttpServlet {
 "                }else{\n" +
 "                    jQuery('img#scrolled').attr('id','imgheader');\n" +
 "                }\n" +
-"            });</script></body></html>");
-            
-//            //printing module
-//            java.awt.print.PrinterJob job = PrinterJob.getPrinterJob();
-//            job.setPrintable(new TicketPrinter());
-//            //boolean doPrint = job.printDialog();
-//            if(true) {
-//                try {
-//                    job.print();
-//                } catch (PrinterException e) {
-//                    System.err.println("Error printing the number. " + e.getMessage());
-//                }
-//            }
+"            });</script>");
+            }
+            out.println("</body></html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+/**
+ * Handles the HTTP <code>GET</code> method.
+ *
+ * @param request servlet request
+ * @param response servlet response
+ * @throws ServletException if a servlet-specific error occurs
+ * @throws IOException if an I/O error occurs
+ */
+@Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -292,7 +282,7 @@ public class kioskGetNumberServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -303,7 +293,7 @@ public class kioskGetNumberServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+        public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
