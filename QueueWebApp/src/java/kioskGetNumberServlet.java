@@ -229,7 +229,7 @@ public class kioskGetNumberServlet extends HttpServlet {
                 out.println(Common.getTotal(con, false, false));
                 out.println("</p>Guests\n"
                         + "                </div>\n"
-                  +  "<p id=\"smalldesc\" style=\"position:relative;top:20px;\">*Accurate at the time of last update</p>" 
+                  +  "<p id=\"smalldesc\" style=\"position:relative;top:20px;\">*Accurate at the time of last use</p>" 
                         + "            </center>\n"
                         + "            </div>\n"
                         + "            <div id=\"footer\">\n"

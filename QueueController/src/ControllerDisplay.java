@@ -75,6 +75,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         Display = new javax.swing.JFrame();
         nowServingLBL = new javax.swing.JLabel();
         dNowServing = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
         viewDatabase = new javax.swing.JFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -126,6 +127,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         selectedTrans = new javax.swing.JLabel();
         selectedNum = new javax.swing.JLabel();
         selectedName = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         cNowServing = new javax.swing.JLabel();
         nextBT = new javax.swing.JButton();
         mobilenumLBL = new javax.swing.JLabel();
@@ -302,31 +305,32 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         nowServingLBL.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         nowServingLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nowServingLBL.setText("Now Serving");
+        nowServingLBL.setText("Counter");
 
         dNowServing.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         dNowServing.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         dNowServing.setText("None");
 
+        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel29.setIcon(new javax.swing.ImageIcon("C:\\Users\\PatrickJoshua\\OneDrive\\Capstone Project (Thesis)\\Barbie-Queue\\Thesis-Queuing-System\\QueueController\\resources\\printlogo.png")); // NOI18N
+
         javax.swing.GroupLayout DisplayLayout = new javax.swing.GroupLayout(Display.getContentPane());
         Display.getContentPane().setLayout(DisplayLayout);
         DisplayLayout.setHorizontalGroup(
             DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DisplayLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nowServingLBL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addComponent(dNowServing, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+            .addComponent(nowServingLBL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(dNowServing, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         DisplayLayout.setVerticalGroup(
             DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DisplayLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(nowServingLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(dNowServing, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
-                .addGap(58, 58, 58))
+                .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(nowServingLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dNowServing, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addGap(130, 130, 130))
         );
 
         viewDatabase.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -752,6 +756,19 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(jTable1);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Offline");
         setIconImage(new ImageIcon("resources/icon.png").getImage());
@@ -1074,24 +1091,20 @@ public class ControllerDisplay extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(mobilenumLBL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(refLBL))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(transLBL))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(nameLBL))
-                                    .addComponent(nextLBL)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel4)
-                                        .addComponent(cNowServing)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(refLBL))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(transLBL))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nameLBL))
+                            .addComponent(nextLBL)
+                            .addComponent(jLabel4)
+                            .addComponent(cNowServing)))
                     .addComponent(info))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1698,7 +1711,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
             connectToDatabaseAgain.setEnabled(false);
             connectToDatabaseAgain.setText("Connected to Database");
             Display.setTitle("Counter " + counter);
-            nowServingLBL.setText("Counter " + counter + " - Now Serving");
+            nowServingLBL.setText("Counter " + counter);
             Thread thread = new Information("Connected to Database Server", false);
             thread.start();
             
@@ -1723,7 +1736,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 rs.close();
                 ps.close();
             } catch (SQLException sqle) {
-                JOptionPane.showMessageDialog(null, "There was a problem retrieving the number currently being served.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "There was a problem retrieving the number currently being served.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
 
             //start upcoming list generator thread
@@ -1946,6 +1959,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1965,7 +1979,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JMenu jmenu1;
     private javax.swing.JMenuItem launchDisplay;
     public static javax.swing.JTextArea log;
