@@ -9,7 +9,10 @@ import java.sql.Statement;
 import java.util.prefs.Preferences;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultCaret;
@@ -46,7 +49,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         System.out.println("Welcome to Queuing Management System Controller");
         
         //retrieve preferences
-        prefs = Preferences.userNodeForPackage(this.getClass());
+        prefs = Preferences.userRoot();
         hostTF.setText(prefs.get("DBHOST", "jdbc:derby://localhost:1527/QueueDB"));
         usernameTF.setText(prefs.get("DBUSERNAME", "dbadmin"));
         passwordTF.setText(prefs.get("DBPASSWORD", "dba"));
@@ -127,8 +130,12 @@ public class ControllerDisplay extends javax.swing.JFrame {
         selectedTrans = new javax.swing.JLabel();
         selectedNum = new javax.swing.JLabel();
         selectedName = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        changeAdminDiag = new javax.swing.JDialog();
+        jLabel30 = new javax.swing.JLabel();
+        pw1 = new javax.swing.JPasswordField();
+        jLabel31 = new javax.swing.JLabel();
+        pw2 = new javax.swing.JPasswordField();
+        changePasswordBT = new javax.swing.JButton();
         cNowServing = new javax.swing.JLabel();
         nextBT = new javax.swing.JButton();
         mobilenumLBL = new javax.swing.JLabel();
@@ -155,6 +162,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         jmenu1 = new javax.swing.JMenu();
         connectToDatabaseAgain = new javax.swing.JMenuItem();
         preferences = new javax.swing.JMenuItem();
+        changeAdminMenu = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         logMenu = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -756,18 +765,63 @@ public class ControllerDisplay extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        changeAdminDiag.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        changeAdminDiag.setTitle("Change Administrator Password");
+
+        jLabel30.setText("New Password:");
+
+        pw1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pw1ActionPerformed(evt);
             }
-        ));
-        jScrollPane4.setViewportView(jTable1);
+        });
+
+        jLabel31.setText("Confirm Password:");
+
+        pw2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pw2ActionPerformed(evt);
+            }
+        });
+
+        changePasswordBT.setText("Change Password");
+        changePasswordBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changePasswordBTActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout changeAdminDiagLayout = new javax.swing.GroupLayout(changeAdminDiag.getContentPane());
+        changeAdminDiag.getContentPane().setLayout(changeAdminDiagLayout);
+        changeAdminDiagLayout.setHorizontalGroup(
+            changeAdminDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(changeAdminDiagLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(changeAdminDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel30)
+                    .addComponent(jLabel31)
+                    .addComponent(pw1)
+                    .addComponent(pw2)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, changeAdminDiagLayout.createSequentialGroup()
+                        .addGap(0, 81, Short.MAX_VALUE)
+                        .addComponent(changePasswordBT)))
+                .addContainerGap())
+        );
+        changeAdminDiagLayout.setVerticalGroup(
+            changeAdminDiagLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(changeAdminDiagLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pw1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pw2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(changePasswordBT)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Offline");
@@ -921,6 +975,15 @@ public class ControllerDisplay extends javax.swing.JFrame {
             }
         });
         jmenu1.add(preferences);
+
+        changeAdminMenu.setText("Change Admin Password");
+        changeAdminMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeAdminMenuActionPerformed(evt);
+            }
+        });
+        jmenu1.add(changeAdminMenu);
+        jmenu1.add(jSeparator2);
 
         logMenu.setText("System Log...");
         logMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -1298,15 +1361,30 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_cleanupActionPerformed
 
     private void clearQueueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearQueueActionPerformed
-        int reply = JOptionPane.showConfirmDialog(null, "Warning: You are about erase the entire queue.\nNote: This process is irrevesible.\nDo you want to continue?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
-        if (reply == JOptionPane.YES_OPTION) {
-            try {
-                PreparedStatement ps = con.prepareStatement("delete from QUEUETBL");
-                JOptionPane.showMessageDialog(null, ps.executeUpdate() + " row(s) deleted", "Successfully Deleted Queue", JOptionPane.INFORMATION_MESSAGE);
-                ps.close();
-            } catch (SQLException sqle) {
-                JOptionPane.showMessageDialog(null, "Cannot delete all records on Queue.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-            }
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Administrator password:");
+        JPasswordField pass = new JPasswordField(10);
+        panel.add(label);
+        panel.add(pass);
+        String[] options = new String[]{"OK", "Cancel"};
+        int option = JOptionPane.showOptionDialog(this, panel, "Restricted Access",
+                                 JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                 null, options, options[0]);
+        if(option == 0) // pressing OK button
+        {
+            if(pass.getText().equals(prefs.get("PASSWORD", ""))) {
+                int reply = JOptionPane.showConfirmDialog(null, "Warning: You are about erase the entire queue.\nNote: This process is irrevesible.\nDo you want to continue?", "Potential Data Loss Warning", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    try {
+                        PreparedStatement ps = con.prepareStatement("delete from QUEUETBL");
+                        JOptionPane.showMessageDialog(null, ps.executeUpdate() + " row(s) deleted", "Successfully Deleted Queue", JOptionPane.INFORMATION_MESSAGE);
+                        ps.close();
+                    } catch (SQLException sqle) {
+                        JOptionPane.showMessageDialog(null, "Cannot delete all records on Queue.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else
+                JOptionPane.showMessageDialog(this, "Invalid password entered", "Access Denied", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_clearQueueActionPerformed
 
@@ -1324,12 +1402,40 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_viewRecordsActionPerformed
 
     private void viewVIPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewVIPActionPerformed
-        currentTBL = "VIPCLIENTSTBL";
-        sqlTF.setText("select * from VIPCLIENTSTBL");
-        executeSQL("VIPCLIENTSTBL");
-        viewDatabase.pack();
-        viewDatabase.setLocationRelativeTo(null);
-        viewDatabase.setVisible(true);
+//        String password = JOptionPane.showInputDialog("Administrator Password: ");
+//        if(password == prefs.get("PASSWORD", "admin")) {
+//            currentTBL = "VIPCLIENTSTBL";
+//            sqlTF.setText("select * from VIPCLIENTSTBL");
+//            executeSQL("VIPCLIENTSTBL");
+//            viewDatabase.pack();
+//            viewDatabase.setLocationRelativeTo(null);
+//            viewDatabase.setVisible(true);
+//        } else if(password == null) {
+//            //do nothing
+//        } else
+//            JOptionPane.showMessageDialog(this, "Invalid password entered", "Access Denied", JOptionPane.ERROR_MESSAGE);
+        
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Administrator password:");
+        JPasswordField pass = new JPasswordField(10);
+        panel.add(label);
+        panel.add(pass);
+        String[] options = new String[]{"OK", "Cancel"};
+        int option = JOptionPane.showOptionDialog(this, panel, "Restricted Access",
+                                 JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                 null, options, options[0]);
+        if(option == 0) // pressing OK button
+        {
+            if(pass.getText().equals(prefs.get("PASSWORD", ""))) {
+                currentTBL = "VIPCLIENTSTBL";
+                sqlTF.setText("select * from VIPCLIENTSTBL");
+                executeSQL("VIPCLIENTSTBL");
+                viewDatabase.pack();
+                viewDatabase.setLocationRelativeTo(null);
+                viewDatabase.setVisible(true);
+            } else
+                JOptionPane.showMessageDialog(this, "Invalid password entered", "Access Denied", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_viewVIPActionPerformed
 
     private void launchDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_launchDisplayActionPerformed
@@ -1607,15 +1713,30 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_editTransActionPerformed
 
     private void clrHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clrHistoryActionPerformed
-        int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the entire records history?\nThis process is irreversible.", "Clear Database Table Warning", JOptionPane.YES_NO_OPTION);
-        if (reply == JOptionPane.YES_OPTION) {
-            try {
-                Statement stmt = con.createStatement();
-                JOptionPane.showMessageDialog(null, stmt.executeUpdate("delete from RECORDSHISTORY") + " Record(s) have been deleted", "Records History Table Deleted", JOptionPane.INFORMATION_MESSAGE);
-                stmt.close();
-            } catch (SQLException sqle) {
-                JOptionPane.showMessageDialog(null, "Cannot delete the records.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-            }
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Administrator password:");
+        JPasswordField pass = new JPasswordField(10);
+        panel.add(label);
+        panel.add(pass);
+        String[] options = new String[]{"OK", "Cancel"};
+        int option = JOptionPane.showOptionDialog(this, panel, "Restricted Access",
+                                 JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                 null, options, options[0]);
+        if(option == 0) // pressing OK button
+        {
+            if(pass.getText().equals(prefs.get("PASSWORD", ""))) {
+                int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the entire records history?\nThis process is irreversible.", "Clear Database Table Warning", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    try {
+                        Statement stmt = con.createStatement();
+                        JOptionPane.showMessageDialog(null, stmt.executeUpdate("delete from RECORDSHISTORY") + " Record(s) have been deleted", "Records History Table Deleted", JOptionPane.INFORMATION_MESSAGE);
+                        stmt.close();
+                    } catch (SQLException sqle) {
+                        JOptionPane.showMessageDialog(null, "Cannot delete the records.\n" + sqle.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else
+                JOptionPane.showMessageDialog(this, "Invalid password entered", "Access Denied", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_clrHistoryActionPerformed
 
@@ -1674,6 +1795,45 @@ public class ControllerDisplay extends javax.swing.JFrame {
             blink.start();
         }
     }//GEN-LAST:event_previousBTActionPerformed
+
+    private void changePasswordBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordBTActionPerformed
+        if(pw1.getText().equals(pw2.getText())) {
+            prefs.put("PASSWORD", pw1.getText());
+            changeAdminDiag.dispose();
+            Thread t = new Information("Administrator password changed", false);
+            t.start();
+        } else
+            JOptionPane.showMessageDialog(this, "Passwords do not match", "Password mismatch", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_changePasswordBTActionPerformed
+
+    private void changeAdminMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeAdminMenuActionPerformed
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Administrator password:");
+        JPasswordField pass = new JPasswordField(10);
+        panel.add(label);
+        panel.add(pass);
+        String[] options = new String[]{"OK", "Cancel"};
+        int option = JOptionPane.showOptionDialog(this, panel, "Restricted Access",
+                                 JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                 null, options, options[0]);
+        if(option == 0) // pressing OK button
+        {
+            if(pass.getText().equals(prefs.get("PASSWORD", ""))) {
+                changeAdminDiag.pack();
+                changeAdminDiag.setLocationRelativeTo(this);
+                changeAdminDiag.setVisible(true);
+            } else
+                JOptionPane.showMessageDialog(this, "Invalid password entered", "Access Denied", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_changeAdminMenuActionPerformed
+
+    private void pw2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pw2ActionPerformed
+        changePasswordBTActionPerformed(evt);
+    }//GEN-LAST:event_pw2ActionPerformed
+
+    private void pw1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pw1ActionPerformed
+        changePasswordBTActionPerformed(evt);
+    }//GEN-LAST:event_pw1ActionPerformed
 
     public void connectToDatabase(String host, String user, String pw, String counterNum, String interval) {
         try {
@@ -1912,6 +2072,9 @@ public class ControllerDisplay extends javax.swing.JFrame {
     public static javax.swing.JLabel cNowServing;
     private javax.swing.JButton callAgainBT;
     private javax.swing.JButton cancelPrefsBT;
+    private javax.swing.JDialog changeAdminDiag;
+    private javax.swing.JMenuItem changeAdminMenu;
+    private javax.swing.JButton changePasswordBT;
     private javax.swing.JMenuItem cleanup;
     private javax.swing.JMenuItem clearQueue;
     private javax.swing.JMenuItem closeDisplay;
@@ -1961,6 +2124,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1979,9 +2144,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JMenu jmenu1;
     private javax.swing.JMenuItem launchDisplay;
     public static javax.swing.JTextArea log;
@@ -1998,6 +2162,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JMenuItem preferences;
     private javax.swing.JButton previousBT;
     private javax.swing.JPasswordField pw;
+    private javax.swing.JPasswordField pw1;
+    private javax.swing.JPasswordField pw2;
     private javax.swing.JPasswordField pwe;
     private javax.swing.JLabel refLBL;
     private javax.swing.JMenuItem restore;

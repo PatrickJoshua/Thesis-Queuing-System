@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.prefs.Preferences;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -210,11 +211,17 @@ public class Common {
             }
             else
             {
+//                int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
+//                if(currentTime > 9 && currentTime < 21)     //9AM to 9PM
+//                    nowserving = new String[]{"None"};
+//                else
+//                    nowserving = new String[]{"Store is closed"};
                 int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
-                if(currentTime > 9 && currentTime < 21)     //9AM to 9PM
+                Preferences prefs = Preferences.userRoot();
+                if (currentTime >= Integer.parseInt(prefs.get("OPENING", "9")) && currentTime < Integer.parseInt(prefs.get("CLOSING", "21"))) //9AM to 9PM
                     nowserving = new String[]{"None"};
-                else
-                    nowserving = new String[]{"Store is closed"};
+                else 
+                    nowserving = new String[]{"Clinic is closed"};
             }
             rs.close();
             stmt.close();
