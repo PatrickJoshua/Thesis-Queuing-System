@@ -36,6 +36,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     PreparedStatement currentPS = null;
     boolean undoed = false;
     String [] previous,current;
+    Thread upcominglistgeneratorThread = new Thread();
 
     public ControllerDisplay() {
         initComponents();
@@ -55,7 +56,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         passwordTF.setText(prefs.get("DBPASSWORD", "dba"));
         counterSpinner.setValue(Integer.parseInt(prefs.get("COUNTER", "1")));
         intervalSpinner.setValue(Integer.parseInt(prefs.get("SMSINTERVAL", "5")));
-        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString(), intervalSpinner.getValue().toString());
+        updateInterval.setValue(Integer.parseInt(prefs.get("CONTROLLERINTERVAL", "5000")));
+        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString(), intervalSpinner.getValue().toString(), updateInterval.getValue().toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -75,6 +77,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
         cancelPrefsBT = new javax.swing.JButton();
         jLabel23 = new javax.swing.JLabel();
         intervalSpinner = new javax.swing.JSpinner();
+        updateInterval = new javax.swing.JSpinner();
+        jLabel32 = new javax.swing.JLabel();
         Display = new javax.swing.JFrame();
         nowServingLBL = new javax.swing.JLabel();
         dNowServing = new javax.swing.JLabel();
@@ -239,6 +243,11 @@ public class ControllerDisplay extends javax.swing.JFrame {
 
         intervalSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(0), null, Integer.valueOf(1)));
 
+        updateInterval.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(5000), Integer.valueOf(100), null, Integer.valueOf(100)));
+
+        jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel32.setText("Upcoming List Database Refresh Interval");
+
         javax.swing.GroupLayout Connect2DBLayout = new javax.swing.GroupLayout(Connect2DB.getContentPane());
         Connect2DB.getContentPane().setLayout(Connect2DBLayout);
         Connect2DBLayout.setHorizontalGroup(
@@ -246,27 +255,35 @@ public class ControllerDisplay extends javax.swing.JFrame {
             .addGroup(Connect2DBLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                    .addComponent(usernameTF)
                     .addGroup(Connect2DBLayout.createSequentialGroup()
-                        .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel23)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(intervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(passwordTF))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Connect2DBLayout.createSequentialGroup()
-                .addContainerGap(160, Short.MAX_VALUE)
-                .addComponent(cancelPrefsBT)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(connectBT)
+                        .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(hostTF, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(usernameTF)
+                            .addGroup(Connect2DBLayout.createSequentialGroup()
+                                .addComponent(counterSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel23)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(intervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(passwordTF))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Connect2DBLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Connect2DBLayout.createSequentialGroup()
+                                .addComponent(cancelPrefsBT)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(connectBT))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Connect2DBLayout.createSequentialGroup()
+                                .addComponent(jLabel32)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(updateInterval, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         Connect2DBLayout.setVerticalGroup(
@@ -290,7 +307,11 @@ public class ControllerDisplay extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel23)
                     .addComponent(intervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updateInterval, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel32))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(Connect2DBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(connectBT)
                     .addComponent(cancelPrefsBT))
@@ -1219,7 +1240,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameTFActionPerformed
 
     private void connectBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectBTActionPerformed
-        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString(), intervalSpinner.getValue().toString());
+        connectToDatabase(hostTF.getText(), usernameTF.getText(), passwordTF.getText(), counterSpinner.getValue().toString(), intervalSpinner.getValue().toString(), updateInterval.getValue().toString());
     }//GEN-LAST:event_connectBTActionPerformed
 
     private void passwordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTFActionPerformed
@@ -1749,6 +1770,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         usernameTF.setText(prefs.get("DBUSERNAME", "dbadmin"));
         passwordTF.setText(prefs.get("DBPASSWORD", "dba"));
         counterSpinner.setValue(Integer.parseInt(prefs.get("COUNTER", "1")));
+        updateInterval.setValue(Integer.parseInt(prefs.get("CONTROLLERINTERVAL", "5000")));
         Connect2DB.pack();
         Connect2DB.setLocationRelativeTo(null);
         Connect2DB.setVisible(true);
@@ -1835,7 +1857,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         changePasswordBTActionPerformed(evt);
     }//GEN-LAST:event_pw1ActionPerformed
 
-    public void connectToDatabase(String host, String user, String pw, String counterNum, String interval) {
+    public void connectToDatabase(String host, String user, String pw, String counterNum, String interval, String update) {
         try {
             counter = Integer.parseInt(counterNum);
             SMSINTERVAL = Integer.parseInt(interval);
@@ -1861,6 +1883,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
             prefs.put("DBPASSWORD", pw);
             prefs.put("COUNTER", counterNum);
             prefs.put("SMSINTERVAL", interval);
+            prefs.put("CONTROLLERINTERVAL", update);
             
             //do necessary GUI actions
             Connect2DB.dispose();
@@ -1900,7 +1923,8 @@ public class ControllerDisplay extends javax.swing.JFrame {
             }
 
             //start upcoming list generator thread
-            Thread upcominglistgeneratorThread = new UpcomingListGenerator(con);
+            upcominglistgeneratorThread.interrupt();
+            upcominglistgeneratorThread = new UpcomingListGenerator(con,update);
             upcominglistgeneratorThread.start();
             
             this.setTitle("Counter " + counter);
@@ -2126,6 +2150,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -2180,6 +2205,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
     private javax.swing.JLabel transLBL;
     private javax.swing.JTextField un;
     private javax.swing.JTextField une;
+    private javax.swing.JSpinner updateInterval;
     private javax.swing.JTextField usernameTF;
     private javax.swing.JMenuItem viewDB;
     public static javax.swing.JFrame viewDatabase;

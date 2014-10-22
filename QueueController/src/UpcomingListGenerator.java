@@ -19,9 +19,11 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class UpcomingListGenerator extends Thread {
     
     Connection con;
+    int interval;
     
-    public UpcomingListGenerator(Connection conn) {
+    public UpcomingListGenerator(Connection conn, String interval) {
         con = conn;
+        this.interval = Integer.parseInt(interval);
     }
     
     @Override
@@ -103,11 +105,12 @@ public class UpcomingListGenerator extends Thread {
                 }
                 
                 //repeat after 5 seconds
-                Thread.sleep(5000);
+                Thread.sleep(interval);
             } catch (SQLException sqle) {
                 System.err.println("Failed refreshing upcoming list. " + sqle.getMessage());
             } catch (InterruptedException ie) {
-                System.err.println(ie.getMessage());
+                System.out.println("Upcoming List Generator interrupted" + ie.getMessage());
+                break;
             }
         }
     }
