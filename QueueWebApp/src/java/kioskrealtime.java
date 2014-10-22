@@ -63,6 +63,7 @@ public class kioskrealtime extends HttpServlet {
 //            out.println("</center>");
 //            out.println("</body>");
 //            out.println("</html>");
+            Preferences prefs = Preferences.userRoot();
             out.println("<!DOCTYPE html>\n"
                     + "<html>\n"
                     + "    <head>\n"
@@ -72,7 +73,7 @@ public class kioskrealtime extends HttpServlet {
                     + "        <link rel=\"stylesheet\" media=\"(max-width: 768px)\" href=\"../mobile.css\">\n"
                     + "        <link rel=\"stylesheet\" media=\"(min-width: 769px)\" href=\"../desktop.css\">\n"
                     + "<link rel=\"shortcut icon\" type=\"image/png\" href=\"../favicon.png\"/>" 
-                    + "<meta http-equiv=\"refresh\" content=\"5\" >"
+                    + "<meta http-equiv=\"refresh\" content=\"" + prefs.get("WEBINTERVAL","5") + "\" >"
                     + "        <script src=\"../jquery-2.1.1.js\"></script>\n"
                     + "    </head>\n"
                     + "    <body class=\"segoe\">\n"
@@ -135,7 +136,6 @@ public class kioskrealtime extends HttpServlet {
                 } else {
                     //store is now closed
                     int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
-                    Preferences prefs = Preferences.userRoot();
                     if (currentTime > Integer.parseInt(prefs.get("OPENING", "9")) && currentTime < Integer.parseInt(prefs.get("CLOSING", "21"))) //9AM to 9PM
                     {
                         out.println("<div id=\"start\" class=\"segoe\">Status:<br>Not Serving Anyone</div><br>");

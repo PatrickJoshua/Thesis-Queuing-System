@@ -188,7 +188,7 @@
         <Component class="javax.swing.JLabel" name="jLabel32">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="4"/>
-            <Property name="text" type="java.lang.String" value="Upcoming List Database Refresh Interval"/>
+            <Property name="text" type="java.lang.String" value="Upcoming List Database Refresh Interval (ms)"/>
           </Properties>
         </Component>
       </SubComponents>

@@ -183,6 +183,8 @@ out.print("                    </select>\n" +
                     out.println("<option value=\"" + i + "\">" + time + "</option>\n");
             }
 out.print("                    </select>\n" +
+"                    <p id=bottomspaced>Real-time Module Auto-Update Interval:</p> <input type=text name=interval value=\"" + prefs.get("WEBINTERVAL", "5") + "\">\n" +
+        "" +
 "                    <p id=\"topspaced\" style=\"padding-top:30px;padding-bottom:20px;\" align=\"center\"><input type=\"submit\" value=\"Save Preferences\"></p>\n" +
 "                </form>\n" +
 "                <br><br>\n" +

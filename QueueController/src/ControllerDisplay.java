@@ -246,7 +246,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         updateInterval.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(5000), Integer.valueOf(100), null, Integer.valueOf(100)));
 
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel32.setText("Upcoming List Database Refresh Interval");
+        jLabel32.setText("Upcoming List Database Refresh Interval (ms)");
 
         javax.swing.GroupLayout Connect2DBLayout = new javax.swing.GroupLayout(Connect2DB.getContentPane());
         Connect2DB.getContentPane().setLayout(Connect2DBLayout);

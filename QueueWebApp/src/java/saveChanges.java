@@ -37,17 +37,27 @@ public class saveChanges extends HttpServlet {
             out.println("<title>Saving Changes...</title>");            
             out.println("</head>");
             out.println("<body>");
-            String pw = request.getParameter("pw");
-            String opening = request.getParameter("opening");
-            String closing = request.getParameter("closing");
-            Preferences prefs = Preferences.userRoot();
-            prefs.put("WEBPW", pw);
-            prefs.put("OPENING", opening);
-            prefs.put("CLOSING", closing);
-            out.println("<script type=\"text/javascript\">");  
-            out.println("alert('Preferences saved');");      //display pop up message
-            out.println("window.location = '/QueueWebApp';");                      //go back to login page
-            out.println("</script>");
+            try {
+                String pw = request.getParameter("pw");
+                String opening = request.getParameter("opening");
+                String closing = request.getParameter("closing");
+                String interval = request.getParameter("interval");
+                Integer.parseInt(interval);
+                Preferences prefs = Preferences.userRoot();
+                prefs.put("WEBPW", pw);
+                prefs.put("OPENING", opening);
+                prefs.put("CLOSING", closing);
+                prefs.put("WEBINTERVAL", interval);
+                out.println("<script type=\"text/javascript\">");  
+                out.println("alert('Preferences saved');");      //display pop up message
+                out.println("window.location = '/QueueWebApp';");                      //go back to login page
+                out.println("</script>");
+            } catch (NumberFormatException e) {
+                out.println("<script type=\"text/javascript\">");  
+                out.println("alert('Invalid update interval value. Enter numbers only.');");      //display pop up message
+                out.println("window.history.back();");                      //go back to login page
+                out.println("</script>");
+            }
             out.println("</body>");
             out.println("</html>");
         }
