@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.prefs.Preferences;
 
 
 /**
@@ -112,9 +113,10 @@ public class SMS extends Thread {
     }
     
     public static void sendSMS(String strMSISDN, String strMessage) {
-        String strAccountId  = "CI00136581";  // Put your AccountId here
-        String strEmail      = "ipa3kjoshua@gmail.com";  // Put your Email address here (Used for authentication and replies)
-        String strPassword   = "gmF6oHn5";  // Put your Password here
+        Preferences prefs = Preferences.userRoot();
+        String strAccountId  = prefs.get("ACCOUNTID", "");  // Put your AccountId here
+        String strEmail      = prefs.get("EMAIL", "");  // Put your Email address here (Used for authentication and replies)
+        String strPassword   = prefs.get("SMSPASSWORD", "");  // Put your Password here
         int nResult;
         StringBuffer strResponse = new StringBuffer();
         

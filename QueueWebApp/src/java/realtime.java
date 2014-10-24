@@ -138,7 +138,7 @@ public class realtime extends HttpServlet {
                     int currentTime = Integer.parseInt(new SimpleDateFormat("HH").format(Calendar.getInstance().getTime()));
                     if (currentTime >= Integer.parseInt(prefs.get("OPENING", "9")) && currentTime < Integer.parseInt(prefs.get("CLOSING", "21"))) //9AM to 9PM
                     {
-                        out.println("<div id=\"start\" class=\"segoe\">Status:<br>Not Serving Anyone</div><br>");
+                        out.println("<div id=\"start\" class=\"segoe\">Inactive</div><div id=\"sublabel\" class=\"segoe\">Not Serving Anyone</div>");
                     } else {
                         out.println("<div id=\"start\" class=\"segoe\">Clinic is now Closed</div>"
                                 + "<div id=\"sublabel\" class=\"segoe\">Clinic opens from ");
