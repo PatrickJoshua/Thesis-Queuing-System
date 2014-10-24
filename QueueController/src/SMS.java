@@ -30,7 +30,8 @@ public class SMS extends Thread {
             PreparedStatement ps = con.prepareStatement("select * from QUEUETBL where DATE=? and COUNTER IS NULL order by VIP desc, NUM asc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
             ResultSet rs = ps.executeQuery();
-            for(int i = 1; rs.next(); i++) {
+            int i;
+            for(i = 1; rs.next(); i++) {
                 rs.absolute(i);
                 if(rs.getBoolean("SMSNOTIFICATION")) {
                     String num;
@@ -39,10 +40,15 @@ public class SMS extends Thread {
                     else
                         num = "N" + rs.getInt("NUM");
                     
-                    if(i==1)
-                        System.out.println("[Next]" + num + " - " + rs.getString("MOBILENUM"));
-                    else if(i==2 || i==3 || i==4 || (i%ControllerDisplay.SMSINTERVAL)==0) 
-                        System.out.println(num + " - " + rs.getString("MOBILENUM"));
+                    if(i==1) {
+                        sendSMS(rs.getString("MOBILENUM"),"CSA Queuing System Update: You are next person to be served. Thank you for using CSA Queuing System!");
+                        System.out.println("Message sent to " + num);
+                    }
+                    else if(i==2 || i==3 || i==4 || (i%ControllerDisplay.SMSINTERVAL)==0) {
+                        int x = i-1;
+                        sendSMS(rs.getString("MOBILENUM"), "CSA Queuing System Update: There are " + x + " persons before your turn. Please be at the clinic before your turn. Thank you! View the queue in real-time anywhere! Go to http://csaqueueonline.com/realtime");
+                        System.out.println("Message sent to " + num);
+                    }
                 }
             }
             rs.close();
@@ -108,6 +114,7 @@ public class SMS extends Thread {
         {
                 System.err.println("Exception caught sending SMS\n"); 
                 nResult = -2;
+                e.printStackTrace();
         }
         return nResult;
     }
