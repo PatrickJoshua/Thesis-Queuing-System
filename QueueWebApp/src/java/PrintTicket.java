@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -40,29 +41,20 @@ class TicketPrinter implements Printable {
         BufferedImage img = null;
         ImageIcon icon = new ImageIcon("../printlogo.png");
         
-        g.drawString("CSA Derm Center", 0, 10);
-//        try {
-//            //URI imageurl = getClass().getResource("../printlogo.jpg").toURI();
-//            //File imagefile = new File(imageurl);
-//            img = ImageIO.read(getClass().getResourceAsStream("../printlogo.jpg"));
-//        } catch (IOException e) {
-//            System.err.println("Failed loading the logo for printing\n" + e.getMessage());
-////        } catch (URISyntaxException u) {
-////            System.out.println(u);
-//        } 
-        //g.drawImage(icon.getImage(), 100, 100, null);
+        //g.setColor(Color.RED);
+        g.drawString("CSA Derm Centre", 175, 10);
         
-        g.setFont(new Font("Segoe UI Light", Font.PLAIN, 16));
-        g.drawString(ticket, 30, 33);
+        g.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+        g.drawString(ticket, 205, 38);
         
         g.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        g.drawString(trans, 0, 50);
+        g.drawString(trans, 175, 55);
         
         g.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        g.drawString("Ref#: " + ref, 0, 65);
+        g.drawString("Ref#: " + ref, 175, 70);
         
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyy");
-        g.drawString(sdf.format(new java.util.Date()) + "", 00, 80);
+        g.drawString(sdf.format(new java.util.Date()) + "", 175, 85);
         
         return PAGE_EXISTS;
     }
