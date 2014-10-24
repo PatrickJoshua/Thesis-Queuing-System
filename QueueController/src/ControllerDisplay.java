@@ -393,22 +393,24 @@ public class ControllerDisplay extends javax.swing.JFrame {
             }
         });
 
+        nowServingLBL.setBackground(new java.awt.Color(255, 255, 255));
         nowServingLBL.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         nowServingLBL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nowServingLBL.setText("Counter");
 
+        dNowServing.setBackground(new java.awt.Color(255, 255, 255));
         dNowServing.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
         dNowServing.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         dNowServing.setText("None");
 
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel29.setIcon(new javax.swing.ImageIcon("C:\\Users\\PatrickJoshua\\OneDrive\\Capstone Project (Thesis)\\Barbie-Queue\\Thesis-Queuing-System\\QueueController\\resources\\printlogo.png")); // NOI18N
+        jLabel29.setIcon(new javax.swing.ImageIcon("C:\\Users\\PatrickJoshua\\OneDrive\\Capstone Project (Thesis)\\Barbie-Queue\\Thesis-Queuing-System\\QueueController\\resources\\banner.png")); // NOI18N
 
         javax.swing.GroupLayout DisplayLayout = new javax.swing.GroupLayout(Display.getContentPane());
         Display.getContentPane().setLayout(DisplayLayout);
         DisplayLayout.setHorizontalGroup(
             DisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+            .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(nowServingLBL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(dNowServing, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );

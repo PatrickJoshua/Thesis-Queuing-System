@@ -41,7 +41,7 @@ class TicketPrinter implements Printable {
         BufferedImage img = null;
         ImageIcon icon = new ImageIcon("../printlogo.png");
         
-        //g.setColor(Color.RED);
+        g.setColor(Color.RED);
         g.drawString("CSA Derm Centre", 175, 10);
         
         g.setFont(new Font("Segoe UI", Font.PLAIN, 24));
