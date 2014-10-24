@@ -404,7 +404,7 @@ public class ControllerDisplay extends javax.swing.JFrame {
         dNowServing.setText("None");
 
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel29.setIcon(new javax.swing.ImageIcon("C:\\Users\\PatrickJoshua\\OneDrive\\Capstone Project (Thesis)\\Barbie-Queue\\Thesis-Queuing-System\\QueueController\\resources\\banner.png")); // NOI18N
+        jLabel29.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bannerAlpha.png"))); // NOI18N
 
         javax.swing.GroupLayout DisplayLayout = new javax.swing.GroupLayout(Display.getContentPane());
         Display.getContentPane().setLayout(DisplayLayout);

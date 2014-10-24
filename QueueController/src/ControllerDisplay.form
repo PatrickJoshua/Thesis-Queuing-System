@@ -334,7 +334,7 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\PatrickJoshua\OneDrive\Capstone Project (Thesis)\Barbie-Queue\Thesis-Queuing-System\QueueController\resources\banner.png"/>
+              <Image iconType="3" name="/bannerAlpha.png"/>
             </Property>
           </Properties>
         </Component>
