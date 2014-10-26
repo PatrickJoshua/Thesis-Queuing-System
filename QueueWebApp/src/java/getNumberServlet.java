@@ -1,5 +1,3 @@
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -164,9 +162,29 @@ public class getNumberServlet extends HttpServlet {
                     if (rs.getBoolean("SMSNOTIFICATION")) {
                         smsnotif = ". SMS Notifications are enabled";
                     }
+                    try {
                     Common.sendSMS(rs.getString("MOBILENUM"), "Welcome to CSA Queuing System. Your number is N" + rs.getInt("NUM")
                             + ". Reference number: " + rs.getInt("REF") + " for " + rs.getString("TRANS") + smsnotif
                             + ". View the queue in real-time anywhere! Go to http://patrickjoshua.ddns.net/realtime");
+//                        Thread ts = new sendSMS(rs.getString("MOBILENUM"),"Welcome to CSA Queuing System. Your number is N" + rs.getInt("NUM") 
+//                            + ". Reference number: " + rs.getInt("REF") + " for " + rs.getString("TRANS") + smsnotif
+//                            + ". View the queue in real-time anywhere! Go to http://192.168.1.2//realtime");
+//                        ts.start();
+////                        while(ts.isAlive()) {
+////                            ts.interrupt();
+////                        }
+//                        long start = System.currentTimeMillis();
+//                        long end = start + 20*1000;
+//                        while(System.currentTimeMillis() < end) {
+//                            //do nothing
+//                        }
+//                        ts.interrupt();
+//                        ts.stop();
+//                        System.out.println("Now dead");
+                    } catch (Exception ex) {
+                        System.err.println("Error sending SMS (caller)");
+                        ex.printStackTrace();
+                    }
                     rs.close();
                     stmt.close();
                 } catch (SQLException e) {

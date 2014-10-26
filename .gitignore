@@ -10,3 +10,9 @@ hs_err_pid*
 QueueWebApp/nbproject/private/private.xml
 *.class
 /Display/nbproject/private/
+/TwilioTest/nbproject/private/
+/TwilioTest/build/
+/CommPortListener/nbproject/private/
+/harshadura-SMS.Dura.Wrapper-956025b/nbproject/private/
+/harshadura-SMS.Dura.Wrapper-956025b/build/
+/harshadura-SMS.Dura.Wrapper-956025b/dist/
