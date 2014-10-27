@@ -9,19 +9,66 @@ and open the template in the editor.
         <title>Queuing System Web App</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel = stylesheet href = "thesis.css" type = "text/css">
     </head>
-    <body>
-    <center>
-        <h2>Queuing System!</h2>
-        Enter your mobile phone number
+    <body style = "/* IE10 Consumer Preview */ 
+          background-image: -ms-radial-gradient(center, circle closest-corner, #FFFFFF 0%, #D12EA6 100%);
+
+          /* Mozilla Firefox */ 
+          background-image: -moz-radial-gradient(center, circle closest-corner, #FFFFFF 0%, #D12EA6 100%);
+
+          /* Opera */ 
+          background-image: -o-radial-gradient(center, circle closest-corner, #FFFFFF 0%, #D12EA6 100%);
+
+          /* Webkit (Safari/Chrome 10) */ 
+          background-image: -webkit-gradient(radial, center center, 0, center center, 505, color-stop(0, #FFFFFF), color-stop(1, #D12EA6));
+
+          /* Webkit (Chrome 11+) */ 
+          background-image: -webkit-radial-gradient(center, circle closest-corner, #FFFFFF 0%, #D12EA6 100%);
+
+          /* W3C Markup, IE10 Release Preview */ 
+          background-image: radial-gradient(circle closest-corner at center, #FFFFFF 0%, #D12EA6 100%);;">
+        <p class = "boarder" style = "
+           position: absolute;
+           top:0.0001px;
+           left:27%;
+           height: 110%;
+           width: 46%;
+           border-style: solid;
+           border-radius: 115px;
+           background-color:#FFD1E0;
+           filter:alpha(opacity=60);">
+
+
+        <p class = "heading">Welcome To</p>
+
+        <img src = "logo.jpg" class = "logo">
+
+        <p class = "bodypos">Queuing System!</p>
+        <p class = "body2pos">Kindly enter your mobile number below to receive</p>
+        <p class = "body3pos">&nbsp&nbsp&nbsp&nbsp&nbsp notifications of your position in the queue.</p>
         <form name="enqueue" action="getNumberServlet">
-            <input type="text" name="cellNo" value="+63" placeholder="Ex. +639151272800" />
-            <br><font size="2"><i>Format: +639XXXXXXXXX</i></font> <br><br>
-            <input name="getNumber" type="submit" value="Get Number" />
+            <p class = "numtxt">+639&nbsp <input type="text" name="cellNo" style = "font-size: 20px;">*</p>
+            <p><input type="checkbox" name="sms" checked>Send me SMS Notifications</p>
+            <div class = "getnumber">
+                <input type="image" src="image/getnumber.PNG" alt="Get Number"/>
+            </div>
         </form>
-        <br><hr width="50%"><br>
-        Are you a VIP client?<br><a href="VIPlogin.html">Click this link here to login</a>
-        <br><br><a href="realtime">Click here to view the real-time queue</a>
-    </center>
+
+        <div class = "boarder">
+            <img src = "boarder.jpg" class = "boarder">
+        </div> 
+
+        <p class = "body4pos">Are you a VIP client?</p>
+
+        <div class = "login">
+            <a href = "VIPlogin.html"><img src = "login.jpg" alt="Login"></a>
+            <div>
+
+                <div class = "body5pos">
+                    <p><i>*Note: Our SMS notification are free of charge!</i></p>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

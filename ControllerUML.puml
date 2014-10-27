@@ -1,0 +1,104 @@
+@startuml
+annotation java.lang.Override
+annotation java.lang.SuppressWarnings
+class BlinkySound
+class ControllerDisplay
+class Information
+class Log
+class SMS
+class UpcomingListGenerator
+class java.awt.Color
+class java.awt.Font
+class java.io.BufferedReader
+class java.io.DataOutputStream
+class java.io.File
+class java.io.IOException
+class java.io.InputStreamReader
+class java.io.OutputStream
+class java.io.PrintStream
+class java.lang.Thread
+class java.net.HttpURLConnection
+class java.net.URL
+class java.net.URLEncoder
+class java.sql.Connection
+class java.sql.DriverManager
+class java.sql.PreparedStatement
+class java.sql.ResultSet
+class java.sql.SQLException
+class java.sql.Statement
+class java.util.prefs.Preferences
+class javax.sound.sampled.AudioInputStream
+class javax.sound.sampled.AudioSystem
+class javax.sound.sampled.Clip
+class javax.sound.sampled.LineUnavailableException
+class javax.sound.sampled.UnsupportedAudioFileException
+class javax.swing.ImageIcon
+class javax.swing.JComboBox
+class javax.swing.JFrame
+class javax.swing.JOptionPane
+class javax.swing.JTextArea
+class javax.swing.UIManager
+class javax.swing.table.DefaultTableModel
+class javax.swing.text.DefaultCaret
+class net.proteanit.sql.DbUtils
+BlinkySound ..> java.lang.Override
+BlinkySound ..> java.awt.Color
+BlinkySound ..> java.io.File
+BlinkySound ..> java.io.IOException
+BlinkySound --|> java.lang.Thread
+BlinkySound ..> javax.sound.sampled.AudioInputStream
+BlinkySound ..> javax.sound.sampled.AudioSystem
+BlinkySound ..> javax.sound.sampled.Clip
+BlinkySound ..> javax.sound.sampled.LineUnavailableException
+BlinkySound ..> javax.sound.sampled.UnsupportedAudioFileException
+ControllerDisplay ..> java.lang.SuppressWarnings
+ControllerDisplay ..> java.awt.Font
+ControllerDisplay ..> java.io.PrintStream
+ControllerDisplay ..> java.sql.Connection
+ControllerDisplay ..> java.sql.DriverManager
+ControllerDisplay ..> java.sql.PreparedStatement
+ControllerDisplay ..> java.sql.ResultSet
+ControllerDisplay ..> java.sql.SQLException
+ControllerDisplay ..> java.sql.Statement
+ControllerDisplay ..> java.util.prefs.Preferences
+ControllerDisplay ..> javax.swing.ImageIcon
+ControllerDisplay ..> javax.swing.JComboBox
+ControllerDisplay --|> javax.swing.JFrame
+ControllerDisplay ..> javax.swing.JOptionPane
+ControllerDisplay ..> javax.swing.UIManager
+ControllerDisplay ..> javax.swing.table.DefaultTableModel
+ControllerDisplay ..> javax.swing.text.DefaultCaret
+ControllerDisplay ..> net.proteanit.sql.DbUtils
+Information ..> java.lang.Override
+Information ..> java.awt.Color
+Information --|> java.lang.Thread
+Log ..> java.io.IOException
+Log --|> java.io.OutputStream
+Log ..> javax.swing.JTextArea
+SMS ..> java.lang.Override
+SMS ..> java.io.BufferedReader
+SMS ..> java.io.DataOutputStream
+SMS ..> java.io.InputStreamReader
+SMS --|> java.lang.Thread
+SMS ..> java.net.HttpURLConnection
+SMS ..> java.net.URL
+SMS ..> java.net.URLEncoder
+SMS ..> java.sql.Connection
+SMS ..> java.sql.PreparedStatement
+SMS ..> java.sql.ResultSet
+SMS ..> java.sql.SQLException
+UpcomingListGenerator ..> java.lang.Override
+UpcomingListGenerator ..> java.awt.Color
+UpcomingListGenerator ..> java.io.File
+UpcomingListGenerator ..> java.io.IOException
+UpcomingListGenerator --|> java.lang.Thread
+UpcomingListGenerator ..> java.sql.Connection
+UpcomingListGenerator ..> java.sql.PreparedStatement
+UpcomingListGenerator ..> java.sql.ResultSet
+UpcomingListGenerator ..> java.sql.SQLException
+UpcomingListGenerator ..> javax.sound.sampled.AudioInputStream
+UpcomingListGenerator ..> javax.sound.sampled.AudioSystem
+UpcomingListGenerator ..> javax.sound.sampled.Clip
+UpcomingListGenerator ..> javax.sound.sampled.LineUnavailableException
+UpcomingListGenerator ..> javax.sound.sampled.UnsupportedAudioFileException
+@enduml

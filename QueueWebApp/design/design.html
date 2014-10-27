@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSA Queuing System Web App</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" media="(max-width: 768px)" href="mobile.css">
+        <link rel="stylesheet" media="(min-width: 769px)" href="desktop.css">
+    </head>
+    <body class="segoe">
+        <div class="lightpink" id="header">
+            <img id="imgheader" src="logo.png">
+            <div id="menu" class="darkpink">
+                <div id="menubar">
+                    <div class="darkerpink" id="menuitem">
+                        <a href="">
+                            Home
+                        </a>
+                    </div>
+                    <div id="menuitem">
+                        <a href="/vip">
+                            VIP
+                        </a>
+                    </div>
+                    <div id="menuitem">
+                        <a href="/realtime">
+                            Real-time
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="content">
+            <div id="main">
+                <p id="Welcome">Welcome</p>
+                <br>
+                <p id="bottomspaced">Enter your mobile address:</p>
+                <form action="getNumberServlet">
+                    <input id="centered" type="text" name="cellNo" value="+63">
+                    <p id="format"><i>Format: +639XXXXXXXXXX</i></p>
+                    <br>
+                    <p id=bottomspaced>Service to be availed:</p>
+                    <select id="centered">
+                        <option>Some Transaction</option>
+                        <option>Here</option>
+                        <option>Examples</option>
+                    </select>
+                    <p id="topspaced"><input type="checkbox" name="sms" checked> Send me SMS Notifications</p>
+                    <center><input type="submit" value="Enter Queue"></center>
+                </form>
+                <br><br>
+            </div>
+            <div id="queue">
+            <center>
+                <div id="nowserving">
+                    <p id="nowservingtxt">Now Serving</p>
+                    <table class="counter">
+                        <tr>
+                            <td>Counter 1: V1</td>
+                            <td>Counter 4: N5</td>
+                        </tr>
+                        <tr>
+                            <td>Counter 2: N2</td>
+                            <td>Counter 5: N6</td>
+                        </tr>
+                        <tr>
+                            <td>Counter 3: V2</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="upcomingvip">
+                    <p id="number">3</p><p id="queuelabel">VIP on Queue</p>
+                </div>
+                <div id="upcomingguest">
+                    <p id="number">8</p>Guests
+                </div>
+            </center>
+            </div>
+
+            <div id="footer">
+                <p style="margin-bottom:1%">Capstone Project 2014-2015</p>
+                <p style="margin-bottom: 5%">Patrick Saguinsin | Maidy Santos | Justine Diza | Jasmine Eve</p>
+            </div>
+        </div>
+    </body>
+</html>
